@@ -145,16 +145,16 @@
   <meta name="description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
 <meta name="keywords" content="git learning notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt;Github入门与实践&gt;学习笔记">
+<meta property="og:title" content="Github入门与实践学习笔记">
 <meta property="og:url" content="http://miracle778.github.io/Study/git/git-study.html">
 <meta property="og:site_name" content="Miracle778&#39;s Blog">
 <meta property="og:description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://miracle778.github.io/Study/git//git-study//github.png">
 <meta property="og:image" content="http://miracle778.github.io/Study/git//git-study//github-1.png">
-<meta property="og:updated_time" content="2019-03-18T12:31:55.889Z">
+<meta property="og:updated_time" content="2019-03-18T12:42:00.883Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="&lt;Github入门与实践&gt;学习笔记">
+<meta name="twitter:title" content="Github入门与实践学习笔记">
 <meta name="twitter:description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
 <meta name="twitter:image" content="http://miracle778.github.io/Study/git//git-study//github.png">
 
@@ -173,7 +173,7 @@
   };
 </script>
 
-  <title><github入门与实践>学习笔记 | Miracle778's Blog</github入门与实践></title>
+  <title>Github入门与实践学习笔记 | Miracle778's Blog</title>
   
 
 
@@ -422,11 +422,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"><github入门与实践>学习笔记
+          <h1 class="post-title" itemprop="name headline">Github入门与实践学习笔记
 
               
             
-          </github入门与实践></h1>
+          </h1>
         
 
         <div class="post-meta">
@@ -465,7 +465,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-18 20:31:55" itemprop="dateModified" datetime="2019-03-18T20:31:55+08:00">2019-03-18</time>
+                <time title="修改时间：2019-03-18 20:42:00" itemprop="dateModified" datetime="2019-03-18T20:42:00+08:00">2019-03-18</time>
               
             
           </span>
@@ -572,7 +572,7 @@
       
 
       
-        <p></p><p style="text-align:center;">这篇学习笔记是之前发在wordpress上的，现在迁移过来了。</p><br>介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。<br><a id="more"></a><br><br><p></p>
+        <p></p><p style="text-align:center;">这篇学习笔记是之前发在wordpress上的，现在迁移过来了。<br>介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。</p><br><a id="more"></a><br><br><p></p>
 <blockquote>
 <p>学习github，找了本书《github入门与实践》，想着做点笔记。这本书目前看着还是很舒服的，把命令记一记，先贴个书的pdf链接 <a href="https://pan.baidu.com/s/1oayFJbXvu2ZhoGmCtn82wg" target="_blank" rel="noopener">https://pan.baidu.com/s/1oayFJbXvu2ZhoGmCtn82wg</a></p>
 <p>密码：baua</p>
@@ -581,7 +581,7 @@
 <h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><p>介绍了下github是什么，git与github的区别，没什么写的。</p>
 <h3 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h3><p>讲了安装git，按照书上写的安装完git后，然后初始化git，设置一下使用git时的姓名和邮件地址，名字注意用英文输入</p>
 <blockquote>
-<p>$git config –global user.name “Firstname Lastname”//你的用户名 $git config –global user.email “<a href="mailto:your_email@example.com" target="_blank" rel="noopener">your_email@example.com</a>“//你的邮件地址 $git config –global color.ui auto $git config –global core.autocrlf false</p>
+<p>$git config –global user.name “Firstname Lastname”//你的用户名<br>$git config –global user.email “<a href="mailto:your_email@example.com" target="_blank" rel="noopener">your_email@example.com</a>“//你的邮件地址<br>$git config –global color.ui auto<br>$git config –global core.autocrlf false</p>
 </blockquote>
 <p>设置完之后用cat ~/.gitconfig查看，书上是写~/.gitconfig ，但是由于查看时.gitconfig不是可执行文件，所以要改成cat ~/.gitconfig</p>
 <h3 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h3><p>第三章名字叫使用github的前期准备，所以就是一些准备工作</p>
@@ -590,7 +590,7 @@
 <li>设置SSH Key</li>
 </ul>
 <blockquote>
-<p>$ssh-keygen -t rsa -C “your_<a href="mailto:email@example.com" target="_blank" rel="noopener">email@example.com</a>“ 输入完命令之后可以在本地文件夹找到私钥：id_rsa和公钥id_rsa.pub</p>
+<p>$ssh-keygen -t rsa -C “your_<a href="mailto:email@example.com" target="_blank" rel="noopener">email@example.com</a>“<br>输入完命令之后可以在本地文件夹找到私钥：id_rsa和公钥id_rsa.pub</p>
 </blockquote>
 <ul>
 <li>添加公开密钥：按照书上添加即可</li>
@@ -610,9 +610,9 @@
 <h2 id="先写这么一点开个头，待更…"><a href="#先写这么一点开个头，待更…" class="headerlink" title="先写这么一点开个头，待更…"></a><strong>先写这么一点开个头，待更…</strong></h2><p>2018/03/15 21:00更</p>
 <h3 id="第四章"><a href="#第四章" class="headerlink" title="第四章"></a>第四章</h3><p>通过实际操作学习Git，这章主要讲Git一些常用操作，基本熟练了这一章的话，日常使用GitHub应该没问题，我也打算先学到这里，先把github作为一个仓库使使，日后按需学习2333…</p>
 <ul>
-<li>$git init—初始化仓库 直接上命令吧，详细的解释实在不记得可以翻书嘛 1.先在本地建立一个目录作为仓库并初始化 $mkdir d:/Github/git-tutorial     //mkdir是linux命令，建立文件夹，因为书上用的是Git bash(linux环境) $cd git-tutorial  //cd 命令切换目录，cd或cd ~是切换到主目录（home），cd ..是返回上一级，cd ../..是返回上两级，cd 指定路径 $git init  //进入到git-tutorial目录后，执行git init对仓库初始化，生成.git目录， .git 目录里存储着管理当前目录内容所需的仓库数据 到这就初始化成功了，提示：如果再按着书操作的时候某一步操作错了不知道怎么修改的话，可以切换到git-tutorial的上一级目录，然后执行$rm -rf git-tutorial删除这个目录重新来过（为了更快熟悉这些指令(其实是自己输命令测试),我删了好几次…）</li>
+<li>$git init—初始化仓库 直接上命令吧，详细的解释实在不记得可以翻书嘛<br>1.先在本地建立一个目录作为仓库并初始化<br>$mkdir d:/Github/git-tutorial     //mkdir是linux命令，建立文件夹，因为书上用的是Git bash(linux环境)<br>$cd git-tutorial  //cd 命令切换目录，cd或cd ~是切换到主目录（home），cd ..是返回上一级，cd ../..是返回上两级，cd 指定路径<br>$git init  //进入到git-tutorial目录后，执行git init对仓库初始化，生成.git目录， .git 目录里存储着管理当前目录内容所需的仓库数据<br>到这就初始化成功了，提示：如果再按着书操作的时候某一步操作错了不知道怎么修改的话，可以切换到git-tutorial的上一级目录，然后执行$rm -rf git-tutorial删除这个目录重新来过（为了更快熟悉这些指令(其实是自己输命令测试),我删了好几次…）</li>
 <li>$touch README.md  //创建README.md文件</li>
-<li>$vim README.md   //用vim编辑README.md(vim是真的好用),vim打开后按i进入插入模式编辑，添加内容后按esc退出编辑模式，输入:wq保存并退出</li>
+<li>$vim README.md   //用vim编辑README.md(vim是真的好用),      vim打开后按i进入插入模式编辑，添加内容后按esc退出编辑模       式，输入:wq保存并退出</li>
 <li>$git status //显示仓库的状态</li>
 <li>$git add README.md  //README.md编辑好之后，$git add README.md将它添加至暂存区（暂存区的文件才可以提交）</li>
 <li>$git commit -m “First commit”  //git commit命令可以将当前暂存区中的文件实际保存到仓库的历史记录中。通过这些记录，我们就可以在工作树中复原文件，-m 参数后的 “First commit”称作提交信息，是对这个提交的概述，如果想详细描述的话用$git commit命令</li>

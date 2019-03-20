@@ -153,10 +153,10 @@
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//2.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//3.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//4.PNG">
-<meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//5.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//5.png">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//6.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//7.PNG">
-<meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//8.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//8.png">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//10.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//1.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//1_1.PNG">
@@ -166,7 +166,7 @@
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//13.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//16.PNG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/DVWA/暴力破解//dvwa-暴力破解//15.PNG">
-<meta property="og:updated_time" content="2019-03-19T16:33:03.764Z">
+<meta property="og:updated_time" content="2019-03-20T03:27:20.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DVWA之暴力破解">
 <meta name="twitter:description" content="DVWA之暴力破解  针对DVWA里的暴力破解漏洞进行实验测试。主要内容包括BurpSuite的一些Intruder模块的基本使用和简单的python脚本编写。">
@@ -479,7 +479,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-20 00:33:03" itemprop="dateModified" datetime="2019-03-20T00:33:03+08:00">2019-03-20</time>
+                <time title="修改时间：2019-03-20 11:27:20" itemprop="dateModified" datetime="2019-03-20T11:27:20+08:00">2019-03-20</time>
               
             
           </span>
@@ -609,9 +609,9 @@
 <h3 id="使用Burp进行爆破"><a href="#使用Burp进行爆破" class="headerlink" title="使用Burp进行爆破"></a>使用Burp进行爆破</h3><ol>
 <li>打开Burp，记得设置浏览器代理。<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\2.PNG" alt></li>
 <li>进行抓包<br>浏览器设置好代理后，点击Login按钮，可以看到Burp成功抓包<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\3.PNG" alt><br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\4.PNG" alt></li>
-<li>抓到包后，按ctrl+l键，或者右键选择send to Intruder<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\5.PNG" alt></li>
+<li>抓到包后，按ctrl+l键，或者右键选择send to Intruder<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\5.png" alt></li>
 <li>因为是要对password参数进行爆破，所以只在password参数内容两边加$<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\6.PNG" alt><br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\7.PNG" alt></li>
-<li>设置好要爆破的参数后，选择Payloads模块设置字典。<br>可以使用Burp自带的简单字典，或者自己去网上下载构造。<br>因为此处Burp自带的字典里没有password(正确密码)，故我们手动加入进去<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\8.PNG" alt></li>
+<li>设置好要爆破的参数后，选择Payloads模块设置字典。<br>可以使用Burp自带的简单字典，或者自己去网上下载构造。<br>因为此处Burp自带的字典里没有password(正确密码)，故我们手动加入进去<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\8.png" alt></li>
 <li>设置攻击字典后，设置爆破线程<br>暴力破解是一个穷举的过程，速度很慢，故可以通过多线程加快速度。<br>但Burp社区版不提供增加线程功能，我用的是Burp pro破解版<br>将线程设为50个，然后点击start attack开始爆破<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\10.PNG" alt></li>
 <li>上一步点击开始爆破后，会切换到一个爆破任务详情新窗口<br>在分析爆破结果前，先讲一下原理(感觉太啰嗦了，麻烦且累以后还是不写这么详细好了)<br>我们分别通过万能密码和错误的密码成功登陆和失败登陆，如下两图<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\1.PNG" alt title="登陆成功"><br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\1_1.PNG" alt title="登陆失败"><br>可以看到，返回的信息是不同的，所以响应包的长度Length也不一样</li>
 <li>因此，在爆破任务详情窗口可以通过Length进行筛选<br>选出Length “与众不同”的payload即为密码<br><img src="/Web安全/DVWA/暴力破解/\dvwa-暴力破解\\11.PNG" alt></li>

@@ -151,7 +151,14 @@
 <meta property="og:description" content="XXE漏洞学习  学习XXE过程中的一些笔记，内容包括XXE的前置知识 XML、DTD等，以及bWapp中XXE的漏洞利用实验">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//1.jpg">
-<meta property="og:updated_time" content="2019-03-22T15:26:01.856Z">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//1.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//2.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//3.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//4.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//5.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//7.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/XXE//XXE学习//6.PNG">
+<meta property="og:updated_time" content="2019-03-27T07:58:56.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XXE学习">
 <meta name="twitter:description" content="XXE漏洞学习  学习XXE过程中的一些笔记，内容包括XXE的前置知识 XML、DTD等，以及bWapp中XXE的漏洞利用实验">
@@ -447,12 +454,24 @@
                 
               
 
-              <time title="创建时间：2019-03-22 20:51:41 / 修改时间：23:26:01" itemprop="dateCreated datePublished" datetime="2019-03-22T20:51:41+08:00">2019-03-22</time>
+              <time title="创建时间：2019-03-22 20:51:41" itemprop="dateCreated datePublished" datetime="2019-03-22T20:51:41+08:00">2019-03-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-27 15:58:56" itemprop="dateModified" datetime="2019-03-27T15:58:56+08:00">2019-03-27</time>
               
             
           </span>
@@ -525,7 +544,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3k</span>
+                <span title="本文字数">6k</span>
               
 
               
@@ -539,7 +558,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">3 分钟</span>
+                <span title="阅读时长">5 分钟</span>
               
             </div>
           
@@ -575,7 +594,7 @@
 <h3 id="DTD"><a href="#DTD" class="headerlink" title="DTD"></a>DTD</h3><p>DTD全称Document Type Definition 即文档类型定义，用来为XML文档定义语义约束。可以嵌入在XML文档中(内部声明)，也可以独立的放在一个文件中(外部引用)，由于其支持的数据类型有限，无法对元素或属性的内容进行详细规范，在可读性和可扩展性方面也比不上XML Schema。</p>
 <h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>XML 指可扩展标记语言，被设计用来传输和存储数据。</p>
 <h3 id="学习链接"><a href="#学习链接" class="headerlink" title="学习链接"></a>学习链接</h3><p>关于XML跟DTD的语法规则，我也是才看，还是不多说了，直接给教程链接吧。其中DTD的实体声明<strong>重点</strong>看<br><a href="http://www.w3school.com.cn/xml/index.asp" target="_blank" rel="noopener">XML教程</a><br><a href="http://www.w3school.com.cn/dtd/index.asp" target="_blank" rel="noopener">DTD教程</a></p>
-<h2 id="基本Payload结构"><a href="#基本Payload结构" class="headerlink" title="基本Payload结构"></a>基本Payload结构</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  //xml声明</span><br><span class="line"><span class="meta">&lt;!DOCTYPE miracle [             //DTD部分</span></span><br><span class="line"><span class="meta">    &lt;!ELEMENT miracle ANY &gt;       //元素类型声明</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;] //实体声明里的外部实体声明</span></span><br><span class="line"><span class="meta">&lt;miracle&gt;</span>&amp;xee;<span class="tag">&lt;/<span class="name">miracle</span>&gt;</span>       //XML部分</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="基本Payload结构"><a href="#基本Payload结构" class="headerlink" title="基本Payload结构"></a>基本Payload结构</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  //xml声明</span><br><span class="line"><span class="meta">&lt;!DOCTYPE miracle [             //DTD部分</span></span><br><span class="line"><span class="meta">    &lt;!ELEMENT miracle ANY &gt;       //元素类型声明</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span>                       //实体声明里的外部实体声明</span><br><span class="line"><span class="tag">&lt;<span class="name">miracle</span>&gt;</span>&amp;xee;<span class="tag">&lt;/<span class="name">miracle</span>&gt;</span>       //XML部分</span><br></pre></td></tr></table></figure>
 <h2 id="DTD实体声明"><a href="#DTD实体声明" class="headerlink" title="DTD实体声明"></a>DTD实体声明</h2><h3 id="上述Payload分析"><a href="#上述Payload分析" class="headerlink" title="上述Payload分析"></a>上述Payload分析</h3><p>稍微对linux有点了解的，看到上面的Payload结构中的DTD部分外部实体声明即<code>&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;</code>这一句就应该猜到这个Payload的作用了吧。<br>没错，这个Payload的作用是输出目标服务器(服务器若为Linux)的passwd文件。<br>那如果想用XXE漏洞进行一些别的操作，如:内网探测、内网入侵该怎么办呢？<br>那就要讲到DTD实体声明了。</p>
 <blockquote>
 <p>实体声明又分为内部实体声明、外部实体声明、参数实体声明等。这里就只讲外部实体声明、参数实体声明吧</p>
@@ -594,10 +613,41 @@
 <p>这里执行完查看结果分两种情况:</p>
 <ol>
 <li>有报错<br>有报错信息的话，直接查看错误信息有没有目标文件源码的base64</li>
-<li>没有报错<br>没有报错的话，查看被发送机(自己的主机)的访问日志。</li>
+<li>没有报错<br>没有报错的话，查看被发送机(自己的主机且具有公网IP)的访问日志。</li>
 </ol>
 <hr>
 <p>还有bWapp中的xxe利用，待更···</p>
+<hr>
+<p><em>2019/03/27 更</em></p>
+<h2 id="bWapp里的XXE实验"><a href="#bWapp里的XXE实验" class="headerlink" title="bWapp里的XXE实验"></a>bWapp里的XXE实验</h2><h3 id="0x01-进入bWapp，选择XXE漏洞环境"><a href="#0x01-进入bWapp，选择XXE漏洞环境" class="headerlink" title="0x01 进入bWapp，选择XXE漏洞环境"></a>0x01 进入bWapp，选择XXE漏洞环境</h3><ol>
+<li>打开bWapp虚拟机,未安装参考<a href="https://www.freebuf.com/sectool/76885.html" target="_blank" rel="noopener">BWAPP：一款非常好用的漏洞演示平台</a>进行安装</li>
+<li>使用账户:<code>bee</code> 密码:<code>bug</code>进行登录，并选择安全级别为low</li>
+<li>登录后选择XXE漏洞环境,点击hack<br><img src="/Web安全/XXE/\XXE学习\\1.PNG" alt></li>
+<li>成功进入到XXE漏洞环境<br><img src="/Web安全/XXE/\XXE学习\\2.PNG" alt></li>
+</ol>
+<h3 id="0x02-抓包分析"><a href="#0x02-抓包分析" class="headerlink" title="0x02 抓包分析"></a>0x02 抓包分析</h3><ol>
+<li>打开Burp，设置好浏览器代理，点击Any bugs?，查看抓包结果<br><img src="/Web安全/XXE/\XXE学习\\3.PNG" alt></li>
+<li>对抓包结果分析，如上图所划线处，可以看到xxe-1.php页面以POST方式向xxe-2.php提交xml数据</li>
+</ol>
+<h3 id="0x03-构造payloads"><a href="#0x03-构造payloads" class="headerlink" title="0x03 构造payloads"></a>0x03 构造payloads</h3><p>payload:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE miracle [</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">reset</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">login</span>&gt;</span>&amp;xxe;<span class="tag">&lt;/<span class="name">login</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">secret</span>&gt;</span>Any Bugs?<span class="tag">&lt;/<span class="name">secret</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">reset</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="0x04-使用Burp-repeater提交payloads"><a href="#0x04-使用Burp-repeater提交payloads" class="headerlink" title="0x04 使用Burp repeater提交payloads"></a>0x04 使用Burp repeater提交payloads</h3><p><img src="/Web安全/XXE/\XXE学习\\4.PNG" alt></p>
+<h3 id="0x05-源码分析"><a href="#0x05-源码分析" class="headerlink" title="0x05 源码分析"></a>0x05 源码分析</h3><ol>
+<li><p>先放源码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(<span class="string">"security.php"</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">"security_level_check.php"</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">"connect_i.php"</span>);</span><br><span class="line"></span><br><span class="line">$message = <span class="string">""</span>;</span><br><span class="line">$body = file_get_contents(<span class="string">"php://input"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// If the security level is not MEDIUM or HIGH</span></span><br><span class="line"><span class="keyword">if</span>($_COOKIE[<span class="string">"security_level"</span>] != <span class="string">"1"</span> &amp;&amp; $_COOKIE[<span class="string">"security_level"</span>] != <span class="string">"2"</span>)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    ini_set(<span class="string">"display_errors"</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    $xml = simplexml_load_string($body);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Debugging</span></span><br><span class="line">    <span class="comment">// print_r($xml);</span></span><br><span class="line"></span><br><span class="line">    $login = $xml-&gt;login;</span><br><span class="line">    $secret = $xml-&gt;secret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($login &amp;&amp; $login != <span class="string">""</span> &amp;&amp; $secret)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// $login = mysqli_real_escape_string($link, $login);</span></span><br><span class="line">        <span class="comment">// $secret = mysqli_real_escape_string($link, $secret);</span></span><br><span class="line">        </span><br><span class="line">        $sql = <span class="string">"UPDATE users SET secret = '"</span> . $secret . <span class="string">"' WHERE login = '"</span> . $login . <span class="string">"'"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Debugging</span></span><br><span class="line">        <span class="comment">// echo $sql;      </span></span><br><span class="line"></span><br><span class="line">        $recordset = $link-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!$recordset)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">die</span>(<span class="string">"Connect Error: "</span> . $link-&gt;error);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $message = $login . <span class="string">"'s secret has been reset!"</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        $message = <span class="string">"An error occured!"</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If the security level is MEDIUM or HIGH</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Disables XML external entities. Doesn't work with older PHP versions!</span></span><br><span class="line">    <span class="comment">// libxml_disable_entity_loader(true);</span></span><br><span class="line">    $xml = simplexml_load_string($body);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Debugging</span></span><br><span class="line">    <span class="comment">// print_r($xml);</span></span><br><span class="line"></span><br><span class="line">    $login = $_SESSION[<span class="string">"login"</span>];</span><br><span class="line">    $secret = $xml-&gt;secret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($secret)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        $secret = mysqli_real_escape_string($link, $secret);</span><br><span class="line"></span><br><span class="line">        $sql = <span class="string">"UPDATE users SET secret = '"</span> . $secret . <span class="string">"' WHERE login = '"</span> . $login . <span class="string">"'"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Debugging</span></span><br><span class="line">        <span class="comment">// echo $sql;      </span></span><br><span class="line"></span><br><span class="line">        $recordset = $link-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!$recordset)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">die</span>(<span class="string">"Connect Error: "</span> . $link-&gt;error);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $message = $login . <span class="string">"'s secret has been reset!"</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        $message = <span class="string">"An error occured!"</span>; </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $message;</span><br><span class="line"></span><br><span class="line">$link-&gt;close();</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如下图,若安全级别为low的话，就从xml传输的数据中取出值来赋给login</p>
+</li>
+</ol>
+<p><img src="/Web安全/XXE/\XXE学习\\5.PNG" alt></p>
+<ol start="3">
+<li><p>login再拼接成message<br><img src="/Web安全/XXE/\XXE学习\\7.PNG" alt></p>
+</li>
+<li><p>message直接输出,所以存在XXE漏洞，利用login进行我们想要的操作并回显<br><img src="/Web安全/XXE/\XXE学习\\6.PNG" alt></p>
+</li>
+<li><p>在源码中也能看到，对于中高级别，login从Session中获取，secret从xml获取后也用 mysqli_real_escape_string函数进行了特殊字符转义。</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p style="text-indent:27px">本来还想写一下jarvis oj上一个xxe的例子，后面想想还是留到后面写刷jarvis题目的时候在写吧。XXE就学到这里吧(更深的现在也找不到例子学不来，2333，以后再深入吧)，过几天把SSRF简单学习总结一下。</p>
 
       
     </div>
@@ -912,7 +962,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE和XML、DTD"><span class="nav-number">2.</span> <span class="nav-text">XXE和XML、DTD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE"><span class="nav-number">2.1.</span> <span class="nav-text">XXE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DTD"><span class="nav-number">2.2.</span> <span class="nav-text">DTD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XML"><span class="nav-number">2.3.</span> <span class="nav-text">XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习链接"><span class="nav-number">2.4.</span> <span class="nav-text">学习链接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本Payload结构"><span class="nav-number">3.</span> <span class="nav-text">基本Payload结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DTD实体声明"><span class="nav-number">4.</span> <span class="nav-text">DTD实体声明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上述Payload分析"><span class="nav-number">4.1.</span> <span class="nav-text">上述Payload分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DTD外部实体声明"><span class="nav-number">4.1.1.</span> <span class="nav-text">DTD外部实体声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DTD参数实体声明"><span class="nav-number">4.1.2.</span> <span class="nav-text">DTD参数实体声明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE的利用方式-DTD"><span class="nav-number">5.</span> <span class="nav-text">XXE的利用方式-DTD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE作用"><span class="nav-number">5.1.</span> <span class="nav-text">XXE作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE分类"><span class="nav-number">5.2.</span> <span class="nav-text">XXE分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#有回显情况"><span class="nav-number">5.2.1.</span> <span class="nav-text">有回显情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无回显情况"><span class="nav-number">5.2.2.</span> <span class="nav-text">无回显情况</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE和XML、DTD"><span class="nav-number">2.</span> <span class="nav-text">XXE和XML、DTD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE"><span class="nav-number">2.1.</span> <span class="nav-text">XXE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DTD"><span class="nav-number">2.2.</span> <span class="nav-text">DTD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XML"><span class="nav-number">2.3.</span> <span class="nav-text">XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习链接"><span class="nav-number">2.4.</span> <span class="nav-text">学习链接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本Payload结构"><span class="nav-number">3.</span> <span class="nav-text">基本Payload结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DTD实体声明"><span class="nav-number">4.</span> <span class="nav-text">DTD实体声明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上述Payload分析"><span class="nav-number">4.1.</span> <span class="nav-text">上述Payload分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DTD外部实体声明"><span class="nav-number">4.1.1.</span> <span class="nav-text">DTD外部实体声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DTD参数实体声明"><span class="nav-number">4.1.2.</span> <span class="nav-text">DTD参数实体声明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE的利用方式-DTD"><span class="nav-number">5.</span> <span class="nav-text">XXE的利用方式-DTD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE作用"><span class="nav-number">5.1.</span> <span class="nav-text">XXE作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XXE分类"><span class="nav-number">5.2.</span> <span class="nav-text">XXE分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#有回显情况"><span class="nav-number">5.2.1.</span> <span class="nav-text">有回显情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无回显情况"><span class="nav-number">5.2.2.</span> <span class="nav-text">无回显情况</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bWapp里的XXE实验"><span class="nav-number">6.</span> <span class="nav-text">bWapp里的XXE实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-进入bWapp，选择XXE漏洞环境"><span class="nav-number">6.1.</span> <span class="nav-text">0x01 进入bWapp，选择XXE漏洞环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-抓包分析"><span class="nav-number">6.2.</span> <span class="nav-text">0x02 抓包分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-构造payloads"><span class="nav-number">6.3.</span> <span class="nav-text">0x03 构造payloads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-使用Burp-repeater提交payloads"><span class="nav-number">6.4.</span> <span class="nav-text">0x04 使用Burp repeater提交payloads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-源码分析"><span class="nav-number">6.5.</span> <span class="nav-text">0x05 源码分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -954,7 +1004,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">26k</span>
+    <span title="站点总字数">29k</span>
   
 
   
@@ -965,7 +1015,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">24 分钟</span>
+    <span title="站点阅读时长">26 分钟</span>
   
 </div>
 

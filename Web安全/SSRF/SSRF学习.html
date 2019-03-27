@@ -142,28 +142,25 @@
 
 
 
-  <meta name="description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
-<meta name="keywords" content="git learning notes">
+  <meta name="description" content="SSRF漏洞学习  关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例">
+<meta name="keywords" content="SSRF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Github入门与实践学习笔记">
-<meta property="og:url" content="http://miracle778.github.io/Study/git/git-study.html">
+<meta property="og:title" content="SSRF学习">
+<meta property="og:url" content="http://miracle778.github.io/Web安全/SSRF/SSRF学习.html">
 <meta property="og:site_name" content="Miracle778&#39;s Blog">
-<meta property="og:description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
+<meta property="og:description" content="SSRF漏洞学习  关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://miracle778.github.io/Study/git//git-study//github.png">
-<meta property="og:image" content="http://miracle778.github.io/Study/git//git-study//github-1.png">
-<meta property="og:updated_time" content="2019-03-18T12:42:00.883Z">
+<meta property="og:updated_time" content="2019-03-27T13:02:22.938Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Github入门与实践学习笔记">
-<meta name="twitter:description" content="这篇学习笔记是之前发在wordpress上的，现在迁移过来了。介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。">
-<meta name="twitter:image" content="http://miracle778.github.io/Study/git//git-study//github.png">
+<meta name="twitter:title" content="SSRF学习">
+<meta name="twitter:description" content="SSRF漏洞学习  关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例">
 
 
 
 
 
 
-  <link rel="canonical" href="http://miracle778.github.io/Study/git/git-study.html">
+  <link rel="canonical" href="http://miracle778.github.io/Web安全/SSRF/SSRF学习.html">
 
 
 
@@ -173,7 +170,7 @@
   };
 </script>
 
-  <title>Github入门与实践学习笔记 | Miracle778's Blog</title>
+  <title>SSRF学习 | Miracle778's Blog</title>
   
 
 
@@ -405,7 +402,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Study/git/git-study.html">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Web安全/SSRF/SSRF学习.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Miracle778">
@@ -422,7 +419,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Github入门与实践学习笔记
+          <h1 class="post-title" itemprop="name headline">SSRF学习
 
               
             
@@ -448,24 +445,12 @@
                 
               
 
-              <time title="创建时间：2018-03-11 15:13:27" itemprop="dateCreated datePublished" datetime="2018-03-11T15:13:27+08:00">2018-03-11</time>
+              <time title="创建时间：2019-03-27 19:52:10 / 修改时间：21:02:22" itemprop="dateCreated datePublished" datetime="2019-03-27T19:52:10+08:00">2019-03-27</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-03-18 20:42:00" itemprop="dateModified" datetime="2019-03-18T20:42:00+08:00">2019-03-18</time>
               
             
           </span>
@@ -482,14 +467,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/" itemprop="url" rel="index"><span itemprop="name">Study</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/" itemprop="url" rel="index"><span itemprop="name">Web安全</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/SSRF/" itemprop="url" rel="index"><span itemprop="name">SSRF</span></a></span>
 
                 
                 
@@ -508,8 +493,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/Study/git/git-study.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/Study/git/git-study.html" itemprop="commentCount"></span>
+                <a href="/Web安全/SSRF/SSRF学习.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Web安全/SSRF/SSRF学习.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -538,7 +523,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">5.4k</span>
+                <span title="本文字数">989</span>
               
 
               
@@ -552,7 +537,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">5 分钟</span>
+                <span title="阅读时长">1 分钟</span>
               
             </div>
           
@@ -572,99 +557,56 @@
       
 
       
-        <p></p><p style="text-align:center;">这篇学习笔记是之前发在wordpress上的，现在迁移过来了。<br>介绍了一些git的使用，其实写的很辣鸡，但毕竟当初也是认真写的，所以直接迁过来了。</p><br><a id="more"></a><br><br><p></p>
-<blockquote>
-<p>学习github，找了本书《github入门与实践》，想着做点笔记。这本书目前看着还是很舒服的，把命令记一记，先贴个书的pdf链接 <a href="https://pan.baidu.com/s/1oayFJbXvu2ZhoGmCtn82wg" target="_blank" rel="noopener">https://pan.baidu.com/s/1oayFJbXvu2ZhoGmCtn82wg</a></p>
-<p>密码：baua</p>
+        <center><strong>SSRF漏洞学习</strong></center>
+
+<p style="text-indent:27px">关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例</p>
+
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>学习SSRF的一些笔记，记录一遍，以便加深印象。<br>话不多说，先给出链接<br>参考链接：<a href="https://www.jianshu.com/p/d1d1c40f6d4c" target="_blank" rel="noopener">SSRF</a>、<a href="https://www.freebuf.com/column/157466.html" target="_blank" rel="noopener">SSRF学习之路</a></p>
+<h2 id="SSRF是什么"><a href="#SSRF是什么" class="headerlink" title="SSRF是什么"></a>SSRF是什么</h2><blockquote>
+<p>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成，服务端发起请求的一个安全漏洞。一般情况下，SSRF的目标是目标网站的内部系统。（因为他是从内部系统访问的，所以可以通过它攻击外网无法访问的内部系统，也就是把目标网站当中间人）</p>
 </blockquote>
-<p><strong>只是自己的笔记，写的时候可能只顾让自己看懂，如果别人也在学这本书的话，可以看看2333</strong></p>
-<h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><p>介绍了下github是什么，git与github的区别，没什么写的。</p>
-<h3 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h3><p>讲了安装git，按照书上写的安装完git后，然后初始化git，设置一下使用git时的姓名和邮件地址，名字注意用英文输入</p>
-<blockquote>
-<p>$git config –global user.name “Firstname Lastname”//你的用户名<br>$git config –global user.email “<a href="mailto:your_email@example.com" target="_blank" rel="noopener">your_email@example.com</a>“//你的邮件地址<br>$git config –global color.ui auto<br>$git config –global core.autocrlf false</p>
+<h2 id="SSRF形成原因"><a href="#SSRF形成原因" class="headerlink" title="SSRF形成原因"></a>SSRF形成原因</h2><blockquote>
+<p>SSRF形成的原因大多是由于服务端提供了从其他服务器应用获取数据的功能，但没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容，加载指定地址的图片，文档，等等。</p>
 </blockquote>
-<p>设置完之后用cat ~/.gitconfig查看，书上是写~/.gitconfig ，但是由于查看时.gitconfig不是可执行文件，所以要改成cat ~/.gitconfig</p>
-<h3 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h3><p>第三章名字叫使用github的前期准备，所以就是一些准备工作</p>
-<ul>
-<li>创建github账户，浏览器打开<a href="http://github.com/join" target="_blank" rel="noopener">http://github.com/join</a> 填写完自己的信息之后完成创建，创建完之后按照他的guide，新建hello-world项目。</li>
-<li>设置SSH Key</li>
-</ul>
-<blockquote>
-<p>$ssh-keygen -t rsa -C “your_<a href="mailto:email@example.com" target="_blank" rel="noopener">email@example.com</a>“<br>输入完命令之后可以在本地文件夹找到私钥：id_rsa和公钥id_rsa.pub</p>
-</blockquote>
-<ul>
-<li>添加公开密钥：按照书上添加即可</li>
-</ul>
-<blockquote>
-<p>用私钥连接github $ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a> <img src="/Study/git/\git-study\\github.png" alt>  </p>
-</blockquote>
-<ul>
-<li>公开代码<ol>
-<li>clone已有仓库      $git clone <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:xxxx/xxxx.git //仓库路径去github上找</li>
-<li>克隆下来之后就可以在本地文件夹中找到以克隆仓库为名的文件夹，在这个文件夹中可以放入想要同步到github上的文件，比如写一个hello_world.php文件放入</li>
-<li>用命令$git status查看刚刚放入的文件，由于hello-world.php文件还没有添加至git仓库，所以显示为Untracked files</li>
-<li>将hello-world.php文件提交至仓库 $git add hello-world.php  //git add命令将文件加入暂存区(缓存区) $git commit -m “Add hello world script by php” //git commit命令将文件提交到本地仓库 $git push //git push命令将本地参库修改同步至服务器仓库 $git log  //git log命令查看提交日志</li>
+<p>总结来说SSRF漏洞就是黑客通过篡改服务器获取资源的请求，而服务器并没有检测这个请求是否合法，然后黑客就可以以目标网站的身份来访问服务器的一些内部资源</p>
+<h2 id="SSRF的用途"><a href="#SSRF的用途" class="headerlink" title="SSRF的用途"></a>SSRF的用途</h2><p>SSRF可以用来：</p>
+<ol>
+<li>内外网的端口和服务扫描</li>
+<li>目标网站本地敏感数据的读取</li>
+<li>内外网主机应用程序漏洞的利用</li>
+<li>内外网Web站点漏洞的利用<br>…</li>
 </ol>
-</li>
-</ul>
-<h2 id="先写这么一点开个头，待更…"><a href="#先写这么一点开个头，待更…" class="headerlink" title="先写这么一点开个头，待更…"></a><strong>先写这么一点开个头，待更…</strong></h2><p>2018/03/15 21:00更</p>
-<h3 id="第四章"><a href="#第四章" class="headerlink" title="第四章"></a>第四章</h3><p>通过实际操作学习Git，这章主要讲Git一些常用操作，基本熟练了这一章的话，日常使用GitHub应该没问题，我也打算先学到这里，先把github作为一个仓库使使，日后按需学习2333…</p>
-<ul>
-<li>$git init—初始化仓库 直接上命令吧，详细的解释实在不记得可以翻书嘛<br>1.先在本地建立一个目录作为仓库并初始化<br>$mkdir d:/Github/git-tutorial     //mkdir是linux命令，建立文件夹，因为书上用的是Git bash(linux环境)<br>$cd git-tutorial  //cd 命令切换目录，cd或cd ~是切换到主目录（home），cd ..是返回上一级，cd ../..是返回上两级，cd 指定路径<br>$git init  //进入到git-tutorial目录后，执行git init对仓库初始化，生成.git目录， .git 目录里存储着管理当前目录内容所需的仓库数据<br>到这就初始化成功了，提示：如果再按着书操作的时候某一步操作错了不知道怎么修改的话，可以切换到git-tutorial的上一级目录，然后执行$rm -rf git-tutorial删除这个目录重新来过（为了更快熟悉这些指令(其实是自己输命令测试),我删了好几次…）</li>
-<li>$touch README.md  //创建README.md文件</li>
-<li>$vim README.md   //用vim编辑README.md(vim是真的好用),      vim打开后按i进入插入模式编辑，添加内容后按esc退出编辑模       式，输入:wq保存并退出</li>
-<li>$git status //显示仓库的状态</li>
-<li>$git add README.md  //README.md编辑好之后，$git add README.md将它添加至暂存区（暂存区的文件才可以提交）</li>
-<li>$git commit -m “First commit”  //git commit命令可以将当前暂存区中的文件实际保存到仓库的历史记录中。通过这些记录，我们就可以在工作树中复原文件，-m 参数后的 “First commit”称作提交信息，是对这个提交的概述，如果想详细描述的话用$git commit命令</li>
-<li>$git log  //通过$git commit提交之后，可以通过git log命令查看提交记录及该记录的其他信息，如这个命令的哈希值</li>
-<li>$git diff 和$git diff HEAD  //git diff是查看当前工作树与暂存区的差别，git diff  HEAD是查看工作树与最新提交的区别</li>
-<li>$git branch//查看当前所在分支</li>
-<li>$git branch feature-A//建立一个新分支</li>
-<li>$git checkout feature-A//切换到指定分支</li>
-<li>$git checkout -b feature-A//创建一个新分支并切换到 feature-A 分支的更改不会影响到master 分支，这正是在开发中创建分支的优点。只要创建多个分支，就可以在不互相影响的情况下同时进行多个功能的开发。</li>
-<li>$git merge –no-ff feature-A//合并分支，千万注意先切换回master分支再进行合并，为了在历史记录中明确记录下本次分支合并，我们需要创建合并提交。因此，在合并时加上 –no-ff参数</li>
-<li>$git log –graph //git log –graph命令可以用图表形式输出提交日志，非常直观</li>
-<li>$git reset –hard  哈希值（通过git log查看）// git reset——回溯历史版本，所有文件都回溯到了指定哈希值对应的时间点上。也要注意在master分支下操作</li>
-<li>$git reflog //git log命令只能查看以当前状态为终点的历史日志。所以这里要使用 git reflog命令，查看当前仓库的操作日志。在日志中找出回溯历史之前的哈希值，通过 git reset –hard命令恢复到回溯历史前的状态。</li>
-<li>$ git commit  – amend——修改提交信息，提交日志中的相应内容也会被修改。</li>
-<li>$git rebase -i //在合并特性分支之前，如果发现已提交的内容中有些许拼写错误等，不妨提交一个修改，然后将这个修改包含到前一个提交之中，压缩成一个历史记录。</li>
-<li>$git rebase -i HEAD~2  //用上述方式执行 git rebase命令，可以选定当前分支中包含HEAD（最新提交）在内的两个最新历史记录为对象，并在编辑器中打开。 <img src="/Study/git/\git-study\\github-1.png" alt> 用fixup替换pick，可以将提交历史压缩。</li>
-</ul>
-<p><strong>在本地仓库操作完之后，接下来就可以推送至远程仓库了。</strong></p>
-<blockquote>
-<p>在Github上新建一个仓库，注意不要选择Initialize this repository with a README （自动生成README.md文件）选项，因为本地仓库自己生成了。然后上命令</p>
-</blockquote>
-<ul>
-<li>$git remote add origin <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:你的用户名/git-tutorial.git  //在 GitHub 上创建的仓库路径为“<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:用户名 /git-tutorial.git”。现在我们用 git remote add命令将它设置成本地仓库的远程仓库。按照上述格式执行 git remote add命令之后，Git 会自动将<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:用户名/git-tutorial.git远程仓库的名称设置为 origin（标识符）。</li>
-<li>$git remote remove origin   //移除与远程仓库的关联</li>
-<li>$git push -u origin master   //在master分支进行该操作，像这样执行 git push命令，当前分支的内容就会被推送给远程仓库origin 的 master分支。-u参数可以在推送的同时，将origin仓库的master分支设置为本地仓库当前分支的 upstream（上游）。添加了这个参数，将来运行 git pull命令从远程仓库获取内容时，本地仓库的这个分支就可以直接从 origin 的 master 分支获取内容，省去了另外添加参数的麻烦（其实这段话只懂个大概2333，所以就照着用就好吧）。执行该操作后，当前本地仓库 master 分支的内容将会被推送到GitHub 的远程仓库中。在 GitHub 上也可以确认远程 master 分支的内容，和本地 master 分支相同。</li>
-<li>$ git push -u origin feature-D(其他分支名)  //除了 master 分支之外，远程仓库也可以创建其他分支。</li>
-</ul>
-<p><strong>从远程仓库获取</strong></p>
-<blockquote>
-<p>上一节中我们把在 GitHub 上新建的仓库设置成了远程仓库，并向这个仓库 push 了 feature-D 分支。现在，所有能够访问这个远程仓库的人都可以获取 feature-D 分支并加以修改。本节中我们从实际开发者的角度出发，在另一个目录下新建一个本地仓库，学习从远程仓库获取内容的相关操作。这就相当于我们刚刚执行过 push 操作的目标仓库又有了另一名新开发者来共同开发。</p>
-</blockquote>
-<ul>
-<li>$ git clone <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:用户名/git-tutorial.git  //  git clone——获取远程仓库  ，注意不要与之前操作的同名仓库在同一目录下</li>
-</ul>
-<blockquote>
-<p>执行 git clone命令后我们会默认处于 master 分支下，同时系统会自动将 origin 设置成该远程仓库的标识符。也就是说，当前本地仓库的 master 分支与 GitHub 端远程仓库（origin）的 master 分支在内容上是完全相同的。</p>
-</blockquote>
-<ul>
-<li>$git branch -a  //用 git branch -a命令查看当前分支的相关信息。添加 -a参数可以同时显示本地仓库和远程仓库的分支信息。</li>
-<li>$git checkout -b feature-D origin/feature-D   //我们试着将 feature-D 分支获取至本地仓库</li>
-</ul>
-<blockquote>
-<p>b 参数的后面是本地仓库中新建分支的名称。为了便于理解，我们仍将其命名为 feature-D，让它与远程仓库的对应分支保持同名。新建分支名称后面是获取来源的分支名称。例子中指定了 origin/feature-D，就是说以名为 origin 的仓库（这里指 GitHub 端的仓库）的 feature-D 分支为来源，在本地仓库中创建 feature-D 分支。</p>
-</blockquote>
-<p><strong>现在假定我们是另一名开发者，我们可以对feature-D仓库进行修改提交，完善之后通过 $git push将修改同步到Github上去。从远程仓库获取 feature-D 分支，在本地仓库中提交更改，再将feature-D 分支推送回远程仓库，通过这一系列操作，就可以与其他开发者相互合作，共同培育 feature-D 分支，实现某些功能。</strong></p>
-<ul>
-<li>$ git pull origin feature-D     //获取最新的远程仓库分支</li>
-</ul>
-<blockquote>
-<p>GitHub 端远程仓库中的 feature-D 分支是最新状态，如果本地仓库没有更新的话，可以通过git pull origin feature-D更新。今后只需要像平常一样在本地进行提交再 push 给远程仓库，就可以与其他开发者同时在同一个分支中进行作业，不断给 feature-D 增加新功能。如果两人同时修改了同一部分的源代码，push 时就很容易发生冲突。所以多名开发者在同一个分支中进行作业时，为减少冲突情况的发生，建议更频繁地进行 push 和 pull 操作。</p>
-</blockquote>
-<h4 id="就写到这里把，留个笔记，以后用来查询"><a href="#就写到这里把，留个笔记，以后用来查询" class="headerlink" title="就写到这里把，留个笔记，以后用来查询"></a><strong>就写到这里把，留个笔记，以后用来查询</strong></h4>
+<h2 id="SSRF漏洞常见出现位置"><a href="#SSRF漏洞常见出现位置" class="headerlink" title="SSRF漏洞常见出现位置"></a>SSRF漏洞常见出现位置</h2><p>由上面叙述中可以得知，SSRF漏洞都是在服务端获取其他站点的资源的过程中形成的。故可以盯紧调用外部资源的参数寻找SSRF漏洞<br>这里具体可以参考: <a href="https://blog.csdn.net/wy_97/article/details/77972575" target="_blank" rel="noopener">SSRF漏洞的挖掘经验</a><br>就简单概括一下吧，具体看上述链接</p>
+<ol>
+<li>分享：通过URL地址分享网页内容</li>
+<li>转码服务</li>
+<li>在线翻译</li>
+<li>图片加载与下载：通过URL地址加载或下载图片</li>
+<li>图片、文章收藏功能</li>
+<li>未公开的api实现以及其他调用URL的功能</li>
+<li><p>从URL关键字中寻找:</p>
+<pre><code>share
+wap
+url
+link
+src
+source
+target
+u
+3g
+display
+sourceURl
+imageURL
+domain
+...
+</code></pre></li>
+</ol>
+<h2 id="SSRF漏洞的简单判断方法"><a href="#SSRF漏洞的简单判断方法" class="headerlink" title="SSRF漏洞的简单判断方法"></a>SSRF漏洞的简单判断方法</h2><ol>
+<li>因为SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器的发送的，从而来判断是否存在SSRF漏洞</li>
+<li>在页面源码中查找访问的资源地址,如果资源地址类型为www&#46;hdu&#46;edu&#46;cn/xxx.php?image=\<url>的话，则有可能出现SSRF漏洞</url></li>
+</ol>
+<h2 id="SSRF实例-——-bWapp中的SSRF"><a href="#SSRF实例-——-bWapp中的SSRF" class="headerlink" title="SSRF实例 —— bWapp中的SSRF"></a>SSRF实例 —— bWapp中的SSRF</h2>
       
     </div>
 
@@ -716,7 +658,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git-learning-notes/" rel="tag"><i class="fa fa-tag"></i> git learning notes</a>
+            <a href="/tags/SSRF/" rel="tag"><i class="fa fa-tag"></i> SSRF</a>
           
         </div>
       
@@ -729,15 +671,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/CTF/Misc/Misc学习（一）.html" rel="next" title="Misc学习(一)">
+                <i class="fa fa-chevron-left"></i> Misc学习(一)
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/hello/hello-world.html" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -978,7 +920,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一章"><span class="nav-number">1.</span> <span class="nav-text">第一章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二章"><span class="nav-number">2.</span> <span class="nav-text">第二章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三章"><span class="nav-number">3.</span> <span class="nav-text">第三章</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#先写这么一点开个头，待更…"><span class="nav-number"></span> <span class="nav-text">先写这么一点开个头，待更…</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第四章"><span class="nav-number">1.</span> <span class="nav-text">第四章</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#就写到这里把，留个笔记，以后用来查询"><span class="nav-number">1.1.</span> <span class="nav-text">就写到这里把，留个笔记，以后用来查询</span></a></li></ol></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF是什么"><span class="nav-number">2.</span> <span class="nav-text">SSRF是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF形成原因"><span class="nav-number">3.</span> <span class="nav-text">SSRF形成原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的用途"><span class="nav-number">4.</span> <span class="nav-text">SSRF的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞常见出现位置"><span class="nav-number">5.</span> <span class="nav-text">SSRF漏洞常见出现位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的简单判断方法"><span class="nav-number">6.</span> <span class="nav-text">SSRF漏洞的简单判断方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实例-——-bWapp中的SSRF"><span class="nav-number">7.</span> <span class="nav-text">SSRF实例 —— bWapp中的SSRF</span></a></li></ol></div>
             
 
           </div>

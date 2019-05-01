@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="关于Go语言Web编程的一些学习笔记，这是第一篇，主要是粗略过一遍Go语言语法，后面会写Go web编程的一些东西。">
+<meta name="keywords" content="study note,Go web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go web编程学习（一）">
+<meta property="og:url" content="http://miracle778.github.io/Study/Go/Go-web编程学习（一）.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="关于Go语言Web编程的一些学习笔记，这是第一篇，主要是粗略过一遍Go语言语法，后面会写Go web编程的一些东西。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//6.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//7.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//1.png">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//8.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//9.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//10.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//11.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//12.JPG">
+<meta property="og:updated_time" content="2019-05-01T14:16:33.992Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go web编程学习（一）">
+<meta name="twitter:description" content="关于Go语言Web编程的一些学习笔记，这是第一篇，主要是粗略过一遍Go语言语法，后面会写Go web编程的一些东西。">
+<meta name="twitter:image" content="http://miracle778.github.io/Study/Go//Go-web编程学习（一）//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/Study/Go/Go-web编程学习（一）.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Go web编程学习（一） | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Study/Go/Go-web编程学习（一）.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Go web编程学习（一）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-01 14:02:17 / 修改时间：22:16:33" itemprop="dateCreated datePublished" datetime="2019-05-01T14:02:17+08:00">2019-05-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/" itemprop="url" rel="index"><span itemprop="name">Study</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/Study/Go/Go-web编程学习（一）.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Study/Go/Go-web编程学习（一）.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p style="text-indent:27px;">关于Go语言Web编程的一些学习笔记，这是第一篇，主要是粗略过一遍Go语言语法，后面会写Go web编程的一些东西。</p>
+
+<a id="more"></a>
+<hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>不知道什么时候开始，整个人变得浮躁起来，沉不下心来学东西。其实早就想静下心来学点东西了，比如说Go语言、Java spring等，所以这次趁着五一小长假，来学习一波。</p>
+<hr>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>这次学习我主要是用一本书，名字叫Go Web编程，在Gitbook上，是一本开源书籍。<a href="https://wizardforcel.gitbooks.io/build-web-application-with-golang/content/" target="_blank" rel="noopener">Go Web编程</a><br>编译器我用的是: <code>Visual Studio Code 2017</code><br>Go的版本是: <code>go1.11.5 windows/amd64</code></p>
+<hr>
+<p>话不多说，开始学吧。</p>
+<h1 id="Go关键字"><a href="#Go关键字" class="headerlink" title="Go关键字"></a>Go关键字</h1><p>Go是一门类似C的编译型语言，但是它的编译速度非常快。这门语言的关键字总共二十五个，把这二十五个关键字用会，Go语言差不多就入门了吧。<br>二十五个关键字如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">break       default         func        interface       select</span><br><span class="line">case        defer           go          map             struct</span><br><span class="line">chan        else            goto        package         switch</span><br><span class="line">const       fallthrough     if          range           type</span><br><span class="line">continue    for             import      return          var</span><br></pre></td></tr></table></figure></p>
+<h1 id="Go包机制理解"><a href="#Go包机制理解" class="headerlink" title="Go包机制理解"></a>Go包机制理解</h1><p>先从hello world讲起。先创建一个hello.go<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"Hello, world or 你好，世界 or καλημ ́ρα κóσμ or こんにちはせかい\n"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段程序输出如下：<br><code>Hello, world or 你好，世界 or καλημ ́ρα κóσμ or こんにちはせかい</code></p>
+<p>现在来分析一下这段代码</p>
+<p>看到第一行package main<br><img src="/Study/Go/\Go-web编程学习（一）\\1.JPG" alt></p>
+<p>归纳一下就是package 遵从以下规则。</p>
+<ol>
+<li>package是最基本的分发单位和工程管理中依赖关系的体现</li>
+<li>每个Go语言源代码文件开头都必须要有一个package声明，表示源代码文件所属包</li>
+<li>要生成Go语言可执行程序，必须要有名为main的package包，且在该包下必须有且只有一个main函数</li>
+<li>同一个路径下只能存在一个package，一个package可以由多个源代码文件组成</li>
+</ol>
+<p>这个package机制还是要搞懂一下的，不然程序运行起来莫名出错。这里我也不知道该怎么表达清楚(水平有限233)，只能放两个例子帮助大家理解。<br>第一个例子: 生成使用自己的<code>package</code><br>在<code>GOPATH\src</code>目录下，新建test文件夹，test文件夹里新建test.go<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test</span><span class="params">()</span></span> &#123; </span><br><span class="line">	fmt.Printf(<span class="string">"this is package test test.go\n"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意，这里第一行是<code>package test</code>,说明这是一个包文件，它有一个函数命名是Test，首字母大写了，这里说明一下，<strong>在Go语言里，有一个简单的规则:如果一个名字是大写字母开头的，那么该名字是导出的（汉字不区分大小写，因此汉字开头的名字是没有导出的）</strong>。</p>
+<p>这是一个简单的包文件，命令行在test文件夹下输入 <code>go install</code>即可编译生成test.a包文件。<br><img src="/Study/Go/\Go-web编程学习（一）\\2.JPG" alt><br>然后就能在别的go程序里使用它了。如在<code>GOPATH\src\hello</code>文件夹下main.go文件中导入调用该包及其Test()函数。<br><img src="/Study/Go/\Go-web编程学习（一）\\3.JPG" alt></p>
+<p>第二个例子: 同一目录下的多文件package<br>在<code>GOPATH\src\hello</code>文件夹下，创建两个文件，分别是main.go、hello.go代码分别如下<br>main.go<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"test"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test1</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"Hello, world or 你好，世界 or καλημ ́ρα κóσμ or こんにちはせかい\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	test.Test()</span><br><span class="line">	test1()</span><br><span class="line">	hello()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>hello.go<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"hello, this is hello.go\n"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里main.go程序下调用了hello.go里的函数，这里的hello.go类似于C中的.h文件，我们可以命令行在hello文件夹内输入<code>go build .</code>,以此生成hello.exe，然后执行。可以看到，生成的hello.exe执行能调用hello.go里的函数，这是同一路径多文件package的情况。<br><img src="/Study/Go/\Go-web编程学习（一）\\4.JPG" alt></p>
+<hr>
+<h1 id="Go基础"><a href="#Go基础" class="headerlink" title="Go基础"></a>Go基础</h1><h2 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h2><p>这里讲讲定义变量、常量、Go内置类型以及Go程序设计中的一些技巧。<br>Go语言的数据类型有<br>整型:<br><code>uint8、uint16、uint32、uint64、int8、int16、int32、int64</code></p>
+<p>浮点数:<br><code>float32、float64</code></p>
+<p>复数:<br><code>complex64、complex128</code>分别对应float32、float64两种浮点数精度<br>内置的complex函数用来构建复数，内置的real、imag函数分别返回复数的实部和虚部<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>,<span class="number">2</span>) <span class="comment">//1+2i</span></span><br><span class="line"><span class="keyword">var</span> y <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">3</span>,<span class="number">4</span>) <span class="comment">//3+4i</span></span><br><span class="line">fmt.Println(<span class="built_in">real</span>(x*y)) <span class="comment">//-5</span></span><br><span class="line">fmt.Println(<span class="built_in">imag</span>(x*y))  <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
+<p>布尔型：<br>只能是true、false</p>
+<p>字符串：<br>字符串就是一串固定长度的字符连接起来的字符序列。Go 的字符串是由单个字节连接起来的。Go 语言的字符串的字节使用 UTF-8 编码标识 Unicode 文本。<br>用双引号<code>&quot;&quot;</code>或反引号&#96;&#96;定义，<strong>反引号可用于定义多行字符串</strong>类型是string。<br>具有len方法、切片、+号连接等操作<br>使用var声明方法：<code>var s string = &quot;miracle778&quot;</code></p>
+<p>字符串是不可修改的，如果非要修改的话，可以先转为byte数组，然后再更改需要改的单位字符。如下图<br><img src="/Study/Go/\Go-web编程学习（一）\\5.JPG" alt></p>
+<p>错误类型：error<br>Go内置有一个error类型，专门用来处理错误信息，Go的package里面还专门有一个包errors来处理错误</p>
+<p>其他类型如iota枚举类型，就不讲了，用的时候网上找找就好了。</p>
+<h2 id="变量定义方式"><a href="#变量定义方式" class="headerlink" title="变量定义方式"></a>变量定义方式</h2><p>一般声明，使用<code>var &lt;变量名&gt; &lt;变量类型&gt;</code>进行声明<br>如:<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span> = <span class="string">"字符串"</span> <span class="comment">//字符串变量</span></span><br><span class="line"><span class="keyword">var</span> num <span class="keyword">uint32</span> = <span class="number">77777</span>  <span class="comment">//uint32类型变量</span></span><br></pre></td></tr></table></figure></p>
+<p>简短声明，使用<code>&lt;变量名&gt;:=&lt;表达式&gt;</code>来声明初始化变量。它会根据表达式自动推导变量的类型。<br>因为简短灵活的特点，简短变量声明被广泛用于大部分的局部变量声明和初始化。而var形式的声明往往<strong>适用于需要显示指明变量类型的地方，或者因为变量稍后会被重新赋值而初始值无关紧要的地方</strong></p>
+<p>变量定义方式可以一次定义多个变量，like python<br><code>var a,b,c int = 1,2,3</code><br><code>a,b,c := 1,2,3</code></p>
+<h2 id="变量要注意的点"><a href="#变量要注意的点" class="headerlink" title="变量要注意的点"></a>变量要注意的点</h2><ol>
+<li><p>下划线<code>_</code>是个特殊的变量名，任何赋予它的值都会被丢弃<br>如:<code>_,a = 7,8</code> 这里将8赋给a，并同时丢弃7</p>
+</li>
+<li><p>Go对于已声明但未使用的变量会在编译阶段报错</p>
+</li>
+</ol>
+<h2 id="Go语言的一些默认规则"><a href="#Go语言的一些默认规则" class="headerlink" title="Go语言的一些默认规则"></a>Go语言的一些默认规则</h2><ol>
+<li>大写字母开头的变量是可导出的，也就是其它包可以读取的，是公用变量；小写字母开头的就是不可导出的，是私有变量。</li>
+<li>大写字母开头的函数也是一样，相当于class中的带public关键词的公有函数；小写字母开头的就是有private关键词的私有函数。</li>
+</ol>
+<h2 id="Array-数组"><a href="#Array-数组" class="headerlink" title="Array 数组"></a>Array 数组</h2><p>数组定义方式</p>
+<ol>
+<li><p>var声明 <code>var &lt;name&gt; [length]&lt;type&gt;</code>如：<code>var arr [7]int</code><br>通过var声明后，数组各项元素默认为0或空<br><img src="/Study/Go/\Go-web编程学习（一）\\6.JPG" alt><br>通过var声明并初始化<br><code>var arr = [4]string{&quot;a&quot;,&quot;b&quot;}</code></p>
+</li>
+<li><p>简短声明</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; <span class="comment">// 声明了一个长度为3的int数组</span></span><br><span class="line"></span><br><span class="line">b := [<span class="number">10</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; <span class="comment">// 声明了一个长度为10的int数组，其中前三个元素初始化为1、2、3，其它默认为0</span></span><br><span class="line"></span><br><span class="line">c := [...]<span class="keyword">int</span>&#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125; <span class="comment">// 可以省略长度而采用`...`的方式，Go会自动根据元素个数来计算长度</span></span><br></pre></td></tr></table></figure>
+<p> 数组初始化的时候可以使用<code>索引:值</code>的形式赋值，如下图<br> <img src="/Study/Go/\Go-web编程学习（一）\\7.JPG" alt></p>
+</li>
+<li>二维数组声明<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a:=[2][3]int&#123;&#123;1,2&#125;,&#123;3,4,5&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>数组可以像python一样切片</p>
+<p>关于数组的一些容易混淆的点</p>
+<p>由于长度也是数组类型的一部分，因此[3]int与[4]int是不同的类型，数组也就不能改变长度。数组之间的赋值是值的赋值，即当把一个数组作为参数传入函数的时候，传入的其实是该数组的副本，而不是它的指针。</p>
+<h2 id="slice-动态数组"><a href="#slice-动态数组" class="headerlink" title="slice 动态数组"></a>slice 动态数组</h2><p>slice并不是真正意义上的动态数组，而是一个<strong>引用类型</strong>。slice总是指向一个底层array，slice的声明也可以像array一样，只是不需要长度。<br>slice var声明举例 <code>var a = []byte{&#39;a&#39;,&#39;b&#39;,&#39;c&#39;}</code>,简短声明 <code>a := []int</code></p>
+<p>slice可以从一个数组或一个已经存在的slice中再次声明。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明一个含有10个元素元素类型为byte的数组</span></span><br><span class="line"><span class="keyword">var</span> ar = [<span class="number">10</span>]<span class="keyword">byte</span> &#123;<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>, <span class="string">'h'</span>, <span class="string">'i'</span>, <span class="string">'j'</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 声明两个含有byte的slice</span></span><br><span class="line"><span class="keyword">var</span> a, b []<span class="keyword">byte</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a指向数组的第3个元素开始，并到第五个元素结束，</span></span><br><span class="line">a = ar[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line"><span class="comment">//现在a含有的元素: ar[2]、ar[3]和ar[4]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// b是数组ar的另一个slice</span></span><br><span class="line">b = ar[<span class="number">3</span>:<span class="number">5</span>]</span><br><span class="line"><span class="comment">// b的元素是：ar[3]和ar[4]</span></span><br></pre></td></tr></table></figure></p>
+<p>slice的一些切片操作，跟python类似<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明一个数组</span></span><br><span class="line"><span class="keyword">var</span> array = [<span class="number">10</span>]<span class="keyword">byte</span>&#123;<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>, <span class="string">'h'</span>, <span class="string">'i'</span>, <span class="string">'j'</span>&#125;</span><br><span class="line"><span class="comment">// 声明两个slice</span></span><br><span class="line"><span class="keyword">var</span> aSlice, bSlice []<span class="keyword">byte</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 演示一些简便操作</span></span><br><span class="line">aSlice = array[:<span class="number">3</span>] <span class="comment">// 等价于aSlice = array[0:3] aSlice包含元素: a,b,c</span></span><br><span class="line">aSlice = array[<span class="number">5</span>:] <span class="comment">// 等价于aSlice = array[5:10] aSlice包含元素: f,g,h,i,j</span></span><br><span class="line">aSlice = array[:]  <span class="comment">// 等价于aSlice = array[0:10] 这样aSlice包含了全部的元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从slice中获取slice</span></span><br><span class="line">aSlice = array[<span class="number">3</span>:<span class="number">7</span>]  <span class="comment">// aSlice包含元素: d,e,f,g，len=4，cap=7</span></span><br><span class="line">bSlice = aSlice[<span class="number">1</span>:<span class="number">3</span>] <span class="comment">// bSlice 包含aSlice[1], aSlice[2] 也就是含有: e,f</span></span><br><span class="line">bSlice = aSlice[:<span class="number">3</span>]  <span class="comment">// bSlice 包含 aSlice[0], aSlice[1], aSlice[2] 也就是含有: d,e,f</span></span><br><span class="line">bSlice = aSlice[<span class="number">0</span>:<span class="number">5</span>] <span class="comment">// 对slice的slice可以在cap范围内扩展，此时bSlice包含：d,e,f,g,h</span></span><br><span class="line">bSlice = aSlice[:]   <span class="comment">// bSlice包含所有aSlice的元素: d,e,f,g</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>slice是引用类型，所以当引用改变其中元素的值时，其它的所有引用都会改变该值，例如上面的aSlice和bSlice，如果修改了aSlice中元素的值，那么bSlice相对应的值也会改变。</strong></p>
+<p>对于slice有几个有用的内置函数:</p>
+<ol>
+<li>len 获取slice的长度</li>
+<li>cap 获取slice的最大容量</li>
+<li>append 向slice里面追加一个或者多个元素，然后返回一个和slice一样类型的slice</li>
+<li>copy 函数copy从源slice的src中复制元素到目标dst，并且返回复制的元素的个数</li>
+</ol>
+<p>对于上面4个内置函数，len函数自然不用多说，返回slice长度。长度和最大容量之间关系如下图示<br><img src="/Study/Go/\Go-web编程学习（一）\\1.png" alt><br>下面演示下另外三个函数的用法<br>其中特别注意append函数</p>
+<blockquote>
+<p>append函数会改变slice所引用的数组的内容，从而影响到引用同一数组的其它slice。 但当slice中没有剩余空间（即(cap-len) == 0）时，此时将动态分配新的数组空间。返回的slice数组指针将指向这个空间，而原数组的内容将保持不变；其它引用此数组的slice则不受影响。</p>
+</blockquote>
+<p>上面这段话意思如下图示，当b slice使用append添加元素后，如果添加后的长度小于cap最大长度时，原数组中对应位置元素也发生变化。如下面a数组，append函数执行后发生改变。<br><img src="/Study/Go/\Go-web编程学习（一）\\8.jpg" alt></p>
+<p>上面那段话还提到当使用append函数slice没有剩余空间时，此时动态分配新的数组空间，返回的slice数组指针将指向这个空间，原数组内容不变，其他引用原数组的slice不受影响<br><img src="/Study/Go/\Go-web编程学习（一）\\9.JPG" alt></p>
+<p>copy函数主要是切片（slice）的拷贝，不支持数组。将第二个slice里的元素拷贝到第一个slice里，拷贝的长度为两个slice中长度较小的长度值<br><img src="/Study/Go/\Go-web编程学习（一）\\10.JPG" alt></p>
+<p>此外还需介绍下append函数的三种用法。</p>
+<ol>
+<li><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slice := <span class="built_in">append</span>([]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br><span class="line">fmt.Println(slice) <span class="comment">//[1 2 3 4 5 6]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slice := <span class="built_in">append</span>([]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,[]<span class="keyword">int</span>&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;...)    <span class="comment">//末尾记住加三个点</span></span><br><span class="line">fmt.Println(slice) <span class="comment">//[1 2 3 4 5 6]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>特殊用法，将字符串当作[]byte类型作为第二个参数传入</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bytes := <span class="built_in">append</span>([]<span class="keyword">byte</span>(<span class="string">"hello"</span>),<span class="string">"world"</span>...)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>append函数返回值必须要有变量接受，不然会报错</strong></p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>map也就是Python中字典的概念，它的格式为map[keyType]valueType</p>
+<p>声明方式</p>
+<ol>
+<li>用var声明，使用前需要用make初始化<br><img src="/Study/Go/\Go-web编程学习（一）\\11.JPG" alt></li>
+<li>简单声明<br><img src="/Study/Go/\Go-web编程学习（一）\\12.JPG" alt></li>
+</ol>
+<p>初始化</p>
+<ol>
+<li><code>var dict = map[int]string{0:&quot;miracle&quot;}</code></li>
+<li><code>dict := map[int]string{0:&quot;Miracle778&quot;}</code></li>
+</ol>
+<p>使用map过程中注意下面几点</p>
+<ol>
+<li>map是无序的，每次打印出来的map都会不一样，它不能通过index获取，而必须通过key获取</li>
+<li>map的长度是不固定的，也就是和slice一样，也是一种引用类型</li>
+<li>内置的len函数同样适用于map，返回map拥有的key的数量</li>
+<li>map的值可以很方便的修改，通过numbers[“one”]=11可以很容易的把key为one的字典值改为11</li>
+<li>map和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制</li>
+</ol>
+<p>map的初始化可以通过<code>key:val</code>的方式初始化值，同时map内置有判断是否存在key的方式<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化一个字典</span></span><br><span class="line">rating := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">float32</span>&#123;<span class="string">"C"</span>:<span class="number">5</span>, <span class="string">"Go"</span>:<span class="number">4.5</span>, <span class="string">"Python"</span>:<span class="number">4.5</span>, <span class="string">"C++"</span>:<span class="number">2</span> &#125;</span><br><span class="line"><span class="comment">// map有两个返回值，第二个返回值，如果不存在key，那么ok为false，如果存在ok为true</span></span><br><span class="line">csharpRating, ok := rating[<span class="string">"C#"</span>]</span><br><span class="line"><span class="keyword">if</span> ok &#123;</span><br><span class="line">    fmt.Println(<span class="string">"C# is in the map and its rating is "</span>, csharpRating)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"We have no rating associated with C# in the map"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">delete</span>(rating, <span class="string">"C"</span>)  <span class="comment">// 删除key为C的元素</span></span><br></pre></td></tr></table></figure></p>
+<p>上面说过了，map也是一种引用类型，如果两个map同时指向一个底层，那么一个改变，另一个也相应的改变：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line">m[<span class="string">"Hello"</span>] = <span class="string">"Bonjour"</span></span><br><span class="line">m1 := m</span><br><span class="line">m1[<span class="string">"Hello"</span>] = <span class="string">"Salut"</span>  <span class="comment">// 现在m["hello"]的值已经是Salut了</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="make、new操作"><a href="#make、new操作" class="headerlink" title="make、new操作"></a>make、new操作</h2><p>待更…</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/study-note/" rel="tag"><i class="fa fa-tag"></i> study note</a>
+          
+            <a href="/tags/Go-web/" rel="tag"><i class="fa fa-tag"></i> Go web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Web安全/Mysql/Mysql客户端任意文件读取.html" rel="next" title="Mysql客户端任意文件读取">
+                <i class="fa fa-chevron-left"></i> Mysql客户端任意文件读取
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go关键字"><span class="nav-number">3.</span> <span class="nav-text">Go关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go包机制理解"><span class="nav-number">4.</span> <span class="nav-text">Go包机制理解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go基础"><span class="nav-number">5.</span> <span class="nav-text">Go基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#变量类型"><span class="nav-number">5.1.</span> <span class="nav-text">变量类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量定义方式"><span class="nav-number">5.2.</span> <span class="nav-text">变量定义方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量要注意的点"><span class="nav-number">5.3.</span> <span class="nav-text">变量要注意的点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go语言的一些默认规则"><span class="nav-number">5.4.</span> <span class="nav-text">Go语言的一些默认规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-数组"><span class="nav-number">5.5.</span> <span class="nav-text">Array 数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slice-动态数组"><span class="nav-number">5.6.</span> <span class="nav-text">slice 动态数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">5.7.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make、new操作"><span class="nav-number">5.8.</span> <span class="nav-text">make、new操作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">139k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">2:06</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+</body>
+</html>

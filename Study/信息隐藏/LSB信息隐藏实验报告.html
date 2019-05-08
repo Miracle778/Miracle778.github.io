@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这学期上的信息隐藏课的实验，这次做的是LSB算法。因为写实验报告是用markdown写然后转pdf提交的，所以就记录下。">
+<meta name="keywords" content="实验报告,LSB,隐写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LSB信息隐藏实验报告">
+<meta property="og:url" content="http://miracle778.github.io/Study/信息隐藏/LSB信息隐藏实验报告.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="这学期上的信息隐藏课的实验，这次做的是LSB算法。因为写实验报告是用markdown写然后转pdf提交的，所以就记录下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//5.JPG">
+<meta property="og:updated_time" content="2019-05-08T13:24:55.462Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LSB信息隐藏实验报告">
+<meta name="twitter:description" content="这学期上的信息隐藏课的实验，这次做的是LSB算法。因为写实验报告是用markdown写然后转pdf提交的，所以就记录下。">
+<meta name="twitter:image" content="http://miracle778.github.io/Study/信息隐藏//LSB信息隐藏实验报告//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/Study/信息隐藏/LSB信息隐藏实验报告.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LSB信息隐藏实验报告 | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-info-circle"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Study/信息隐藏/LSB信息隐藏实验报告.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LSB信息隐藏实验报告
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-08 21:12:36 / 修改时间：21:24:55" itemprop="dateCreated datePublished" datetime="2019-05-08T21:12:36+08:00">2019-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/" itemprop="url" rel="index"><span itemprop="name">Study</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/信息隐藏/" itemprop="url" rel="index"><span itemprop="name">信息隐藏</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/Study/信息隐藏/LSB信息隐藏实验报告.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Study/信息隐藏/LSB信息隐藏实验报告.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">9 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p style="text-indent:27px;">这学期上的信息隐藏课的实验，这次做的是LSB算法。因为写实验报告是用markdown写然后转pdf提交的，所以就记录下。</p>
+
+
+<a id="more"></a>
+<hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>感觉这个LSB写的有点辣鸡，凑合看吧(<del>233</del>)</p>
+<p>本来还想把实验报告改的通顺一点再放上来，但是因为懒，所以直接粘贴过来了。。</p>
+<hr>
+<h1 id="实验要求"><a href="#实验要求" class="headerlink" title="实验要求"></a>实验要求</h1><p>实现LSB信息隐藏算法，使其能够隐藏信息，并且能够还原，然后计算原图和隐藏了信息的图的MSE、PSNR</p>
+<hr>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><p>采用python进行编程<br>其中python版本是: 3.6<br>用到的库及说明如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image   <span class="comment"># 为了对载体图片进行像素操作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> base64           <span class="comment"># 实验思路是对文字和图片进行不同方式处理</span></span><br><span class="line"><span class="keyword">import</span> qrcode           <span class="comment"># 如果要隐藏的是图片的话，把图片base64编码后再隐藏</span></span><br><span class="line">                        <span class="comment"># 如果要隐藏的是文字的话，先用qrcode生成一张二维码，</span></span><br><span class="line">                        <span class="comment"># 把文字隐藏在二维码里，然后再把二维码图片base64后隐藏</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np      <span class="comment">#为了计算PSNR、MSE</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> cv2</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="实验思路"><a href="#实验思路" class="headerlink" title="实验思路"></a>实验思路</h1><p>关于这个实验我的设计思路是。</p>
+<ol>
+<li><p>先编写用于读取要隐藏的文件的函数get_data(),相关代码如下。简单解释下，先是根据传入的文件名判断文件的后缀，如果是<code>txt</code>文件则使用generate_qrcode()函数生成包含txt内容的二维码，然后再把二维码图片进行base64转换隐藏。如果是<code>png、jpg、gif</code>文件的话，先调用img_to_b64()函数转为base64编码后，然后再进行隐藏。进行完base64转换后，在要隐藏的数据后面加上<code>\r\n\r\n + 后缀</code>,以此作为结束符，也方便还原，然后把内容从字节流转为8位比特流。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取需要隐藏的文件信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span><span class="params">(path)</span>:</span></span><br><span class="line">    data = <span class="string">''</span></span><br><span class="line">    <span class="comment"># 获取文件类型，根据类型不同操作</span></span><br><span class="line">    ext = path[path.find(<span class="string">'.'</span>) + <span class="number">1</span>:]</span><br><span class="line">    <span class="keyword">if</span> ext.lower() == <span class="string">'txt'</span>:</span><br><span class="line">        img_path = generate_qrcode(path)</span><br><span class="line">        <span class="comment"># 生成二维码后的文件扩展为png</span></span><br><span class="line">        ext = <span class="string">'png'</span>.upper()</span><br><span class="line">        ext = <span class="string">'\r\n\r\n'</span> + ext</span><br><span class="line">        <span class="comment"># 藏的时候要把图片扩展名藏进去，方便还原</span></span><br><span class="line">        b64data = img_to_b64(img_path) + ext</span><br><span class="line">    <span class="keyword">if</span> ext.lower() <span class="keyword">in</span> [<span class="string">'png'</span>,<span class="string">'jpg'</span>,<span class="string">'gif'</span>]:</span><br><span class="line">        ext = <span class="string">'\r\n\r\n'</span> + ext.upper()</span><br><span class="line">        b64data = img_to_b64(path) + ext</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 把信息转为比特流</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(b64data)):</span><br><span class="line">        data +=  bin(ord(b64data[i])).replace(<span class="string">'0b'</span>,<span class="string">''</span>).zfill(<span class="number">8</span>) <span class="comment">#zfill返回指    定长度字符串，不足填0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把图片转为base64，返回base64字串</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">img_to_b64</span><span class="params">(path)</span>:</span></span><br><span class="line">    f = open(path,<span class="string">'rb'</span>)</span><br><span class="line">    s = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    res = base64.b64encode(s).decode()</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把txt内容转为二维码，返回生成的二维码路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_qrcode</span><span class="params">(path)</span>:</span></span><br><span class="line">    f = open(path,<span class="string">'rb'</span>)</span><br><span class="line">    text = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    img = qrcode.make(text)</span><br><span class="line">    save_path = path[:path.find(<span class="string">'.'</span>)] + <span class="string">'.png'</span></span><br><span class="line">    img.save(save_path)</span><br><span class="line">    <span class="keyword">return</span> save_path</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写lsb加密函数，这里用PIL库里的Image包文件，先判断要隐藏的信息是否超过载体最低一位的容量，如果超过即输出提示信息<code>载体装不下，换个大点的吧</code>，然后退出。若没有超过容量的话，就遍历载体图片的像素点，利用模2取出最后一位，然后替换成我们要隐藏的信息。重要操作的话，下面代码都附上了注释，这里就不多叙述了。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># old 载体，path 隐藏信息，new 新生成的图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lsb</span><span class="params">(old,path,new)</span>:</span></span><br><span class="line">    im = Image.open(old)</span><br><span class="line">    width,height = im.size[<span class="number">0</span>],im.size[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    data = get_data(path)</span><br><span class="line">    <span class="keyword">if</span> len(data) &gt; width * height *<span class="number">3</span>:</span><br><span class="line">        print(<span class="string">"载体装不下，换个大点的吧"</span>)</span><br><span class="line">        exit()</span><br><span class="line">    data_len = len(data)</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> range(height):</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> range(<span class="number">0</span>,width):</span><br><span class="line">            pixel = im.getpixel((w,h)) <span class="comment">#获取像素</span></span><br><span class="line">            a = pixel[<span class="number">0</span>]</span><br><span class="line">            b = pixel[<span class="number">1</span>]</span><br><span class="line">            c = pixel[<span class="number">2</span>]</span><br><span class="line">            <span class="comment"># 每次循环前判断是否藏完</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            a = a - mod(a,<span class="number">2</span>) + int(data[count]) <span class="comment"># 先把最低一位减了再藏</span></span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            b = b - mod(b,<span class="number">2</span>) + int(data[count])</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            c = c - mod(c,<span class="number">2</span>) + int(data[count])</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> count % <span class="number">3</span> == <span class="number">0</span>: <span class="comment">#一个像素藏完，putpixel一下</span></span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line"></span><br><span class="line">    im.save(new)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后编写解密函数，lsb_decode()，代码如下，这里我是直接把图像的最后一位先全部提出来，然后根据上面加密函数里最后放入的<code>\r\n\r\n</code>标记判断是否结束，然后找出扩展名，将提取出的数据base64解码后存到文件里，这里生成的文件名用<code>lsb_decode.</code>+找出的扩展名。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lsb_decode</span><span class="params">(path)</span>:</span></span><br><span class="line">    im = Image.open(path)</span><br><span class="line">    width,height = im.size[<span class="number">0</span>],im.size[<span class="number">1</span>]</span><br><span class="line">    data = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> range(height):</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> range(width):</span><br><span class="line">            pixel = im.getpixel((w,h)) <span class="comment">#获取像素</span></span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> pixel[:<span class="number">3</span>]:         </span><br><span class="line">                data += str(mod(p,<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    temp_data = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,len(data),<span class="number">8</span>):</span><br><span class="line">        temp = int(data[i:i+<span class="number">8</span>],<span class="number">2</span>)  <span class="comment">#转成十进制</span></span><br><span class="line">        temp_data += chr(temp)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 藏的信息结束位置</span></span><br><span class="line">    end_pos = temp_data.find(<span class="string">'\r\n\r\n'</span>)</span><br><span class="line">    msg_b64 = temp_data[:end_pos]</span><br><span class="line">    msg_ext = temp_data[end_pos+<span class="number">4</span>:end_pos+<span class="number">7</span>]</span><br><span class="line">    msg = base64.b64decode(msg_b64)</span><br><span class="line">    msg_name = <span class="string">"lsb_decode."</span> + msg_ext.lower()</span><br><span class="line">    f = open(msg_name,<span class="string">'wb'</span>)</span><br><span class="line">    f.write(msg)</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后编写计算MSE、PSNR的函数，这里代码就是利用PSNR和MSE的公式计算，不多讲。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">PSNR</span><span class="params">(old,new)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">    <span class="keyword">import</span> math</span><br><span class="line">    <span class="keyword">import</span> cv2</span><br><span class="line">    img1,img2 = cv2.imread(old),cv2.imread(new)</span><br><span class="line">    mse = np.mean((img1 - img2) ** <span class="number">2</span> )</span><br><span class="line">    <span class="keyword">if</span> mse &lt; <span class="number">1.0e-10</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="number">100</span></span><br><span class="line">    psnr = <span class="number">10</span> * math.log10(<span class="number">255.0</span>**<span class="number">2</span>/mse)</span><br><span class="line">    print(<span class="string">"MSE为:&#123;0&#125;\nPSNR为:&#123;1&#125;"</span>.format(mse,psnr))</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h1 id="实验测试"><a href="#实验测试" class="headerlink" title="实验测试"></a>实验测试</h1><ol>
+<li><p>测试隐藏txt文件，要隐藏的<code>1.txt</code>文件内容为<code>易涛LSB实验测试</code>，使用下面代码测试。预期结果应该是，产生<code>1.png</code>(<code>1.txt</code>的二维码文件)，隐藏有<code>1.png</code>base64编码的<code>lsb_encode_txt.bmp</code>文件，和解码还原后的<code>lsb_decode.png</code>二维码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">     data_path = <span class="string">r"1.txt"</span></span><br><span class="line">     image_path = <span class="string">r"mitu.bmp"</span></span><br><span class="line">     new_path = <span class="string">r"lsb_encode_txt.bmp"</span></span><br><span class="line">     lsb(image_path,data_path,new_path)</span><br><span class="line">     lsb_decode(<span class="string">"lsb_encode_txt.bmp"</span>)</span><br><span class="line">     PSNR(image_path,new_path)</span><br></pre></td></tr></table></figure>
+<p> 下面截图是未执行代码前的截图<br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\1.JPG" alt><br> 执行一下代码，代码执行结果如下，可以看到计算出了MSE和PSNR<br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\2.JPG" alt><br> 而我们的目录也多出来了系列文件，可以扫描下面截图的两个二维码从而获取隐藏的信息<code>易涛LSB实验测试</code><br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\3.JPG" alt></p>
+</li>
+<li><p>测试隐藏图片文件，隐藏的文件名为<code>shell.gif</code>，用下面代码测试。预期结果应该是，生成隐藏有<code>shell.gif</code>base64编码的<code>lsb_encode_img.bmp</code>文件，和解码还原后的<code>lsb_decode.gif</code>文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">     data_path = <span class="string">r"shell.gif"</span></span><br><span class="line">     image_path = <span class="string">r"mitu.bmp"</span></span><br><span class="line">     new_path = <span class="string">r"lsb_encode_img.bmp"</span></span><br><span class="line">     lsb(image_path,data_path,new_path)</span><br><span class="line">     lsb_decode(<span class="string">"lsb_encode_img.bmp"</span>)</span><br><span class="line">     PSNR(image_path,new_path)</span><br></pre></td></tr></table></figure>
+<p> 下面是未执行代码前的文件夹目录<br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\3.JPG" alt><br> 代码执行结果截图如下，可以看到计算的MSE和PSNR值，PSNR值比上面小了一些，可能是隐藏的<code>shell.gif</code>的大小比二维码大导致。<br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\4.JPG" alt><br> 执行完后的目录截图如下。可以看到，和预期结果一致。<br> <img src="/Study/信息隐藏/\LSB信息隐藏实验报告\\5.JPG" alt></p>
+</li>
+</ol>
+<hr>
+<h1 id="实验源码"><a href="#实验源码" class="headerlink" title="实验源码"></a>实验源码</h1><p>整个实验的源码<code>lsb.py</code>如下，实验的代码和测试用到的图片也会以压缩包附件形式上传。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding=UTF-8</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@Author: 易涛</span></span><br><span class="line"><span class="string">@LastEditors: 易涛</span></span><br><span class="line"><span class="string">@Description: LSB隐写算法</span></span><br><span class="line"><span class="string">@Date: 2019-04-30 13:41:37</span></span><br><span class="line"><span class="string">@LastEditTime: 2019-05-08 16:43:23</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> qrcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取需要隐藏的文件信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span><span class="params">(path)</span>:</span></span><br><span class="line">    data = <span class="string">''</span></span><br><span class="line">    <span class="comment"># 获取文件类型，根据类型不同操作</span></span><br><span class="line">    ext = path[path.find(<span class="string">'.'</span>) + <span class="number">1</span>:]</span><br><span class="line">    <span class="keyword">if</span> ext.lower() == <span class="string">'txt'</span>:</span><br><span class="line">        img_path = generate_qrcode(path)</span><br><span class="line">        <span class="comment"># 生成二维码后的文件扩展为png</span></span><br><span class="line">        ext = <span class="string">'png'</span>.upper()</span><br><span class="line">        ext = <span class="string">'\r\n\r\n'</span> + ext</span><br><span class="line">        <span class="comment"># 藏的时候要把图片扩展名藏进去，方便还原</span></span><br><span class="line">        b64data = img_to_b64(img_path) + ext</span><br><span class="line">    <span class="keyword">if</span> ext.lower() <span class="keyword">in</span> [<span class="string">'png'</span>,<span class="string">'jpg'</span>,<span class="string">'gif'</span>]:</span><br><span class="line">        ext = <span class="string">'\r\n\r\n'</span> + ext.upper()</span><br><span class="line">        b64data = img_to_b64(path) + ext</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 把信息转为比特流</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(b64data)):</span><br><span class="line">        data +=  bin(ord(b64data[i])).replace(<span class="string">'0b'</span>,<span class="string">''</span>).zfill(<span class="number">8</span>) <span class="comment">#zfill返回指定长度字符串，不足填0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把图片转为base64，返回base64字串</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">img_to_b64</span><span class="params">(path)</span>:</span></span><br><span class="line">    f = open(path,<span class="string">'rb'</span>)</span><br><span class="line">    s = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    res = base64.b64encode(s).decode()</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把txt内容转为二维码，返回生成的二维码路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_qrcode</span><span class="params">(path)</span>:</span></span><br><span class="line">    f = open(path,<span class="string">'rb'</span>)</span><br><span class="line">    text = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    img = qrcode.make(text)</span><br><span class="line">    save_path = path[:path.find(<span class="string">'.'</span>)] + <span class="string">'.png'</span></span><br><span class="line">    img.save(save_path)</span><br><span class="line">    <span class="keyword">return</span> save_path</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mod</span><span class="params">(x,y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x%y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># old 载体，path 隐藏信息，new 新生成的图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lsb</span><span class="params">(old,path,new)</span>:</span></span><br><span class="line">    im = Image.open(old)</span><br><span class="line">    width,height = im.size[<span class="number">0</span>],im.size[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    data = get_data(path)</span><br><span class="line">    <span class="keyword">if</span> len(data) &gt; width * height *<span class="number">3</span>:</span><br><span class="line">        print(<span class="string">"载体装不下，换个大点的吧"</span>)</span><br><span class="line">        exit()</span><br><span class="line">    data_len = len(data)</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> range(height):</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> range(<span class="number">0</span>,width):</span><br><span class="line">            pixel = im.getpixel((w,h)) <span class="comment">#获取像素</span></span><br><span class="line">            a = pixel[<span class="number">0</span>]</span><br><span class="line">            b = pixel[<span class="number">1</span>]</span><br><span class="line">            c = pixel[<span class="number">2</span>]</span><br><span class="line">            <span class="comment"># 每次循环前判断是否藏完</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            a = a - mod(a,<span class="number">2</span>) + int(data[count]) <span class="comment"># 先把最低一位减了再藏</span></span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            b = b - mod(b,<span class="number">2</span>) + int(data[count])</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            </span><br><span class="line">            c = c - mod(c,<span class="number">2</span>) + int(data[count])</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count == data_len:</span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> count % <span class="number">3</span> == <span class="number">0</span>: <span class="comment">#一个像素藏完，putpixel一下</span></span><br><span class="line">                im.putpixel((w,h),(a,b,c))</span><br><span class="line"></span><br><span class="line">    im.save(new)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lsb_decode</span><span class="params">(path)</span>:</span></span><br><span class="line">    im = Image.open(path)</span><br><span class="line">    width,height = im.size[<span class="number">0</span>],im.size[<span class="number">1</span>]</span><br><span class="line">    data = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> range(height):</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> range(width):</span><br><span class="line">            pixel = im.getpixel((w,h)) <span class="comment">#获取像素</span></span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> pixel[:<span class="number">3</span>]:         </span><br><span class="line">                data += str(mod(p,<span class="number">2</span>))</span><br><span class="line">    </span><br><span class="line">    temp_data = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,len(data),<span class="number">8</span>):</span><br><span class="line">        temp = int(data[i:i+<span class="number">8</span>],<span class="number">2</span>)  <span class="comment">#转成十进制</span></span><br><span class="line">        temp_data += chr(temp)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 藏的信息结束位置</span></span><br><span class="line">    end_pos = temp_data.find(<span class="string">'\r\n\r\n'</span>)</span><br><span class="line">    msg_b64 = temp_data[:end_pos]</span><br><span class="line">    msg_ext = temp_data[end_pos+<span class="number">4</span>:end_pos+<span class="number">7</span>]</span><br><span class="line">    msg = base64.b64decode(msg_b64)</span><br><span class="line">    msg_name = <span class="string">"lsb_decode."</span> + msg_ext.lower()</span><br><span class="line">    f = open(msg_name,<span class="string">'wb'</span>)</span><br><span class="line">    f.write(msg)</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">PSNR</span><span class="params">(old,new)</span>:</span></span><br><span class="line">    <span class="comment"># target:目标图像  ref:参考图像  scale:尺寸大小</span></span><br><span class="line">    <span class="comment"># assume RGB image</span></span><br><span class="line">     </span><br><span class="line">    <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">    <span class="keyword">import</span> math</span><br><span class="line">    <span class="keyword">import</span> cv2</span><br><span class="line">    img1,img2 = cv2.imread(old),cv2.imread(new)</span><br><span class="line">    mse = np.mean((img1 - img2) ** <span class="number">2</span> )</span><br><span class="line">    <span class="keyword">if</span> mse &lt; <span class="number">1.0e-10</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="number">100</span></span><br><span class="line">    psnr = <span class="number">10</span> * math.log10(<span class="number">255.0</span>**<span class="number">2</span>/mse)</span><br><span class="line">    print(<span class="string">"MSE为:&#123;0&#125;\nPSNR为:&#123;1&#125;"</span>.format(mse,psnr))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    data_path = <span class="string">r"shell.gif"</span>        <span class="comment"># 自己选择</span></span><br><span class="line">    image_path = <span class="string">r"mitu.bmp"</span></span><br><span class="line">    new_path = <span class="string">r"lsb_encode_img.bmp"</span></span><br><span class="line">    lsb(image_path,data_path,new_path)</span><br><span class="line">    lsb_decode(<span class="string">"lsb_encode_img.bmp"</span>)</span><br><span class="line">    PSNR(image_path,new_path)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/实验报告/" rel="tag"><i class="fa fa-tag"></i> 实验报告</a>
+          
+            <a href="/tags/LSB/" rel="tag"><i class="fa fa-tag"></i> LSB</a>
+          
+            <a href="/tags/隐写/" rel="tag"><i class="fa fa-tag"></i> 隐写</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Web安全/SQL注入/SQL注入之WAF-Bypass.html" rel="next" title="SQL注入之WAF Bypass">
+                <i class="fa fa-chevron-left"></i> SQL注入之WAF Bypass
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验要求"><span class="nav-number">2.</span> <span class="nav-text">实验要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验环境"><span class="nav-number">3.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验思路"><span class="nav-number">4.</span> <span class="nav-text">实验思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验测试"><span class="nav-number">5.</span> <span class="nav-text">实验测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验源码"><span class="nav-number">6.</span> <span class="nav-text">实验源码</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">192k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">2:55</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":170,"height":380,"position":"right","hOffset":50,"vOffset":-7},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

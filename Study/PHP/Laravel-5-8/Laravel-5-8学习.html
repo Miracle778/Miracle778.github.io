@@ -123,7 +123,7 @@
 <meta property="og:image" content="http://miracle778.github.io/Study/PHP/Laravel-5-8//Laravel-5-8学习//16.JPG">
 <meta property="og:image" content="http://miracle778.github.io/Study/PHP/Laravel-5-8//Laravel-5-8学习//17.JPG">
 <meta property="og:image" content="http://miracle778.github.io/Study/PHP/Laravel-5-8//Laravel-5-8学习//18.JPG">
-<meta property="og:updated_time" content="2019-05-13T07:02:34.110Z">
+<meta property="og:updated_time" content="2019-05-13T07:05:15.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel-5.8学习">
 <meta name="twitter:description" content="用Laravel框架自带的邮件发送机制实现登录注册认证。">
@@ -436,7 +436,7 @@
                 
               
 
-              <time title="创建时间：2019-05-13 14:07:10 / 修改时间：15:02:34" itemprop="dateCreated datePublished" datetime="2019-05-13T14:07:10+08:00">2019-05-13</time>
+              <time title="创建时间：2019-05-13 14:07:10 / 修改时间：15:05:15" itemprop="dateCreated datePublished" datetime="2019-05-13T14:07:10+08:00">2019-05-13</time>
             
 
             
@@ -580,7 +580,7 @@
 <h2 id="密码重置"><a href="#密码重置" class="headerlink" title="密码重置"></a>密码重置</h2><p>跟邮件认证功能一样，密码重置功能laravel框架已经自己内置了，我们要做的就是调用它。所以跟上一步一样，在使用 Laravel 提供的密码重置功能之前，先验证 App\User 模型是不是实现了 Illuminate\Contracts\Auth\CanResetPassword 契约。然后使用 Illuminate\Auth\Passwords\CanResetPassword trait 来包含实现该接口需要的方法。如下图红线代码部分。<br><img src="/Study/PHP/Laravel-5-8/\Laravel-5-8学习\\8.JPG" alt></p>
 <p>因为重置密码的路由和视图在laravel进行php artisan make:auth时已经自动生成了，所以现在可以直接通过/password/reset或者点击登录页面的For got your password?链接进入重置密码页面。如下图<br><img src="/Study/PHP/Laravel-5-8/\Laravel-5-8学习\\9.JPG" alt></p>
 <h2 id="配置Apache虚拟主机和hosts文件"><a href="#配置Apache虚拟主机和hosts文件" class="headerlink" title="配置Apache虚拟主机和hosts文件"></a>配置Apache虚拟主机和hosts文件</h2><p>基本的登录、注册认证、密码重置功能都已经实现了，下面就是配置Apache虚拟主机和hosts文件实现自定义域名访问了。<br>先在Apache的配置文件http.conf文件里开启虚拟主机功能，即找到Virtual hosts选项，将该行下面的<code># Include conf/extra/httpd-vhosts.conf</code>取消注释。如下图<br><img src="/Study/PHP/Laravel-5-8/\Laravel-5-8学习\\10.JPG" alt><br>然后在conf/extra/httpd-vhosts.conf文件里配置虚拟主机。配置完后重启apache。然后再修改hosts文件，使127.0.0.1指向apache定义的虚拟域名。如我的虚拟主机域名为<code>yt.weblab.com</code></p>
-<p>这里配置Apache的虚拟主机容易出现错误，比如定义了虚拟主机后，只能通过虚拟主机访问，而localhost访问失效。或者是能用虚拟主机和localhost访问，但是只能访问到<code>index.php</code>,而其他登录、注册等路径均为404。<br>我也是踩着坑过来的(2333~)，下面就放一下我最终的Apache虚拟主机配置代码吧。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</span><br><span class="line">    ServerName localhost        <span class="comment"># 定义localhos解决定义虚拟主机后localhost无法访问</span></span><br><span class="line">    DocumentRoot <span class="string">"D:\\laragon\\www\\library\\public"</span></span><br><span class="line"></span><br><span class="line">    &lt;Directory <span class="string">"D:\\laragon\\www\\library"</span>&gt;     <span class="comment"># 解决除index.php外其余页面404</span></span><br><span class="line">        Options FollowSymLinks ExecCGI</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow <span class="keyword">from</span> all</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</span><br><span class="line">    DocumentRoot <span class="string">"D:\\laragon\\www\\library\\public"</span></span><br><span class="line">    ServerName www.yt.weblab.com</span><br><span class="line">    ErrorLog <span class="string">"logs/yt.weblab.com-error.log"</span></span><br><span class="line">    CustomLog <span class="string">"logs/yt.weblab.com-access.log"</span> common</span><br><span class="line"></span><br><span class="line">    &lt;Directory <span class="string">"D:\\laragon\\www\\library"</span>&gt; <span class="comment"># Directory下面配置，解决除index.php外其余页面404</span></span><br><span class="line">        Options FollowSymLinks ExecCGI</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow <span class="keyword">from</span> all</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这里配置Apache的虚拟主机容易出现错误，比如定义了虚拟主机后，只能通过虚拟主机访问，而localhost访问失效。或者是能用虚拟主机和localhost访问，但是只能访问到<code>index.php</code>,而其他登录、注册等路径均为404。<br>我也是踩着坑过来的(2333~)，下面就放一下我最终的Apache虚拟主机配置代码吧。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</span><br><span class="line">    ServerName localhost        <span class="comment"># 定义localhos解决定义虚拟主机后localhost无法访问</span></span><br><span class="line">    DocumentRoot <span class="string">"D:\\laragon\\www\\library\\public"</span></span><br><span class="line"></span><br><span class="line">    &lt;Directory <span class="string">"D:\\laragon\\www\\library"</span>&gt;     <span class="comment"># 解决除index.php外其余页面404问题</span></span><br><span class="line">        Options FollowSymLinks ExecCGI</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow <span class="keyword">from</span> all</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</span><br><span class="line">    DocumentRoot <span class="string">"D:\\laragon\\www\\library\\public"</span></span><br><span class="line">    ServerName www.yt.weblab.com</span><br><span class="line">    ErrorLog <span class="string">"logs/yt.weblab.com-error.log"</span></span><br><span class="line">    CustomLog <span class="string">"logs/yt.weblab.com-access.log"</span> common</span><br><span class="line"></span><br><span class="line">    &lt;Directory <span class="string">"D:\\laragon\\www\\library"</span>&gt; <span class="comment"># 配置Directory，解决除index.php外其余页面404问题</span></span><br><span class="line">        Options FollowSymLinks ExecCGI</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow <span class="keyword">from</span> all</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h1 id="程序测试"><a href="#程序测试" class="headerlink" title="程序测试"></a>程序测试</h1><p>测试一下实验的功能</p>
 <ol>
@@ -678,6 +678,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/CTF/Jarvis/Web/Jarvis-OJ-Web.html" rel="prev" title="Jarvis OJ Web">
+                Jarvis OJ Web <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -770,7 +774,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -837,7 +841,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -922,7 +930,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">34</span>
+                      
+                    
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1031,7 +1041,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">196k</span>
+    <span title="站点总字数">214k</span>
   
 
   
@@ -1042,7 +1052,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">2:59</span>
+    <span title="站点阅读时长">3:14</span>
   
 </div>
 

@@ -160,7 +160,7 @@
 <meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//53.jpg">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//54.jpg">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Jarvis/Web//Jarvis-OJ-Web//55.jpg">
-<meta property="og:updated_time" content="2019-05-22T07:13:45.750Z">
+<meta property="og:updated_time" content="2019-05-25T08:14:11.568Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jarvis OJ Web">
 <meta name="twitter:description" content="Jarvis OJ Web部分题目的write up">
@@ -490,7 +490,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-22 15:13:45" itemprop="dateModified" datetime="2019-05-22T15:13:45+08:00">2019-05-22</time>
+                <time title="修改时间：2019-05-25 16:14:11" itemprop="dateModified" datetime="2019-05-25T16:14:11+08:00">2019-05-25</time>
               
             
           </span>
@@ -734,7 +734,7 @@
 <p>简单测试下，发现有密码错误和用户名错误两种错误回显。<br>当输入<code>username=admin&amp;password=123</code>，页面返回密码错误。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\38.JPG" alt></p>
 <p>当输入<code>username=admin&#39;&amp;password=123</code>，页面返回用户名错误。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\39.JPG" alt></p>
 <p>而输入<code>username=admin&#39; #&amp;password=123</code>，页面返回密码错误而不是之前的用户名错误，说明<code>&#39; #</code>没有被过滤。<br>输入<code>username=admin&#39; and 1=1#</code>，页面返回用户名错误，说明新增的空格和and可能存在过滤。于是逐步排查，先将空格改为<code>/**/</code>试试，即输入<code>username=admin&#39;/**/and/**/1=1#</code>，结果发现页面返回密码错误，即可确定，服务器只过滤了空格。</p>
-<p>于是就可以通过页面回显结果进行布尔盲注，以页面返回密码错误为True，返回用户名错误为False。<br>这一题关于盲注的解法我准备后面文章再拿来当例子讲（后面准备出一篇关于盲注、报错注入的文章）</p>
+<p>于是就可以通过页面回显结果进行布尔盲注，以页面返回密码错误为True，返回用户名错误为False。<br>这一题关于盲注的解法我准备后面文章再拿来当例子讲（后面准备写一篇关于盲注、报错注入的文章）<br>盲注脚本写在另一篇文章里了，<a href="http://miracle778.site/Web安全/SQL注入/SQL注入之布尔盲注.html" target="_blank" rel="noopener">http://miracle778.site/Web安全/SQL注入/SQL注入之布尔盲注.html</a> —— 5/25加</p>
 <p>所以这题介绍另一种算是巧解的方法吧。<br>页面存在两种报错返回结果，用户名错误和密码错误，而且输入除admin外的用户名均提示用户名错误，所以可以肯定admin一个用户，进而猜测它的处理逻辑可能为：通过输入的username作为where条件查询密码，如果存在且查询结果与输入的密码相同即爆flag，如果不匹配则返回密码错误，而如果不存在查询结果就报用户名错误。逻辑代码类似于下面:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$res = query(select password from user where username=$_POST[<span class="string">'username'</span>]);<span class="comment">//query函数为了简便瞎写了</span></span><br><span class="line"><span class="keyword">if</span>($res)	<span class="comment">//查询返回结果不为空集</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(fetch($res)===md5($_POST[<span class="string">'password'</span>]))&#123;	<span class="comment">//fetch函数为图简便，也是瞎写的。</span></span><br><span class="line">		<span class="keyword">echo</span> $flag;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;	<span class="comment">//密码不匹配</span></span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"密码错误"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"用户名错误"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>于是我们可以输入一个不存在的用户名，结合union select语句手动创建一个密码作为sql查询语句的返回结果，然后密码框处输入我们创建的假密码进行绕过。<br>例如输入<code>username=miracle778&#39;/**/union(select(123))#&amp;password=123</code>，结果返回密码错误没有报用户名错误，这说明了我们这个方法是生效的，只是服务器做密码比较的时候可能用了哈希加密，这里推测用了md5加密。于是输入<code>username=miracle778&#39;/**/union(select(md5(&#39;123&#39;)))#&amp;password=123</code>，成功得到flag，如下图示。<br><img src="/CTF/Jarvis/Web/\Jarvis-OJ-Web\\40.JPG" alt></p>
 <hr>
@@ -910,6 +910,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/Web安全/SQL注入/SQL注入之布尔盲注.html" rel="prev" title="SQL注入之布尔盲注">
+                SQL注入之布尔盲注 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -1002,7 +1006,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1160,7 +1164,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">35</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1269,7 +1279,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">214k</span>
+    <span title="站点总字数">219k</span>
   
 
   
@@ -1280,7 +1290,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">3:14</span>
+    <span title="站点阅读时长">3:19</span>
   
 </div>
 

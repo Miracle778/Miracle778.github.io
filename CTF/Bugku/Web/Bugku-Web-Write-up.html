@@ -128,9 +128,9 @@
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x10//2.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x11//1.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x11//2.JPG">
-<meta property="og:image" content="http://bugku-web-write-up//0x12//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//2.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//1.JPG">
-<meta property="og:image" content="http://bugku-web-write-up//0x12//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//4.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//3.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x12//5.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x13//1.JPG">
@@ -141,7 +141,7 @@
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//2.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//3.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x14//4.JPG">
-<meta property="og:image" content="http://bugku-web-write-up//0x15//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x15//1.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x15//2.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x15//3.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x16//1.JPG">
@@ -197,7 +197,7 @@
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x33//2.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x33//3.JPG">
 <meta property="og:image" content="http://miracle778.github.io/CTF/Bugku/Web//Bugku-Web-Write-up//0x33//4.JPG">
-<meta property="og:updated_time" content="2019-04-17T02:18:36.313Z">
+<meta property="og:updated_time" content="2019-06-15T06:03:01.324Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Bugku Web Write up">
 <meta name="twitter:description" content="Bugku平台的Web题的Write up,差不多刷了一遍，总结一下。">
@@ -527,7 +527,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-17 10:18:36" itemprop="dateModified" datetime="2019-04-17T10:18:36+08:00">2019-04-17</time>
+                <time title="修改时间：2019-06-15 14:03:01" itemprop="dateModified" datetime="2019-06-15T14:03:01+08:00">2019-06-15</time>
               
             
           </span>
@@ -666,10 +666,10 @@
 <h3 id="0x09-变量1"><a href="#0x09-变量1" class="headerlink" title="0x09 变量1"></a>0x09 变量1</h3><p>点击题目，看到源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x09\\1.JPG" alt><br>分析一下，可以看到var_dump那里出现$$,存在变量覆盖，前面正则对args进行了过滤，只能输入[a-z][0-9][A-Z]。<br>因为存在变量覆盖，所以我们传入args=GLOBALS,即可达到输出$GLOBALS数组的目的，GLOBALS为php的超全局变量，一个包含了全部变量的全局组合数组。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x09\\2.JPG" alt></p>
 <h3 id="0x10-web5"><a href="#0x10-web5" class="headerlink" title="0x10 web5"></a>0x10 web5</h3><p>题目描述：JSPFUCK??????答案格式CTF{**}<br>点进题目并查看源码，发现一堆js混淆过的jsfuck。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x10\\1.JPG" alt><br>复制下来直接输入F12控制台即可得到flag，再将ctf改为大写即可<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x10\\2.JPG" alt></p>
 <h3 id="0x11-头等舱"><a href="#0x11-头等舱" class="headerlink" title="0x11 头等舱"></a>0x11 头等舱</h3><p>点进题目如图,源代码里也找不到啥东西<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x11\\1.JPG" alt><br>结合题目：头等舱 猜测flag藏在http头里<br>于是直接在响应的Headers里面找到<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x11\\2.JPG" alt></p>
-<h2 id="初级题"><a href="#初级题" class="headerlink" title="初级题"></a>初级题</h2><h3 id="0x12-网站被黑"><a href="#0x12-网站被黑" class="headerlink" title="0x12 网站被黑"></a>0x12 网站被黑</h3><p>点进题目去，是一个如下图示界面,源代码、HTTP头都没找到什么东西<br><img src="\\Bugku-Web-Write-up\\0x12\\2.JPG" alt><br>结合题目意思，网站被黑，说不定留下了什么后门。<br>于是用御剑(或者其他工具)扫一下后台,发现shell.php<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\1.JPG" alt><br>访问一下，看到一个登录框,随便输个密码，出现如图所警告<br><img src="\\Bugku-Web-Write-up\\0x12\\4.JPG" alt><br>到这一步的话，没有其他提示，只能先通过万能密码看看能不能绕过登录，不能的话再暴力破解<br>用万能密码绕过失败，尝试Burp暴力破解，Burp暴力破解具体操作自行百度，或者参考我之前发的<a href="https://miracle778.github.io/Web%E5%AE%89%E5%85%A8/DVWA/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/dvwa-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3.html">Dvwa暴力破解</a><br>暴力破解选择simple list里的password字典进行爆破<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\3.JPG" alt><br>得到密码为hack<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\5.JPG" alt><br>输入密码即可得flag</p>
+<h2 id="初级题"><a href="#初级题" class="headerlink" title="初级题"></a>初级题</h2><h3 id="0x12-网站被黑"><a href="#0x12-网站被黑" class="headerlink" title="0x12 网站被黑"></a>0x12 网站被黑</h3><p>点进题目去，是一个如下图示界面,源代码、HTTP头都没找到什么东西<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\2.JPG" alt><br>结合题目意思，网站被黑，说不定留下了什么后门。<br>于是用御剑(或者其他工具)扫一下后台,发现shell.php<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\1.JPG" alt><br>访问一下，看到一个登录框,随便输个密码，出现如图所警告<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\4.JPG" alt><br>到这一步的话，没有其他提示，只能先通过万能密码看看能不能绕过登录，不能的话再暴力破解<br>用万能密码绕过失败，尝试Burp暴力破解，Burp暴力破解具体操作自行百度，或者参考我之前发的<a href="https://miracle778.github.io/Web%E5%AE%89%E5%85%A8/DVWA/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/dvwa-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3.html">Dvwa暴力破解</a><br>暴力破解选择simple list里的password字典进行爆破<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\3.JPG" alt><br>得到密码为hack<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x12\\5.JPG" alt><br>输入密码即可得flag</p>
 <h3 id="0x13-管理员系统"><a href="#0x13-管理员系统" class="headerlink" title="0x13 管理员系统"></a>0x13 管理员系统</h3><p>点进题目如图示,使用万能密码测试登录，提示说IP不允许访问，联系本地管理员登录<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\1.JPG" alt><br>于是添加XXF(X-Forwarded-For)=127.0.0.1进行登录尝试，提示说密码不对<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\2.JPG" alt><br>从上面尝试知道，万能密码不管用，所以密码可能藏在某个地方(也是凑巧发现233~)<br>查看源代码，发现有一行诡异的base64注释，解码可得内容为<code>test123</code><br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\3.JPG" alt><br>于是用admin&amp;test123进行登录，同时添加XXF头，得到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x13\\4.JPG" alt></p>
 <h3 id="0x14-web4"><a href="#0x14-web4" class="headerlink" title="0x14 web4"></a>0x14 web4</h3><p>题目如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\1.JPG" alt><br>按提示查看源代码，如图发现一段被url编码的js脚本<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\2.JPG" alt><br>将这段代码进行解码，如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\3.JPG" alt><br>通过阅读源码分析，只要在输入框输入<code>67d709b2b54aa2aa648cf6e87a7114f1</code>即可得到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x14\\4.JPG" alt></p>
-<h3 id="0x15-flag在index里"><a href="#0x15-flag在index里" class="headerlink" title="0x15 flag在index里"></a>0x15 flag在index里</h3><p>题目如图示<br><img src="\\Bugku-Web-Write-up\\0x15\\1.JPG" alt><br>点击链接后跳转到如图示地址<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\2.JPG" alt><br>很明显存在文件包含，结合题目标题 flag在index里，构造payload：<code>http://123.206.87.240:8005/post/index.php?file=php://filter/read/convert.base64-encode/resource=index.php</code>获取index.php源码<br>将获取到的base64解码后得到网页源码,找到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\3.JPG" alt></p>
+<h3 id="0x15-flag在index里"><a href="#0x15-flag在index里" class="headerlink" title="0x15 flag在index里"></a>0x15 flag在index里</h3><p>题目如图示<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\1.JPG" alt><br>点击链接后跳转到如图示地址<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\2.JPG" alt><br>很明显存在文件包含，结合题目标题 flag在index里，构造payload：<code>http://123.206.87.240:8005/post/index.php?file=php://filter/read/convert.base64-encode/resource=index.php</code>获取index.php源码<br>将获取到的base64解码后得到网页源码,找到flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x15\\3.JPG" alt></p>
 <h3 id="0x16-输入密码查看flag"><a href="#0x16-输入密码查看flag" class="headerlink" title="0x16 输入密码查看flag"></a>0x16 输入密码查看flag</h3><p>题目如图<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x16\\1.JPG" alt><br>很明显，用Burp暴力破解,得到密码为13579<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x16\\2.JPG" alt><br>输入得flag：<code>flag{bugku-baopo-hah}</code></p>
 <h3 id="0x17-点击一百万次"><a href="#0x17-点击一百万次" class="headerlink" title="0x17 点击一百万次"></a>0x17 点击一百万次</h3><p>题目hints为:JavaScript<br>题目如图，每点击这个图片一次，数量加1，当数量为100万的时候出来flag<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\1.JPG" alt><br>显然，不可能为了一个flag浪费一个鼠标233~<br>结合题目给的hints，于是查看前端关于点击的js代码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\2.JPG" alt><br>分析可知，点击一次clicks加1，当clicks大于100万的时候，提交一个表单，value等于clicks的值，所以我们直接POST提交clicks即可。<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x17\\3.JPG" alt></p>
 <h3 id="0x18-备份是个好习惯"><a href="#0x18-备份是个好习惯" class="headerlink" title="0x18 备份是个好习惯"></a>0x18 备份是个好习惯</h3><p>点击题目如图示,出现一段hash编码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\1.JPG" alt><br>乍一看还以为是md5，算了下长度，发现是64位，但是前32位跟后32位是相同的。感觉有点奇怪，于是把前32位md5解密一下，发现是个空密码。所以这段编码估计是没有什么用了。那应该怎么做呢?<br>题目描述是备份是个好习惯猜测可能是备份文件泄露漏洞。于是访问index.php.bak，可以下载。于是打开备份文件查看源码<br><img src="/CTF/Bugku/Web/\Bugku-Web-Write-up\\0x18\\2.JPG" alt><br>分析一下，这里代码意思是，第11行获取url ?及?后的字符串,第12行去除?,第13行剩下字符串中的key替代成’’,第14行解析字符串，即将 key1=234&amp;key2=123解析成$key1=234、$key2=123。<br>到了这里就应该明白了，主要考察两个点，第一是13行处，绕过str_replace。绕过之后，来到第二处，md5弱类型比较。<br>对于第一个点，可以使用双写绕过，第二个点的话，可以利用两个字符串md5都是0e开头绕过，或者将key1 key2赋为两个不同数组进行绕过(md5不能对数组进行操作，会返回null=null)</p>
@@ -883,7 +883,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -956,7 +956,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                    <span class="site-state-item-count">29</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1057,7 +1059,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">42</span>
+                      
+                    
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1166,7 +1170,7 @@
     
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">250k</span>
+    <span title="站点总字数">254k</span>
   
 
   
@@ -1177,7 +1181,7 @@
     
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">3:47</span>
+    <span title="站点阅读时长">3:51</span>
   
 </div>
 

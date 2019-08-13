@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/米兔.jpg?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16x16.ico?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这几天看了看操作系统，顺便研究了一下Python的协程，下面就是做的一点笔记">
+<meta name="keywords" content="Python协程,asyncio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python协程">
+<meta property="og:url" content="http://miracle778.github.io/Study/Python/Python协程.html">
+<meta property="og:site_name" content="Miracle778&#39;s Blog">
+<meta property="og:description" content="这几天看了看操作系统，顺便研究了一下Python的协程，下面就是做的一点笔记">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//1.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//2.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//3.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//4.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//5.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//6.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//7.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//8.jpg">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//9.JPG">
+<meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//10.JPG">
+<meta property="og:updated_time" content="2019-08-13T08:06:52.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python协程">
+<meta name="twitter:description" content="这几天看了看操作系统，顺便研究了一下Python的协程，下面就是做的一点笔记">
+<meta name="twitter:image" content="http://miracle778.github.io/Study/Python//Python协程//1.JPG">
+
+
+
+
+
+
+  <link rel="canonical" href="http://miracle778.github.io/Study/Python/Python协程.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Python协程 | Miracle778's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Miracle778's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">人生本来就有很多事是徒劳无功呀!</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-info-circle"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://miracle778.github.io/Study/Python/Python协程.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Miracle778">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/米兔.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Miracle778's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python协程
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-13 15:59:05 / 修改时间：16:06:52" itemprop="dateCreated datePublished" datetime="2019-08-13T15:59:05+08:00">2019-08-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/" itemprop="url" rel="index"><span itemprop="name">Study</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/Study/Python/Python协程.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Study/Python/Python协程.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">12k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">11 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>这几天看了看操作系统，顺便研究了一下Python的协程，下面就是做的一点笔记</center>
+
+<a id="more"></a>
+<hr>
+<h1 id="协程是什么"><a href="#协程是什么" class="headerlink" title="协程是什么?"></a>协程是什么?</h1><p>协程，英文Coroutines，是一种比线程更加轻量级的存在。正如一个进程可以拥有多个线程一样，一个线程也可以拥有多个协程。协程相当于一个特殊的函数，可以在某个地方挂起，并且可以重新在挂起处继续运行。<br>协程不被操作系统内核所管理，而完全是由程序所控制(也就是在用户态执行),这样带来的好处就是性能得到了很大的提升，不会像线程切换那样消耗资源。<br>一个线程内的多个协程是串行执行的，不能利用多核，所以，显然，协程不适合计算密集型的场景。协程适合I/O 阻塞型。</p>
+<hr>
+<h1 id="Python的协程"><a href="#Python的协程" class="headerlink" title="Python的协程"></a>Python的协程</h1><p>Python的协程有这么三种</p>
+<ol>
+<li>由生成器变形来的 <code>yield/send</code></li>
+<li>Python 3.4版本引入的<a href="mailto:`@asyncio.coroutine" target="_blank" rel="noopener">`@asyncio.coroutine</a>和yield from`</li>
+<li>Python 3.5版本引入的<code>async/await</code></li>
+</ol>
+<hr>
+<h1 id="生成器变形来的-yield-send"><a href="#生成器变形来的-yield-send" class="headerlink" title="生成器变形来的 yield/send"></a>生成器变形来的 yield/send</h1><p>在写这个之前，先要知道Python的生成器，讲生成器之前又要先讲下迭代器。</p>
+<h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><p>在Python中，实现了<strong>iter</strong>方法的对象即为可迭代对象，可迭代对象能提供迭代器。<br>实现了<strong>next</strong>方法的对象称为迭代器，Python2里面是实现next方法。因为迭代器也属于可迭代对象，所以说迭代器也要实现<strong>iter</strong>方法，即迭代器需要同时实现<strong>iter</strong>和<strong>next</strong>两个方法。</p>
+<p>关于可迭代对象和迭代器的区别，参考<a href="https://blog.csdn.net/liangjisheng/article/details/79776008" target="_blank" rel="noopener">https://blog.csdn.net/liangjisheng/article/details/79776008</a>，这里就不多讲了。</p>
+<p>直接讲迭代器了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Miracle</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__age += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.__age &gt; <span class="number">778</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">        <span class="keyword">return</span> self.__age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set</span><span class="params">(self,age)</span>:</span></span><br><span class="line">        self.__age = age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">m = Miracle(<span class="string">"Miracle778"</span>,<span class="number">770</span>)</span><br></pre></td></tr></table></figure></p>
+<p>上面定义了一个类，实现了<code>__next__、__iter__</code>方法，故这个类的对象是迭代器。迭代器可以调用内置方法next(另一种写法是<code>obj.__next__()</code>)，进行一次迭代。我们如果用上面的代码的上下文环境执行 <code>next(m)</code>语句，会输出<code>771</code>。</p>
+<p>如果<strong>next</strong>方法被调用，但迭代器没有值可以返回的话，就会引发一个<code>StopIteration</code>异常，我们这里手动抛出该异常，主要是为了避免无限迭代。</p>
+<p>我们可以知道，使用next()方法，迭代器会返回它的下一个值，那如果我们需要遍历所有迭代器的值，那岂不是要调用n次next()方法了吗？但还好，可以使用for循环进行遍历。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Miracle</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__age += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.__age &gt; <span class="number">778</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">        <span class="keyword">return</span> self.__age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set</span><span class="params">(self,age)</span>:</span></span><br><span class="line">        self.__age = age</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">m = Miracle(<span class="string">"ye"</span>,<span class="number">770</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m:</span><br><span class="line">    print(i)</span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line"><span class="number">771</span></span><br><span class="line"><span class="number">772</span></span><br><span class="line"><span class="number">773</span></span><br><span class="line"><span class="number">774</span></span><br><span class="line"><span class="number">775</span></span><br><span class="line"><span class="number">776</span></span><br><span class="line"><span class="number">777</span></span><br><span class="line"><span class="number">778</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到上面的<code>for i in m</code>，这里发生的过程如下</p>
+<blockquote>
+<p>Python解释器会在第一次迭代时自动调用iter(obj)，之后的迭代会调用迭代器的next方法，for语句会自动处理最后抛出的StopIteration异常。</p>
+</blockquote>
+<p>也就是说，也可以这样写<code>for i in iter(m)</code>，执行结果与<code>for i in m</code>一样。<br>此外，因为迭代器也属于可迭代对象，于是也能使用内置方法<code>list()</code>,将对象转换成列表。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">m.set(<span class="number">770</span>)</span><br><span class="line">t = list(m)</span><br><span class="line">print(t)</span><br><span class="line">输出:</span><br><span class="line">[<span class="number">771</span>,<span class="number">772</span>,<span class="number">773</span>,<span class="number">774</span>,<span class="number">775</span>,<span class="number">776</span>,<span class="number">777</span>,<span class="number">778</span>]</span><br></pre></td></tr></table></figure></p>
+<p>迭代器就简单讲到这里了。下面简单讲下生成器</p>
+<hr>
+<h1 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h1><p>生成器其实是一种特殊的迭代器，不过这种迭代器更加优雅。它不需要再像上面的类一样写<code>__iter__()和__next__()</code>方法了，只需要一个yiled关键字。 生成器一定是迭代器（反之不成立）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"正在执行"</span>)</span><br><span class="line">    prev, curr = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">yield</span> curr</span><br><span class="line">        prev, curr = curr, curr + prev</span><br></pre></td></tr></table></figure></p>
+<p>比如说上面的代码，函数<code>fib</code>里面出现了yield关键字，则这个函数即为生成器。函数的返回值是一个生成器对象。当执行f=fib()返回的是一个生成器对象，此时函数体中的代码并不会执行，只有显示或隐示地调用next的时候才会真正执行里面的代码。<br><img src="/Study/Python/\Python协程\\1.JPG" alt><br>如上图，执行了next后，函数里面代码才被执行，所以生成器更能节省内存和CPU。</p>
+<p>开头说到，生成器也是一种特殊的迭代器，故生成器也可以被迭代，如下图。<br><img src="/Study/Python/\Python协程\\2.JPG" alt></p>
+<p>从上面的例子可以看到，通过yield语句返回迭代值，整个过程如下</p>
+<blockquote>
+<p>在 for 循环执行时，每次循环都会执行 fib 函数内部的代码，执行到 yield curr 语句时，fib 函数就返回一个迭代值，下次迭代时，代码从 yield curr 的下一条语句继续执行，而函数的本地变量看起来和上次中断执行前是完全一样的，于是函数继续执行，直到再次遇到 yield。看起来就好像一个函数在正常执行的过程中被 yield 中断了数次，每次中断都会通过 yield 返回当前的迭代值。</p>
+</blockquote>
+<p>上面我们用到的都是使用<code>yield</code>语句抛出迭代值，如:<code>yield curr</code>，其实<code>yield</code>语句也能用来赋值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consume</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        i = <span class="keyword">yield</span> </span><br><span class="line">        print(<span class="string">"消费者"</span>,i)</span><br></pre></td></tr></table></figure></p>
+<p>看到上面这个例子中的<code>i = yield</code>语句，我们可以在函数外调用<code>send</code>函数对i进行赋值，不过在调用send函数之前，必须先要“激活”该生成器，使其执行到<code>yield</code>语句处。<br>下面我们就来调用一下send函数，运行一下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consume</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"consume函数被激活"</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        i = <span class="keyword">yield</span> </span><br><span class="line">        print(<span class="string">"消费者"</span>,i)</span><br><span class="line"></span><br><span class="line">consumer = consume() <span class="comment"># 生成器</span></span><br><span class="line">next(consumer)  <span class="comment"># 激活生成器，使其运行到yield函数处</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    consumer.send(i)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/Study/Python/\Python协程\\3.JPG" alt></p>
+<p>send函数跟next函数类似，把值传输进去，然后函数运行<code>yield</code>语句后面的代码，直至再次遇上<code>yield</code>，然后中断，等待下一个send或者next函数的运行。<br>因此，send函数也能用于生产器激活，不过激活的时候，要send(None)才行，此外send函数的返回值和next一样，都是yield抛出的当前迭代值。</p>
+<hr>
+<h1 id="yield-send-协程"><a href="#yield-send-协程" class="headerlink" title="yield/send 协程"></a>yield/send 协程</h1><p>上面讲生成器最后举的例子，可视为<code>yield/send</code>型协程。<br>yield会使当前函数即协程暂停，这不同于线程的阻塞，协程的暂停完全由程序控制，协程暂停的时候，CPU可以去执行另一个任务，等待所需要的值准备好后由send传入再继续执行。</p>
+<h1 id="asyncio-coroutine和yield-from型协程"><a href="#asyncio-coroutine和yield-from型协程" class="headerlink" title="@asyncio.coroutine和yield from型协程"></a>@asyncio.coroutine和yield from型协程</h1><p>这类协程和async/await差不多，所以就不讲了，直接讲Python 3.5版的async/await</p>
+<h1 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h1><p>在Python3.5中引入的async和await,可以将他们理解成asyncio.coroutine/yield from的完美替身。当然，从Python设计的角度来说，async/await让协程表面上独立于生成器而存在，将细节都隐藏于asyncio模块之下，语法更清晰明了。</p>
+<p>先看到async关键字的使用情况</p>
+<ol>
+<li>async def 定义协程函数或者异步生成器</li>
+<li>async for 异步迭代器</li>
+<li>async with 异步上下文管理器</li>
+</ol>
+<p>先看到async def定义的函数的两种情况<br><img src="/Study/Python/\Python协程\\4.JPG" alt><br>我们可以看到，图中的A函数是用return返回的，类型为协程类型，B函数<strong>里面包含yield关键字</strong>，类型为异步生成器。</p>
+<p>所以以async def开头声明的，函数代码里不含yield的是协程函数，含yield的是异步生成器。<strong>异步生成器可以用async for进行迭代。</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">Miracle</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'Miracle778'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">666</span>,<span class="number">677</span>):</span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">()</span>:</span></span><br><span class="line">    m = Miracle()</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">for</span> i <span class="keyword">in</span> m:</span><br><span class="line">        i+=<span class="number">100</span></span><br><span class="line">        print(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(get())</span><br><span class="line">loop.close()</span><br></pre></td></tr></table></figure></p>
+<p>看到上面代码，最后三行是运行协程所需要的，后面会讲，我们来看到Miracle函数里的yield部分，如上面所说，这种函数是异步生成器，可以用async for迭代(见get函数)，这里迭代了666 - 676 十个数，get函数里会把这十个数加100然后打印。执行结果如下图<br><img src="/Study/Python/\Python协程\\5.JPG" alt></p>
+<p>async for迭代异步生成器介绍好了，下面我们再返回去看到协程函数，刚刚的截图里面，当我们输入type(A())的时候，Python shell有一个警告，<code>RuntimeWarning: coroutine &#39;A&#39; was never awaited</code>。<br>这个警告信息说协程A永远不会等待，我们知道，协程最大的特点就是，在运行过程中，可以挂起然后去执行别的任务，待所需的条件满足后，再返回来执行挂起位置后续代码。而挂起操作，前面的yield/send型协程靠的是yield语句，这里的async/await则是靠await语句了。<strong>所以每个async类型的协程函数里面，应该要有await语句，不然就失去特性了，和普通函数一样，没有交替执行。</strong></p>
+<p>上面把 async、await两个关键字介绍了下，还给了个代码示例，里面用到了asyncio的一些函数。所以下面就要介绍这些函数了。讲到这里，有必要放下asyncio库的<a href="https://docs.python.org/zh-cn/3/library/asyncio-eventloop.html" target="_blank" rel="noopener">官方文档</a>了<br>另外再放几篇别的相关文章:<br><a href="https://segmentfault.com/a/1190000008814676" target="_blank" rel="noopener">Python 的异步 IO：Asyncio 简介</a><br><a href="https://segmentfault.com/a/1190000012631063#articleHeader6" target="_blank" rel="noopener">通读Python官方文档之协程、Future与Task</a><br><a href="https://www.jianshu.com/p/7690edfe9ba5" target="_blank" rel="noopener">Python3 异步协程函数async具体用法</a></p>
+<p>想要详细了解asyncio可以看上面几个链接，我这里就只简单讲讲自己用到的函数。<br>我们上面讲到过，协程不能直接运行，需要创建一个事件循环loop，再把协程注册到事件循环轰中，然后开启事件循环才能运行。这几步分别涉及的函数有</p>
+<ol>
+<li><p>创建事件循环 </p>
+<blockquote>
+<p>loop = asyncio.get_event_loop()<br>asyncio.get_event_loop()<br>获取当前事件循环。 如果当前 OS 线程没有设置当前事件循环并且 set_event_loop() 还没有被调用，asyncio 将创建一个新的事件循环并将其设置为当前循环。</p>
+</blockquote>
+</li>
+<li><p>将协程注册到事件循环并开启</p>
+<blockquote>
+<p>loop.run_until_complete(future)<br>运行直到 future ( Future 的实例 ) 被完成。<br>如果参数是 coroutine object ，将被隐式调度为 asyncio.Task 来运行。<br>返回 Future 的结果 或者引发相关异常。</p>
+<p>在注册事件循环的时候，其实是run_until_complete方法将协程包装成为了一个任务（task）对象。所谓task对象是Future类的子类。保存了协程运行后的状态，用于未来获取协程的结果，关于Future、Task类的详情请看上面链接<br>asyncio.ensure_future(coroutine) 和 loop.create_task(coroutine)都可以创建一个task<br>也就是说，注册事件循环有三种写法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法一  直接传入coroutine obeject 类型参数，隐式调度</span></span><br><span class="line">&gt; <span class="keyword">import</span> asyncio</span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;    <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; loop.run_until_complete(miracle())</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法二 使用asyncio.ensure_future(coroutine) 创建task传入</span></span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;   <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; task = asyncio.ensure_future(miracle())</span><br><span class="line">&gt; loop.run_until_complete(task)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法三 使用loop.create_task(coroutine) 创建task传入</span></span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;   <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; task = loop.create_task(miracle())</span><br><span class="line">&gt; loop.run_until_complete(task)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>这里关于写法二和写法三做个解释，写法二和三，都是将协程生成一个task对象。<br>而run_until_complete的参数是一个futrue对象。当传入一个协程，其内部会自动封装成task，task是Future的子类。<strong>isinstance(task, asyncio.Future)将会输出True。</strong></p>
+</blockquote>
+<p>上面都是通过 run_until_complete 来运行 loop ，等到 future 完成，run_until_complete 也就返回了。但还可以通过另一个函数 loop.run_forever 运行loop。不同的是，该函数等到 future 完成不会自动退出，得需要 loop.stop() 函数退出，且 loop.stop 函数不能写在 loop.run_forever 后面，得写在协程函数里。具体见下面例子<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 协程miracle await 0.1s test await 0.3s，miracle执行的更快，</span></span><br><span class="line"><span class="comment"># 调用完loop.stop后，事件循环结束，故test没有执行完毕就退出了</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">miracle</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"coroutine miracle start"</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.1</span>)</span><br><span class="line">    print(<span class="string">"miracle end"</span>)</span><br><span class="line">    loop.stop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"test start"</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.3</span>)</span><br><span class="line">    print(<span class="string">"test end"</span>)</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">task = loop.create_task(miracle())</span><br><span class="line">task2 = loop.create_task(test())</span><br><span class="line">loop.run_forever()</span><br></pre></td></tr></table></figure></p>
+<p>输出结果如下图<br><img src="/Study/Python/\Python协程\\6.jpg" alt></p>
+<p><strong>多个协程情况</strong><br>上面 run_until_complete 传入的都只是一个task，当有多个协程的时候，该怎么传入呢<br>答案是用 asyncio.wait() asyncio.gather()函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task1 = asyncio.ensure_future(demo1())</span><br><span class="line">task2 = loop.create_task(demo2())</span><br><span class="line">tasks = [task1,task2]</span><br><span class="line"><span class="comment"># asyncio.wait()</span></span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line"><span class="comment"># asyncio.gather()</span></span><br><span class="line">loop.run_until_complete(asyncio.gather(*tasks))</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>asyncio库里还有一些用于 socket 编程函数，之前做网络编程实验的时候简单用过，具体见官方文档，这里就不讲了。</p>
+<h2 id="awaitable-对象"><a href="#awaitable-对象" class="headerlink" title="awaitable 对象"></a>awaitable 对象</h2><p>我们在上面举的代码例子里面的 await 后面都是加的<code>asyncio.sleep</code>函数或者是<code>async def</code>定义的协程，那么这个 await 右边能加些什么类型的对象呢? 我们可以试一下。</p>
+<hr>
+<p>分隔线，<strong>以下几个是错误示例，错误示例，千万不要这样写*</strong></p>
+<hr>
+<p>本来是想着，<del>如果一个协程读文件的时候，挂起让给另一个协程进行计算，然后等文件读完，返回去执行</del>。<strong>但是</strong>，想法是好的，写起来难受，踩了好多坑，所以就有了<strong>下面几个错误示例，大家笑笑就好。。</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 错误写法一</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time </span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">Read</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"Read start"</span>)</span><br><span class="line">    f = open(<span class="string">"C:\\Users\\HP\\Desktop\\1.gif"</span>,<span class="string">'rb'</span>)</span><br><span class="line">    <span class="keyword">await</span> f.read()</span><br><span class="line">    print(<span class="string">"Read end"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">Calculate</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"Calculate start"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="keyword">while</span> time.time() - start &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">pass</span>                    <span class="comment"># 模拟计算消耗时间2s</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.1</span>)</span><br><span class="line">    print(<span class="string">"Calculate end"</span>)</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"></span><br><span class="line">loop.run_until_complete(asyncio.wait([Read(),Calculate()]))</span><br></pre></td></tr></table></figure></p>
+<p>错误写法一，不清楚 await 右边能跟什么对象，所以直接 await f.read()了，于是有了报错<br><code>TypeError: object bytes can&#39;t be used in &#39;await&#39; expression</code>，报错信息说bytes型对象不能被用于await表达式，于是上官方文档搜搜 await 语法，找到了 <a href="https://www.python.org/dev/peps/pep-0492/" target="_blank" rel="noopener">PEP492文件 Coroutines with async and await syntax</a>、英语版看不懂的这里还有个中文版可以结合参考参考<a href="https://www.cnblogs.com/animalize/p/4738941.html" target="_blank" rel="noopener">PEP492翻译版</a><br>PEP492里有一段话，描述了什么是 awaitable<br><img src="/Study/Python/\Python协程\\7.JPG" alt><br>翻译一下就，await只接受awaitable对象，awaitable对象是以下的其中一个</p>
+<blockquote>
+<p>1、由原生协程函数返回的原生协程对象 即使用 async def 声明的协程函数</p>
+<p>2、由装饰器types.coroutine()装饰的一个“生成器实现的协程”对象<br>这里解释一下，”生成器实现的协程”就是指我们前面介绍的 yield from 这种类型<br>types.coroutune 是个装饰器，可以把生成器实现的协程 转化为与原生协程相兼容的形式，代码如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; @types.coroutine</span><br><span class="line">&gt; <span class="function"><span class="keyword">def</span> <span class="title">miracle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;   i = <span class="keyword">yield</span> <span class="keyword">from</span> test()</span><br><span class="line">&gt;   ··· </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>3、实现了<strong>await</strong>方法的对象（<strong>await</strong>方法返回的一个迭代器）<br> 在asyncio库里面，有 Future 对象</p>
+<p>4、在CPython C API，有tp_as_async.am_await函数的对象，该函数返回一个迭代器（类似<strong>await</strong>方法）</p>
+<p>报错原因<br>如果在async def函数之外使用await语句，会引发SyntaxError异常。这和在def函数之外使用yield语句一样。<br>如果await右边不是一个awaitable对象，会引发TypeError异常。</p>
+</blockquote>
+<p>所以我们上面那样，直接调用 await f.read() 会引发TypeError异常。那应该怎么改呢? </p>
+<h2 id="回调-——-await-普通函数的方式"><a href="#回调-——-await-普通函数的方式" class="headerlink" title="回调 —— await 普通函数的方式"></a>回调 —— await 普通函数的方式</h2><p>awaitable对象就上面那么几种情况，一个普通的函数的话，1跟2肯定就不符合了，只能是3——实现了<code>__await__</code>方法(class Future)<br>于是在官方文档里查看 Future 这一部分，发现有几个跟回调相关的函数。然后看了几个Demo后，我就写出了下面这段’错误代码’，这段代码其实并没有错，但是他的执行时间跟顺序执行差不多，没有达到读文件的时候，cpu处理另一个计算任务的效果，原因等下在后面我会分析。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio </span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Read</span><span class="params">(future, f)</span>:</span></span><br><span class="line">    print(<span class="string">"Read start"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    data = f.read()</span><br><span class="line">    print(<span class="string">"Read用时"</span>,time.time()-start)</span><br><span class="line">    future.set_result(<span class="string">"读取完毕"</span>)</span><br><span class="line">    f.close()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(loop)</span>:</span></span><br><span class="line">    print(<span class="string">"main start"</span>)</span><br><span class="line">    all_done = asyncio.Future() <span class="comment"># 设置Future 对象</span></span><br><span class="line">    f = open(<span class="string">"G:\\迅雷下载\\xxx.rmvb"</span>,<span class="string">'rb'</span>) </span><br><span class="line">    <span class="comment"># 1.76Gb，读完时间大概20s左右</span></span><br><span class="line">    loop.call_soon(Read, all_done, f)  <span class="comment"># 安排Read函数尽快执行，后面是传入的参数</span></span><br><span class="line"> </span><br><span class="line">    result = <span class="keyword">await</span> all_done  </span><br><span class="line">    <span class="comment"># 若future对象完成，则会通过set_result函数设置并返回一个结果</span></span><br><span class="line">    print(<span class="string">'returned result: &#123;!r&#125;'</span>.format(result))</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">miracle</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"miracle start"</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.1</span>) </span><br><span class="line">    print(<span class="string">"miracle running"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="keyword">while</span> time.time() - start &lt; <span class="number">20</span>: <span class="comment"># 模拟计算20s</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    print(<span class="string">"miracle end"</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">event_loop = asyncio.get_event_loop()</span><br><span class="line">start = time.time()</span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line">     event_loop.run_until_complete(asyncio.wait([miracle(),main(event_loop)])) </span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line">     event_loop.close()</span><br><span class="line">print(<span class="string">"总用时"</span>,time.time()-start)</span><br></pre></td></tr></table></figure></p>
+<p>如上面代码示，这段代码是对<code>错误代码1</code>的改进，刚刚我们分析了<code>await f.read()</code>报错的原因，并且找到了解决方法，<strong>那就是把要进行的操作封装在一个函数里，这个函数要有一个接收Future对象的参数，然后协程函数里面，用asyncio.Future() 创建一个新的 Future 对象，然后用 loop.call_soon() 传入函数名及参数，安排我们之前封装的函数执行</strong>，然后就可以 <code>await 传入的future对象</code>，等待函数代码处理完成，通过 future.set_result() 设置并返回一个结果，await会接受这个结果。</p>
+<p><strong>所以我们可以得到 await 普通函数的方法，使用回调。</strong></p>
+<p>本来以为解决了这个问题，程序就能按我设想的那样子异步执行，读文件的时候挂起去执行另一个协程的计算，等文件读完后，再返回去处理。但事实却不是这样，本来按我的预想，给Read函数读的一个 1.7G的文件，读完需要20s左右，在读的时候挂起去执行miracle协程，miracle函数会空循环20s，然后再挂起，这时候Read函数和miracle协程都差不多要结束了，总时间应该是20多s。然而下面是运行结果图<br><img src="/Study/Python/\Python协程\\8.jpg" alt></p>
+<p>可以看到，总运行时间为40s，没有达到异步的效果。对于这个问题，我后面搜了好久，分析了一下，得到结果如下</p>
+<blockquote>
+<p>协程是用户自己控制切换的时机,不再需要陷入系统的内核态。而线程和进程，每次阻塞、切换都需要陷入系统调用，先让CPU跑操作系统的调度程序，然后再由调度程序决定该跑哪一个进程(线程)。<br><strong>因为协程是用户自己写调度逻辑的，对CPU来说，协程其实是单线程，所以CPU不用去怎么调度、切换上下文。</strong><br>因为我们这里main协程里用到了Python的内置文件操作，而Python内置文件操作调用的时候都是阻塞的，上面也说了，协程可视为单线程，因而一旦协程出现阻塞，将会阻塞整个线程，所以执行到读文件操作时，协程被阻塞，CPU只能等待文件读完。</p>
+</blockquote>
+<hr>
+<p>所以说如果要达到上面的边读文件边计算的目的，还是用多线程。那么我们下面用多线程实现下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Read</span><span class="params">(f)</span>:</span></span><br><span class="line">    print(<span class="string">"读文件线程开始\n"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    f.read()</span><br><span class="line">    end = time.time() - start</span><br><span class="line">    print(<span class="string">"读文件线程结束,耗时"</span>,end)</span><br><span class="line"></span><br><span class="line">start_main = time.time()</span><br><span class="line">f = open(<span class="string">"G:\\迅雷下载\\xx.rmvb"</span>,<span class="string">'rb'</span>)</span><br><span class="line">th = threading.Thread(target=Read,args=(f,))</span><br><span class="line">th.start()</span><br><span class="line">print(<span class="string">"主线程计算开始"</span>)</span><br><span class="line">start = time.time()</span><br><span class="line"><span class="keyword">while</span> time.time()- start &lt; <span class="number">20</span>: <span class="comment">#模拟计算20s</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">end = time.time()</span><br><span class="line">print(<span class="string">"主线程计算结束,耗时"</span>,end - start)</span><br><span class="line">th.join()</span><br><span class="line">print(<span class="string">"总耗时"</span>,time.time()-start_main)</span><br></pre></td></tr></table></figure></p>
+<p>执行结果如下图<br><img src="/Study/Python/\Python协程\\9.JPG" alt></p>
+<p>其实协程也可以调用多线程实现异步，通过loop.run_in_executor函数可以创建线程<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Read</span><span class="params">(f)</span>:</span></span><br><span class="line">    print(<span class="string">"Read start\n"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    f.read()</span><br><span class="line">    print(<span class="string">"Read end 耗时"</span>,time.time()-start)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">miracle</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 模拟计算</span></span><br><span class="line">    print(<span class="string">"miracle start"</span>)</span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="keyword">while</span> time.time() - start &lt; <span class="number">20</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    print(<span class="string">"miracle end 耗时"</span>,time.time()-start)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(f)</span>:</span></span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    t = []</span><br><span class="line">    t.append(loop.run_in_executor(<span class="literal">None</span>,Read,f))</span><br><span class="line">    t.append(loop.run_in_executor(<span class="literal">None</span>,miracle))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> t:</span><br><span class="line">        <span class="keyword">await</span> i</span><br><span class="line">        </span><br><span class="line">start = time.time()</span><br><span class="line">f = open(<span class="string">"G:\\迅雷下载\\xx.rmvb"</span>,<span class="string">'rb'</span>)</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(main(f))</span><br><span class="line">print(<span class="string">"总耗时"</span>,time.time()-start)</span><br></pre></td></tr></table></figure></p>
+<p>运行截图如下<br><img src="/Study/Python/\Python协程\\10.JPG" alt></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这协程、异步、多线程、阻塞I/O、非阻塞I/O，都要搞晕了。。。<br>就这样吧，留个大概印象，日后碰到了再回过头仔细研究。。。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>ヾﾉ≧∀≦)o 来呀！快活呀！~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Miracle778 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Miracle778 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python协程/" rel="tag"><i class="fa fa-tag"></i> Python协程</a>
+          
+            <a href="/tags/asyncio/" rel="tag"><i class="fa fa-tag"></i> asyncio</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Study/Go/Go语言——DES算法实现.html" rel="next" title="Go语言——DES算法实现">
+                <i class="fa fa-chevron-left"></i> Go语言——DES算法实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  <div>
+    
+    <div>
+    
+    <div style="text-align:center;color: #000;font-size:17px; font-family:STLiti;">
+	-------- 本文结束 --------
+	</div>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<p style="font-size: 10px;line-height: 30px"><a href="https://miracle778.github.io" style="color:#258FC6">Miracle's Blog</a> by <a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.
+<br>
+由<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778</a>创作并维护的<a href="https://miracle778.github.io" style="color:#258FC6">Miracle778's Blog</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br>
+本文首发于<a href="https://miracle.github.io" style="color:#258FC6">Miracle's Blog</a> 博客（ <a href="https://miracle778.github.io" style="color:#258FC6">https://miracle778.github.io</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+    
+</div>
+
+    
+ </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/米兔.jpg" alt="Miracle778">
+            
+              <p class="site-author-name" itemprop="name">Miracle778</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Miracle778" title="GitHub &rarr; https://github.com/Miracle778" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:Yiitao@163.com" title="E-Mail &rarr; mailto:Yiitao@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=29045579&auto=0&height=32"></iframe>
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#协程是什么"><span class="nav-number">1.</span> <span class="nav-text">协程是什么?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python的协程"><span class="nav-number">2.</span> <span class="nav-text">Python的协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成器变形来的-yield-send"><span class="nav-number">3.</span> <span class="nav-text">生成器变形来的 yield/send</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器"><span class="nav-number">3.1.</span> <span class="nav-text">迭代器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成器"><span class="nav-number">4.</span> <span class="nav-text">生成器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#yield-send-协程"><span class="nav-number">5.</span> <span class="nav-text">yield/send 协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#asyncio-coroutine和yield-from型协程"><span class="nav-number">6.</span> <span class="nav-text">@asyncio.coroutine和yield from型协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#async-await"><span class="nav-number">7.</span> <span class="nav-text">async/await</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#awaitable-对象"><span class="nav-number">7.1.</span> <span class="nav-text">awaitable 对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调-——-await-普通函数的方式"><span class="nav-number">7.2.</span> <span class="nav-text">回调 —— await 普通函数的方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Miracle778</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">294k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">4:28</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w9nX4X8WpdsRFrCFoTt7cpqz-gzGzoHsz',
+    appKey: 'H3aV3vWVqkmAgeD0ep6RVf07',
+    placeholder: 'ヾﾉ≧∀≦)o 来呀！快活呀！~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":170,"height":380,"position":"right","hOffset":50,"vOffset":-7},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

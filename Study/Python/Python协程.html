@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//8.jpg">
 <meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//9.JPG">
 <meta property="og:image" content="http://miracle778.github.io/Study/Python//Python协程//10.JPG">
-<meta property="og:updated_time" content="2019-08-13T08:06:52.971Z">
+<meta property="og:updated_time" content="2019-08-13T08:15:28.453Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python协程">
 <meta name="twitter:description" content="这几天看了看操作系统，顺便研究了一下Python的协程，下面就是做的一点笔记">
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2019-08-13 15:59:05 / 修改时间：16:06:52" itemprop="dateCreated datePublished" datetime="2019-08-13T15:59:05+08:00">2019-08-13</time>
+              <time title="创建时间：2019-08-13 15:59:05 / 修改时间：16:15:28" itemprop="dateCreated datePublished" datetime="2019-08-13T15:59:05+08:00">2019-08-13</time>
             
 
             
@@ -594,21 +594,15 @@
 <p>看到上面代码，最后三行是运行协程所需要的，后面会讲，我们来看到Miracle函数里的yield部分，如上面所说，这种函数是异步生成器，可以用async for迭代(见get函数)，这里迭代了666 - 676 十个数，get函数里会把这十个数加100然后打印。执行结果如下图<br><img src="/Study/Python/\Python协程\\5.JPG" alt></p>
 <p>async for迭代异步生成器介绍好了，下面我们再返回去看到协程函数，刚刚的截图里面，当我们输入type(A())的时候，Python shell有一个警告，<code>RuntimeWarning: coroutine &#39;A&#39; was never awaited</code>。<br>这个警告信息说协程A永远不会等待，我们知道，协程最大的特点就是，在运行过程中，可以挂起然后去执行别的任务，待所需的条件满足后，再返回来执行挂起位置后续代码。而挂起操作，前面的yield/send型协程靠的是yield语句，这里的async/await则是靠await语句了。<strong>所以每个async类型的协程函数里面，应该要有await语句，不然就失去特性了，和普通函数一样，没有交替执行。</strong></p>
 <p>上面把 async、await两个关键字介绍了下，还给了个代码示例，里面用到了asyncio的一些函数。所以下面就要介绍这些函数了。讲到这里，有必要放下asyncio库的<a href="https://docs.python.org/zh-cn/3/library/asyncio-eventloop.html" target="_blank" rel="noopener">官方文档</a>了<br>另外再放几篇别的相关文章:<br><a href="https://segmentfault.com/a/1190000008814676" target="_blank" rel="noopener">Python 的异步 IO：Asyncio 简介</a><br><a href="https://segmentfault.com/a/1190000012631063#articleHeader6" target="_blank" rel="noopener">通读Python官方文档之协程、Future与Task</a><br><a href="https://www.jianshu.com/p/7690edfe9ba5" target="_blank" rel="noopener">Python3 异步协程函数async具体用法</a></p>
-<p>想要详细了解asyncio可以看上面几个链接，我这里就只简单讲讲自己用到的函数。<br>我们上面讲到过，协程不能直接运行，需要创建一个事件循环loop，再把协程注册到事件循环轰中，然后开启事件循环才能运行。这几步分别涉及的函数有</p>
-<ol>
-<li><p>创建事件循环 </p>
+<p>想要详细了解asyncio可以看上面几个链接，我这里就只简单讲讲自己用到的函数。<br>我们上面讲到过，协程不能直接运行，需要创建一个事件循环loop，再把协程注册到事件循环轰中，然后开启事件循环才能运行。这几步分别涉及的函数有<br>1 、创建事件循环 </p>
 <blockquote>
 <p>loop = asyncio.get_event_loop()<br>asyncio.get_event_loop()<br>获取当前事件循环。 如果当前 OS 线程没有设置当前事件循环并且 set_event_loop() 还没有被调用，asyncio 将创建一个新的事件循环并将其设置为当前循环。</p>
 </blockquote>
-</li>
-<li><p>将协程注册到事件循环并开启</p>
+<p>2、 将协程注册到事件循环并开启</p>
 <blockquote>
 <p>loop.run_until_complete(future)<br>运行直到 future ( Future 的实例 ) 被完成。<br>如果参数是 coroutine object ，将被隐式调度为 asyncio.Task 来运行。<br>返回 Future 的结果 或者引发相关异常。</p>
-<p>在注册事件循环的时候，其实是run_until_complete方法将协程包装成为了一个任务（task）对象。所谓task对象是Future类的子类。保存了协程运行后的状态，用于未来获取协程的结果，关于Future、Task类的详情请看上面链接<br>asyncio.ensure_future(coroutine) 和 loop.create_task(coroutine)都可以创建一个task<br>也就是说，注册事件循环有三种写法</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法一  直接传入coroutine obeject 类型参数，隐式调度</span></span><br><span class="line">&gt; <span class="keyword">import</span> asyncio</span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;    <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; loop.run_until_complete(miracle())</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<p>在注册事件循环的时候，其实是run_until_complete方法将协程包装成为了一个任务（task）对象。所谓task对象是Future类的子类。保存了协程运行后的状态，用于未来获取协程的结果，关于Future、Task类的详情请看上面链接<br>asyncio.ensure_future(coroutine) 和 loop.create_task(coroutine)都可以创建一个task<br>也就是说，注册事件循环有三种写法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法一  直接传入coroutine obeject 类型参数，隐式调度</span></span><br><span class="line">&gt; <span class="keyword">import</span> asyncio</span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;    <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; loop.run_until_complete(miracle())</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
-</li>
-</ol>
 <blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 写法二 使用asyncio.ensure_future(coroutine) 创建task传入</span></span><br><span class="line">&gt; <span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">mriacle</span><span class="params">()</span>:</span></span><br><span class="line">&gt;   <span class="keyword">await</span> xxxxx</span><br><span class="line">&gt; loop = asyncio.get_event_loop()</span><br><span class="line">&gt; task = asyncio.ensure_future(miracle())</span><br><span class="line">&gt; loop.run_until_complete(task)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
